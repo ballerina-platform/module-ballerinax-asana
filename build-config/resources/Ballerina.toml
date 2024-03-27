@@ -1,0 +1,13 @@
+[package]
+distribution = "2201.8.6"
+org = "ballerinax"
+name = "asana"
+version = "@toml.version@"
+license = ["Apache-2.0"]
+authors = ["Ballerina"]
+keywords = ["Asana", "Productivity/Project Management", "Cost/Freemium", "Task Management"]
+icon = "icon.png"
+repository = "https://github.com/ballerina-platform/module-ballerinax-asana"
+
+[build-options]
+observabilityIncluded = true
