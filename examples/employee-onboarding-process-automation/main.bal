@@ -11,13 +11,12 @@ asana:ConnectionConfig asanaConfig = {
         token: bearerToken
     }
 };
-
 asana:Client asana = check new (asanaConfig);
 
 // Function to automate the creation of an employee onboarding project with tasks
 public function main() returns error? {
-    // Step 1: Create a new onboarding project
 
+    // Step 1: Create a new onboarding project
     asana:Projects_body projectBody = {
         data: {
             name: "Onboarding - " + newEmployeeName,
@@ -46,7 +45,7 @@ public function main() returns error? {
         };
 
         asana:Inline_response_200_30|error sectionCreationResult = asana->/projects/[projectId]/sections.post(sectionBody);
-        if (sectionCreationResult is error) {
+        if sectionCreationResult is error {
             return error("error creating section: " + sectionCreationResult.message());
         }
     }
@@ -63,9 +62,9 @@ public function main() returns error? {
             }
         };
 
-        var taskCreationResponse = asana->/tasks.post(newTaskPayload);
-        if (taskCreationResponse is error) {
-            return taskCreationResponse;
+        asana:Inline_response_201_7|error taskCreationResponse = asana->/tasks.post(newTaskPayload);
+        if taskCreationResponse is error {
+            return error("error creating task: " + taskCreationResponse.message());
         }
     }
 }
