@@ -7,14 +7,14 @@ It identifies team members with high or low workloads and suggests adjustments t
 
 ### 1. Setup Asana account
 
-Refer to the [Setup guide](https://central.ballerina.io/ballerinax/asana/latest#setup-guide) to set up your Asana account, if you do not have one.
+Refer to the [Setup guide](https://central.ballerina.io/ballerinax/asana/latest#setup-guide) to obtain an Asana personal access token, if you do not have one.
 
 ### 2. Configuration
 
-Update your Asana account related configurations in the `Config.toml` file in the example root directory:
+Update the following configurations in the `Config.toml` file in the example root directory:
 
 ```toml
-bearerToken = "<bearer_token>"
+authToken = "<auth_token>"
 workspaceId = "<workspace_gid>"
 ```
 

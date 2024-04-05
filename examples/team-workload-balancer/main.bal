@@ -17,13 +17,13 @@
 import ballerina/log;
 import ballerinax/asana;
 
+configurable string authToken = ?;
 configurable string workspaceId = ?;
-configurable string bearerToken = ?;
 
 // Initialize Asana client configuration
 asana:ConnectionConfig asanaConfig = {
     auth: {
-        token: bearerToken
+        token: authToken
     }
 };
 asana:Client asana = check new (asanaConfig);

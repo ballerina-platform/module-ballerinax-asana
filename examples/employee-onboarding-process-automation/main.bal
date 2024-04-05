@@ -16,7 +16,7 @@
 
 import ballerinax/asana;
 
-configurable string bearerToken = ?;
+configurable string authToken = ?;
 configurable string workspaceId = ?;
 configurable string teamId = ?;
 configurable string newEmployeeName = ?;
@@ -24,7 +24,7 @@ configurable string newEmployeeName = ?;
 // Initialize Asana client configuration
 asana:ConnectionConfig asanaConfig = {
     auth: {
-        token: bearerToken
+        token: authToken
     }
 };
 asana:Client asana = check new (asanaConfig);
