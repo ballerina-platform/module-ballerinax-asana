@@ -44,7 +44,7 @@ Once you have an Asana account, you can proceed to create a PAT or set up OAuth2
 
 To use the `Asana` connector in your Ballerina application, modify the `.bal` file as follows:
 
-### Step 1: Import the connector
+### Step 1: Import the module
 
 Import the `ballerinax/asana` package into your Ballerina project.
 
