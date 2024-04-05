@@ -1,7 +1,7 @@
 import ballerina/log;
 import ballerinax/asana;
 
-configurable string workspaceGid = ?;
+configurable string workspaceId = ?;
 configurable string bearerToken = ?;
 
 // Initialize Asana client configuration
@@ -18,7 +18,7 @@ public function main() returns error? {
     map<int> userWorkloads = {};
 
     // Get users in the workspace
-    asana:Inline_response_200_49|error response = asana->/users(workspace = workspaceGid);
+    asana:Inline_response_200_49|error response = asana->/users(workspace = workspaceId);
     if response is asana:Inline_response_200_49 {
         // Iterate through users to get their tasks
         foreach asana:UserCompact user in response.data ?: [] {
@@ -28,7 +28,7 @@ public function main() returns error? {
                 continue;
             }
 
-            asana:Inline_response_200_48 tasksResponse = check asana->/users/[userId]/user_task_list(workspace = workspaceGid);
+            asana:Inline_response_200_48 tasksResponse = check asana->/users/[userId]/user_task_list(workspace = workspaceId);
             asana:UserTaskListResponse? taskList = tasksResponse.data;
             if taskList is asana:UserTaskListResponse {
                 // Increment the user's task count to represent their workload

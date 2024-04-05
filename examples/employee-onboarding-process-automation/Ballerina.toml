@@ -1,0 +1,14 @@
+[package]
+org = "wos2"
+name = "employee_onboarding_process_automation"
+version = "0.1.0"
+distribution = "2201.8.6"
+
+[build-options]
+observabilityIncluded = true
+
+[[dependency]]
+org = "ballerinax"
+name = "asana"
+version = "0.1.0"
+repository = "local"
