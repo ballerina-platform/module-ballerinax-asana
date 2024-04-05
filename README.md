@@ -117,7 +117,11 @@ This repository only contains the source code for the package.
 
    > **Note:** After installation, remember to set the `JAVA_HOME` environment variable to the directory where JDK was installed.
 
-2. Download and install [Ballerina Swan Lake](https://ballerina.io/).
+2. Generate a Github access token with read package permissions, then set the following `env` variables:
+    ```sh
+   export packageUser=<Your GitHub Username>
+   export packagePAT=<GitHub Personal Access Token>
+    ```
 
 3. Download and install [Docker](https://www.docker.com/get-started).
 
