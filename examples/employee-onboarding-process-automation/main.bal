@@ -53,7 +53,7 @@ public function main() returns error? {
 
     // Step 2: Add sections to the new project
     string[] sections = ["Documentation", "Training", "Setup"];
-    foreach var sectionName in sections {
+    foreach string sectionName in sections {
         asana:Project_gid_sections_body sectionBody = {
             data: {
                 name: sectionName
