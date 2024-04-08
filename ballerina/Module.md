@@ -24,11 +24,9 @@ Once you have an Asana account, you can proceed to create a PAT or set up OAuth2
 1. Provide a name for the token and accept Asana's API terms checkbox after reading them.
 2. Click on the **Create token** button.
 
-   <img src=https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-asana/master/docs/setup/resources/2-generate-token.png alt="Generate new PAT">
+   <img src=https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-asana/master/docs/setup/resources/2-create-token.png alt="Generate new PAT">
 
-### Step 5: Generate the token 
-
-1. Copy the generated token and keep it secure. You will need this token to authenticate the Asana connector.
+3. Copy the generated token and keep it secure. You will need this token to authenticate the Asana connector.
 
    <img src=https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-asana/master/docs/setup/resources/3-copy-token.png alt="Copy PAT">
 
