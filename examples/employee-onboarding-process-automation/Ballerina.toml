@@ -1,0 +1,7 @@
+[package]
+org = "wos2"
+name = "employee_onboarding_process_automation"
+version = "0.1.0"
+
+[build-options]
+observabilityIncluded = true
