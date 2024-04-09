@@ -1,4 +1,4 @@
-# Asana team workload balancer
+# Asana employee onboarding automation
 
 This use case demonstrates how to automate the onboarding process of new employees using Asana. Automating the employee onboarding process in Asana can significantly improve the efficiency and consistency of welcoming new team members. 
 
