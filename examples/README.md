@@ -2,9 +2,9 @@
 
 The `ballerinax/asana` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-asana/tree/main/examples), covering use cases like cache management, session management, and rate limiting.
 
-1. [Employee onboarding process automation](https://github.com/ballerina-platform/module-ballerinax-asana/tree/master/examples/employee-onboarding-process-automation) - Automate the onboarding process of new employees using Asana projects and tasks.
+1. [Employee onboarding process automation](https://github.com/ballerina-platform/module-ballerinax-asana/tree/main/examples/employee-onboarding-process-automation) - Automate the onboarding process of new employees using Asana projects and tasks.
 
-2. [Team workload balancer](https://github.com/ballerina-platform/module-ballerinax-asana/tree/master/examples/team-workload-balancer) - Evaluate and balance the workload of a given team using Asana tasks and assignments.
+2. [Team workload balancer](https://github.com/ballerina-platform/module-ballerinax-asana/tree/main/examples/team-workload-balancer) - Evaluate and balance the workload of a given team using Asana tasks and assignments.
 
 
 ## Prerequisites
