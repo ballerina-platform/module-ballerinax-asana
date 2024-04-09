@@ -92,10 +92,10 @@ record {asana:TaskResponse data?;} taskCreated = check asana->/tasks.post(taskRe
 ## Examples
 
 The `Asana` connector offers practical examples illustrating its use in various scenarios.
-Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-asana/tree/master/examples/), covering the following use cases:
+Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-asana/tree/main/examples/), covering the following use cases:
 
-1. [Employee onboarding process automation](https://github.com/ballerina-platform/module-ballerinax-asana/tree/master/examples/employee-onboarding-process-automation) - Automate the onboarding process of new employees using Asana projects and tasks.
-2. [Team workload balancer](https://github.com/ballerina-platform/module-ballerinax-asana/tree/master/examples/team-workload-balancer) - Evaluate and balance the workload of a given team using Asana tasks and assignments.
+1. [Employee onboarding process automation](https://github.com/ballerina-platform/module-ballerinax-asana/tree/main/examples/employee-onboarding-process-automation) - Automate the onboarding process of new employees using Asana projects and tasks.
+2. [Team workload balancer](https://github.com/ballerina-platform/module-ballerinax-asana/tree/main/examples/team-workload-balancer) - Evaluate and balance the workload of a given team using Asana tasks and assignments.
 
 
 ## Issues and projects
