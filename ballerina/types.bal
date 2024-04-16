@@ -84,7 +84,7 @@ public type OAuth2RefreshTokenGrantConfig record {|
     string refreshUrl = "https://app.asana.com/-/oauth_token";
 |};
 
-public type PortfolioMembershipResponse PortfolioMembershipBase;
+public type PortfolioMembershipResponse PortfolioMembershipBase?;
 
 # The entity that triggered the event. Will typically be a user.
 public type AuditLogEventActor record {
@@ -92,66 +92,66 @@ public type AuditLogEventActor record {
     # Can be one of `user`, `asana`, `asana_support`, `anonymous`, or `external_administrator`.
     "user"|"asana"|"asana_support"|"anonymous"|"external_administrator" actor_type?;
     # Globally unique identifier of the actor, if it is a user.
-    string gid?;
+    string? gid?;
     # The name of the actor, if it is a user.
-    string name?;
+    string? name?;
     # The email of the actor, if it is a user.
-    string email?;
+    string? email?;
 };
 
 public type GoalRelationshipCompact record {
     *AsanaResource;
     # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
     "subgoal"|"supporting_work" resource_subtype?;
-    record {*ProjectCompact;} supporting_resource?;
+    record {*ProjectCompact;}? supporting_resource?;
     # The weight that the supporting resource's progress contributes to the supported goal's progress. This can only be 0 or 1.
-    decimal contribution_weight?;
+    decimal? contribution_weight?;
 };
 
 public type Portfolio_gid_addMembers_body record {
-    AddMembersRequest data?;
+    AddMembersRequest? data?;
 };
 
 public type GoalMembershipCompact record {
     *GoalMembershipBase;
     # *Deprecated: new integrations should prefer the `role` field.* Describes if the member is comment only in goal.
-    boolean is_commenter?;
+    boolean? is_commenter?;
     # *Deprecated: new integrations should prefer the `role` field.* Describes if the member is editor in goal.
-    boolean is_editor?;
+    boolean? is_editor?;
 };
 
 public type Sections_insert_body record {
-    ProjectSectionInsertRequest data?;
+    ProjectSectionInsertRequest? data?;
 };
 
 # A response object returned from a batch request.
 public type BatchResponse record {
     # The HTTP status code that the invoked endpoint returned.
-    int status_code?;
+    int? status_code?;
     # A map of HTTP headers specific to this result. This is primarily used for returning a `Location` header to accompany a `201 Created` result.  The parent HTTP response will contain all common headers.
-    record {} headers?;
+    record {}? headers?;
     # The JSON body that the invoked endpoint returned.
-    record {} body?;
+    record {}? body?;
 };
 
 public type Stories_story_gid_body record {
-    StoryRequest data?;
+    StoryRequest? data?;
 };
 
-public type ProjectStatusRequest ProjectStatusBase;
+public type ProjectStatusRequest ProjectStatusBase?;
 
 public type Custom_fields_custom_field_gid_body record {
-    CustomFieldRequest data?;
+    CustomFieldRequest? data?;
 };
 
 public type TeamRequest record {
     *TeamBase;
     # The description of the team.
-    string description?;
+    string? description?;
     # The description of the team with formatting as HTML.
-    string html_description?;
+    string? html_description?;
     # The organization/workspace the team belongs to. This must be the same organization you are in and cannot be changed once set.
-    string organization?;
+    string? organization?;
     # The visibility of the team to users in the same organization
     "secret"|"request_to_join"|"public" visibility?;
     # Controls who can edit team name and description
@@ -170,11 +170,11 @@ public type TeamRequest record {
 
 public type SectionTaskInsertRequest record {
     # The task to add to this section.
-    string task;
+    string? task;
     # An existing task within this section before which the added task should be inserted. Cannot be provided together with insert_after.
-    string insert_before?;
+    string? insert_before?;
     # An existing task within this section after which the added task should be inserted. Cannot be provided together with insert_before.
-    string insert_after?;
+    string? insert_after?;
 };
 
 public type ProjectMembershipBase ProjectMembershipCompact;
@@ -184,76 +184,76 @@ public type CustomFieldSettingBase CustomFieldSettingCompact;
 public type PortfolioResponse record {
     *PortfolioBase;
     # The time at which this resource was created.
-    string created_at?;
-    UserCompact created_by?;
+    string? created_at?;
+    UserCompact? created_by?;
     # Array of custom field settings applied to the portfolio.
-    CustomFieldSettingResponse[] custom_field_settings?;
-    StatusUpdateCompact current_status_update?;
+    CustomFieldSettingResponse[]? custom_field_settings?;
+    StatusUpdateCompact?? current_status_update?;
     # The localized day on which this portfolio is due. This takes a date with format YYYY-MM-DD.
     string? due_on?;
     # Array of Custom Fields.
-    CustomFieldCompact[] custom_fields?;
-    UserCompact[] members?;
-    UserCompact owner?;
+    CustomFieldCompact[]? custom_fields?;
+    UserCompact[]? members?;
+    UserCompact? owner?;
     # The day on which work for this portfolio begins, or null if the portfolio has no start date. This takes a date with `YYYY-MM-DD` format. *Note: `due_on` must be present in the request when setting or unsetting the `start_on` parameter. Additionally, `start_on` and `due_on` cannot be the same date.*
     string? start_on?;
-    record {*WorkspaceCompact;} workspace?;
+    record {*WorkspaceCompact;}? workspace?;
     # A url that points directly to the object within Asana.
-    string permalink_url?;
+    string? permalink_url?;
     # True if the portfolio is public to its workspace members.
-    boolean 'public?;
+    boolean? 'public?;
     # Array of project templates that are in the portfolio
-    ProjectTemplateCompact[] project_templates?;
+    ProjectTemplateCompact[]? project_templates?;
 };
 
 public type Memberships_body record {
-    CreateMembershipRequest data?;
+    CreateMembershipRequest? data?;
 };
 
 public type StoryBase record {
     *AsanaResource;
     # The time at which this resource was created.
-    string created_at?;
+    string? created_at?;
     # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
-    string resource_subtype?;
+    string? resource_subtype?;
     # The plain text of the comment to add. Cannot be used with html_text.
-    string text?;
+    string? text?;
     # [Opt In](/docs/inputoutput-options). HTML formatted text for a comment. This will not include the name of the creator.
-    string html_text?;
+    string? html_text?;
     # *Conditional*. Whether the story should be pinned on the resource.
-    boolean is_pinned?;
+    boolean? is_pinned?;
     # The name of the sticker in this story. `null` if there is no sticker.
     "green_checkmark"|"people_dancing"|"dancing_unicorn"|"heart"|"party_popper"|"people_waving_flags"|"splashing_narwhal"|"trophy"|"yeti_riding_unicorn"|"celebrating_people"|"determined_climbers"|"phoenix_spreading_love" sticker_name?;
 };
 
 public type WebhookRequest record {
     # A resource ID to subscribe to. Many Asana resources are valid to create webhooks on, but higher-level resources require filters.
-    string 'resource;
+    string? 'resource;
     # The URL to receive the HTTP POST. The full URL will be used to deliver events from this webhook (including parameters) which allows encoding of application-specific state when the webhook is created.
-    string target;
+    string? target;
     # An array of WebhookFilter objects to specify a whitelist of filters to apply to events from this webhook. If a webhook event passes any of the filters the event will be delivered; otherwise no event will be sent to the receiving server.
-    record {*WebhookFilter;}[] filters?;
+    record {*WebhookFilter;}[]? filters?;
 };
 
 public type TaskAddTagRequest record {
     # The tag's gid to add to the task.
-    string tag;
+    string? tag;
 };
 
 # A request object for use in a batch request.
 public type BatchRequest record {
-    BatchRequestAction[] actions?;
+    BatchRequestAction[]? actions?;
 };
 
 public type RuleTriggerRequest record {
     # The ID of the resource. For the duration of the beta, this resource is always a task, and this task must exist in the project in which the rule is created.
-    string 'resource;
+    string? 'resource;
     # The dynamic keys and values of the request. These fields are intended to be used in the action for the rule associated with this trigger.
-    record {} action_data;
+    record {}? action_data;
 };
 
 public type Inline_response_201_8 record {
-    TeamResponse data?;
+    TeamResponse? data?;
 };
 
 public type CustomFieldSettingCompact record {
@@ -263,57 +263,57 @@ public type CustomFieldSettingCompact record {
 public type TagResponse record {
     *TagBase;
     # The time at which this resource was created.
-    string created_at?;
+    string? created_at?;
     # Array of users following this tag.
-    UserCompact[] followers?;
-    WorkspaceCompact workspace?;
+    UserCompact[]? followers?;
+    WorkspaceCompact? workspace?;
     # A url that points directly to the object within Asana.
-    string permalink_url?;
+    string? permalink_url?;
 };
 
 public type Inline_response_201_9 record {
-    TimeTrackingEntryBase data?;
+    TimeTrackingEntryBase? data?;
 };
 
 public type Portfolio_gid_removeMembers_body record {
-    RemoveMembersRequest data?;
+    RemoveMembersRequest? data?;
 };
 
 public type Inline_response_201_6 record {
-    TagResponse data?;
+    TagResponse? data?;
 };
 
 public type RuleTriggerResponse record {
     # Message providing more detail about the result
-    string message?;
+    string? message?;
 };
 
 public type Inline_response_201_7 record {
-    TaskResponse data?;
+    TaskResponse? data?;
 };
 
 # *OAuth Required*. *Conditional*. This field is returned only if external values are set or included by using [Opt In] (/docs/inputoutput-options).
 # The external field allows you to store app-specific metadata on tasks, including a gid that can be used to retrieve tasks and a data blob that can store app-specific character strings. Note that you will need to authenticate with Oauth to access or modify this data. Once an external gid is set, you can use the notation `external:custom_gid` to reference your object anywhere in the API where you may use the original object gid. See the page on Custom External Data for more details.
 public type TaskBase_external record {
-    string gid?;
-    string data?;
+    string? gid?;
+    string? data?;
 };
 
 public type Inline_response_201_4 record {
-    PortfolioResponse data?;
+    PortfolioResponse? data?;
 };
 
 public type Inline_response_201_5 record {
-    ProjectResponse data?;
+    ProjectResponse? data?;
 };
 
 public type Portfolios_body record {
-    PortfolioRequest data?;
+    PortfolioRequest? data?;
 };
 
 public type TaskAddProjectRequest record {
     # The project to add the task to.
-    string project;
+    string? project;
     # A task in the project to insert the task after, or `null` to insert at the beginning of the list.
     string? insert_after?;
     # A task in the project to insert the task before, or `null` to insert at the end of the list.
@@ -325,69 +325,69 @@ public type TaskAddProjectRequest record {
 public type WebhookResponse record {
     *WebhookCompact;
     # The time at which this resource was created.
-    string created_at?;
+    string? created_at?;
     # The timestamp when the webhook last received an error when sending an event to the target.
-    string last_failure_at?;
+    string? last_failure_at?;
     # The contents of the last error response sent to the webhook when attempting to deliver events to the target.
-    string last_failure_content?;
+    string? last_failure_content?;
     # The timestamp when the webhook last successfully sent an event to the target.
-    string last_success_at?;
+    string? last_success_at?;
     # Whitelist of filters to apply to events from this webhook. If a webhook event passes any of the filters the event will be delivered; otherwise no event will be sent to the receiving server.
-    record {*WebhookFilter;}[] filters?;
+    record {*WebhookFilter;}[]? filters?;
 };
 
 public type Webhooks_body record {
-    WebhookRequest data?;
+    WebhookRequest? data?;
 };
 
 public type MemberCompact record {
     *AsanaResource;
     # The name of the member
-    string name?;
+    string? name?;
     # The type of the member (team or user)
-    string resource_type?;
+    string? resource_type?;
 };
 
 public type AddCustomFieldSettingRequest record {
     # The custom field to associate with this container.
-    string custom_field;
+    string? custom_field;
     # Whether this field should be considered important to this container (for instance, to display in the list view of items in the container).
-    boolean is_important?;
+    boolean? is_important?;
     # A gid of a Custom Field Setting on this container, before which the new Custom Field Setting will be added.  `insert_before` and `insert_after` parameters cannot both be specified.
-    string insert_before?;
+    string? insert_before?;
     # A gid of a Custom Field Setting on this container, after which the new Custom Field Setting will be added.  `insert_before` and `insert_after` parameters cannot both be specified.
-    string insert_after?;
+    string? insert_after?;
 };
 
 public type Workspace_gid_addUser_body record {
     # A user identification object for specification with the addUser/removeUser endpoints.
-    WorkspaceAddUserRequest data?;
+    WorkspaceAddUserRequest? data?;
 };
 
 public type Team_gid_projects_body record {
-    ProjectRequest data?;
+    ProjectRequest? data?;
 };
 
 public type ProjectMembershipCompactResponse record {
     *ProjectMembershipCompact;
     # The base type of this resource.
-    string resource_type?;
+    string? resource_type?;
     # Type of the membership.
-    string resource_subtype?;
+    string? resource_subtype?;
 };
 
 public type ProjectBase record {
     *ProjectCompact;
     # True if the project is archived, false if not. Archived projects do not show in the UI by default and may be treated differently for queries.
-    boolean archived?;
+    boolean? archived?;
     # Color of the project.
     "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray"|"none"? color?;
     # The time at which this resource was created.
-    string created_at?;
-    record {*ProjectStatusResponse;} current_status?;
-    record {*StatusUpdateCompact;} current_status_update?;
+    string? created_at?;
+    record {*ProjectStatusResponse;}? current_status?;
+    record {*StatusUpdateCompact;}? current_status_update?;
     # Array of Custom Field Settings (in compact form).
-    CustomFieldSettingResponse[] custom_field_settings?;
+    CustomFieldSettingResponse[]? custom_field_settings?;
     # The default view (list, board, calendar, or timeline) of a project.
     "list"|"board"|"calendar"|"timeline" default_view?;
     # *Deprecated: new integrations should prefer the `due_on` field.*
@@ -395,16 +395,16 @@ public type ProjectBase record {
     # The day on which this project is due. This takes a date with format YYYY-MM-DD.
     string? due_on?;
     # [Opt In](/docs/inputoutput-options). The notes of the project with formatting as HTML.
-    string html_notes?;
+    string? html_notes?;
     # Array of users who are members of this project.
-    UserCompact[] members?;
+    UserCompact[]? members?;
     # The time at which this project was last modified.
     # *Note: This does not currently reflect any changes in associations such as tasks or comments that may have been added or removed from the project.*
-    string modified_at?;
+    string? modified_at?;
     # Free-form textual information associated with the project (ie., its description).
-    string notes?;
+    string? notes?;
     # *Deprecated:* new integrations use `privacy_setting` instead.
-    boolean 'public?;
+    boolean? 'public?;
     # The privacy setting of the project. *Note: Administrators in your organization may restrict the values of `privacy_setting`.*
     "public_to_workspace"|"private_to_team"|"private" privacy_setting?;
     # The day on which work for this project begins, or null if the project has no start date. This takes a date with `YYYY-MM-DD` format. *Note: `due_on` or `due_at` must be present in the request when setting or unsetting the `start_on` parameter. Additionally, `start_on` and `due_on` cannot be the same date.*
@@ -418,11 +418,11 @@ public type ProjectBase record {
 };
 
 public type Inline_response_201_2 record {
-    MembershipResponse data?;
+    MembershipResponse? data?;
 };
 
 public type Inline_response_201_3 record {
-    OrganizationExportResponse data?;
+    OrganizationExportResponse? data?;
 };
 
 public type CustomFieldResponse record {
@@ -432,41 +432,41 @@ public type CustomFieldResponse record {
     # This field is the unique custom ID string for the custom field.
     string? id_prefix?;
     # *Conditional*. This flag describes whether a custom field is a formula custom field.
-    boolean is_formula_field?;
+    boolean? is_formula_field?;
     # *Conditional*. This flag describes whether a custom field is read only.
-    boolean is_value_read_only?;
-    UserCompact created_by?;
+    boolean? is_value_read_only?;
+    UserCompact?? created_by?;
     # *Conditional*. Only relevant for custom fields of type `people`. This array of [compact user](/reference/users) objects reflects the values of a `people` custom field.
-    UserCompact[] people_value?;
+    UserCompact[]? people_value?;
 };
 
 public type Inline_response_201_1 record {
-    EnumOption data?;
+    EnumOption? data?;
 };
 
 public type CustomFieldCompact record {
     *AsanaResource;
     # The name of the custom field.
-    string name?;
+    string? name?;
     # The type of the custom field. Must be one of the given values.
     "text"|"enum"|"multi_enum"|"number"|"date"|"people" resource_subtype?;
     # *Deprecated: new integrations should prefer the resource_subtype field.* The type of the custom field. Must be one of the given values.
     "text"|"enum"|"multi_enum"|"number"|"date"|"people" 'type?;
     # *Conditional*. Only relevant for custom fields of type `enum`. This array specifies the possible values which an `enum` custom field can adopt. To modify the enum options, refer to [working with enum options](/reference/createenumoptionforcustomfield).
-    EnumOption[] enum_options?;
+    EnumOption[]? enum_options?;
     # *Conditional*. Determines if the custom field is enabled or not.
-    boolean enabled?;
+    boolean? enabled?;
     # This field tells the type of the custom field.
     "text"|"enum"|"multi_enum"|"number"|"date"|"people"|"formula"|"custom_id" representation_type?;
     # This field is the unique custom ID string for the custom field.
     string? id_prefix?;
     # *Conditional*. This flag describes whether a custom field is a formula custom field.
-    boolean is_formula_field?;
+    boolean? is_formula_field?;
     # *Conditional*. Only relevant for custom fields of type `date`. This object reflects the chosen date (and optionally, time) value of a `date` custom field. If no date is selected, the value of `date_value` will be `null`.
     CustomFieldCompact_date_value? date_value?;
-    record {*EnumOption;} enum_value?;
+    record {*EnumOption;}? enum_value?;
     # *Conditional*. Only relevant for custom fields of type `multi_enum`. This object is the chosen values of a `multi_enum` custom field.
-    EnumOption[] multi_enum_values?;
+    EnumOption[]? multi_enum_values?;
     # *Conditional*. This number is the value of a `number` custom field.
     decimal? number_value?;
     # *Conditional*. This string is the value of a `text` custom field.
@@ -478,47 +478,47 @@ public type CustomFieldCompact record {
 public type JobCompact record {
     *AsanaResource;
     # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
-    string resource_subtype?;
+    string? resource_subtype?;
     # The current status of this job. The value is one of: `not_started`, `in_progress`, `succeeded`, or `failed`.
     "not_started"|"in_progress"|"succeeded"|"failed" status?;
-    ProjectCompact new_project?;
-    record {*TaskCompact;} new_task?;
-    ProjectTemplateCompact new_project_template?;
+    ProjectCompact? new_project?;
+    record {*TaskCompact;}? new_task?;
+    ProjectTemplateCompact? new_project_template?;
 };
 
 public type WorkspaceResponse record {
     *WorkspaceBase;
     # The email domains that are associated with this workspace.
-    string[] email_domains?;
+    string[]? email_domains?;
     # Whether the workspace is an *organization*.
-    boolean is_organization?;
+    boolean? is_organization?;
 };
 
 public type PortfolioRequest record {
     *PortfolioBase;
     # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string[] members?;
+    string[]? members?;
     # Gid of an object.
-    string workspace?;
+    string? workspace?;
     # True if the portfolio is public to its workspace members.
-    boolean 'public?;
+    boolean? 'public?;
 };
 
 public type Project_briefs_project_brief_gid_body record {
-    ProjectBriefRequest data?;
+    ProjectBriefRequest? data?;
 };
 
 public type SectionResponse record {
     *SectionBase;
     # The time at which this resource was created.
-    string created_at?;
-    ProjectCompact project?;
+    string? created_at?;
+    ProjectCompact? project?;
     # *Deprecated - please use project instead*
-    ProjectCompact[] projects?;
+    ProjectCompact[]? projects?;
 };
 
 public type Goal_gid_addSupportingRelationship_body record {
-    GoalAddSupportingRelationshipRequest data?;
+    GoalAddSupportingRelationshipRequest? data?;
 };
 
 public type TaskTemplateBase TaskTemplateCompact;
@@ -526,77 +526,77 @@ public type TaskTemplateBase TaskTemplateCompact;
 # A dictionary of options to auto-shift dates. `task_dates` must be included to use this option. Requires either `start_on` or `due_on`, but not both.
 public type ProjectDuplicateRequest_schedule_dates record {
     # Determines if the auto-shifted dates should skip weekends.
-    boolean should_skip_weekends;
+    boolean? should_skip_weekends;
     # Sets the last due date in the duplicated project to the given date. The rest of the due dates will be offset by the same amount as the due dates in the original project.
-    string due_on?;
+    string? due_on?;
     # Sets the first start date in the duplicated project to the given date. The rest of the start dates will be offset by the same amount as the start dates in the original project.
-    string start_on?;
+    string? start_on?;
 };
 
 public type TaskRemoveProjectRequest record {
     # The project to remove the task from.
-    string project;
+    string? project;
 };
 
 public type Task_gid_setParent_body record {
-    TaskSetParentRequest data?;
+    TaskSetParentRequest? data?;
 };
 
 public type AttachmentCompact record {
     *AsanaResource;
     # The name of the file.
-    string name?;
+    string? name?;
     # The service hosting the attachment. Valid values are `asana`, `dropbox`, `gdrive`, `onedrive`, `box`, `vimeo`, and `external`.
-    string resource_subtype?;
+    string? resource_subtype?;
 };
 
 public type Task_gid_removeDependencies_body record {
-    ModifyDependenciesRequest data?;
+    ModifyDependenciesRequest? data?;
 };
 
 public type Task_gid_addDependencies_body record {
-    ModifyDependenciesRequest data?;
+    ModifyDependenciesRequest? data?;
 };
 
 # A user identification object for specification with the addUser/removeUser endpoints.
 public type WorkspaceAddUserRequest record {
     # A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    string user?;
+    string? user?;
 };
 
 public type Task_gid_stories_body record {
-    StoryRequest data?;
+    StoryRequest? data?;
 };
 
 public type ProjectCompact record {
     *AsanaResource;
     # Name of the project. This is generally a short sentence fragment that fits on a line in the UI for maximum readability. However, it can be longer.
-    string name?;
+    string? name?;
 };
 
 # A WebhookFilter can be passed on creation of a webhook in order to filter the types of actions that trigger delivery of an [event](/reference/events)
 public type WebhookFilter record {
     # The type of the resource which created the event when modified; for example, to filter to changes on regular tasks this field should be set to `task`.
-    string resource_type?;
+    string? resource_type?;
     # The resource subtype of the resource that the filter applies to. This should be set to the same value as is returned on the `resource_subtype` field on the resources themselves.
-    string resource_subtype?;
+    string? resource_subtype?;
     # The type of change on the **resource** to pass through the filter. For more information refer to `Event.action` in the [event](/reference/events) schema. This can be one of `changed`, `added`, `removed`, `deleted`, and `undeleted` depending on the nature of what has occurred on the resource.
-    string action?;
+    string? action?;
     # *Conditional.* A whitelist of fields for events which will pass the filter when the resource is changed. These can be any combination of the fields on the resources themselves. This field is only valid for `action` of type `changed`
-    string[] fields?;
+    string[]? fields?;
 };
 
 public type Task_gid_removeDependents_body record {
     # A set of dependent tasks.
-    ModifyDependentsRequest data?;
+    ModifyDependentsRequest? data?;
 };
 
-public type TeamMembershipBase TeamMembershipCompact;
+public type TeamMembershipBase TeamMembershipCompact?;
 
 public type UserBaseResponse record {
     *UserBase;
     # The user's email address.
-    string email?;
+    string? email?;
     # A map of the user’s profile photo in various sizes, or null if no photo is set. Sizes provided are 21, 27, 36, 60, 128, and 1024. All images are in PNG format, except for 1024 (which is in JPEG format).
     UserBaseResponse_photo? photo?;
 };
@@ -604,27 +604,27 @@ public type UserBaseResponse record {
 public type GoalCompact record {
     *AsanaResource;
     # The name of the goal.
-    string name?;
-    record {*UserCompact;} owner?;
+    string? name?;
+    record {*UserCompact;}? owner?;
 };
 
 public type Portfolio_gid_addItem_body record {
-    PortfolioAddItemRequest data?;
+    PortfolioAddItemRequest? data?;
 };
 
 public type Inline_response_412_errors record {
     # Message providing more detail about the error that occurred, if available.
-    string message?;
+    string? message?;
 };
 
-public type MembershipResponse GoalMembershipResponse|ProjectMembershipCompactResponse;
+public type MembershipResponse GoalMembershipResponse|ProjectMembershipCompactResponse?;
 
 public type PortfolioRemoveItemRequest record {
     # The item to remove from the portfolio.
-    string item;
+    string? item;
 };
 
-public type ProjectTemplateResponse ProjectTemplateBase;
+public type ProjectTemplateResponse ProjectTemplateBase?;
 
 public type TaskRequest record {
     *TaskBase;
@@ -634,20 +634,20 @@ public type TaskRequest record {
     # The `assignee_section` property will be returned in the response only if the request was sent by the user who is the assignee of the task. Note that you can only write to `assignee_section` with the gid of an existing section visible in the user's "My Tasks" list.
     string? assignee_section?;
     # An object where each key is the GID of a custom field and its corresponding value is either an enum GID, string, number, object, or array (depending on the custom field type). See the [custom fields guide](/docs/custom-fields-guide) for details on creating and updating custom field values.
-    record {|string...;|} custom_fields?;
+    record {|string?...;|}? custom_fields?;
     # *Create-Only* An array of strings identifying users. These can either be the string "me", an email, or the gid of a user. In order to change followers on an existing task use `addFollowers` and `removeFollowers`.
-    string[] followers?;
+    string[]? followers?;
     # Gid of a task.
     string? parent?;
     # *Create-Only* Array of project gids. In order to change projects on an existing task use `addProject` and `removeProject`.
-    string[] projects?;
+    string[]? projects?;
     # *Create-Only* Array of tag gids. In order to change tags on an existing task use `addTag` and `removeTag`.
-    string[] tags?;
+    string[]? tags?;
     # Gid of a workspace.
-    string workspace?;
+    string? workspace?;
 };
 
-public type UserTaskListRequest UserTaskListBase;
+public type UserTaskListRequest UserTaskListBase?;
 
 # Sadly, sometimes requests to the API are not successful. Failures can
 # occur for a wide range of reasons. In all cases, the API should return
@@ -662,121 +662,121 @@ public type UserTaskListRequest UserTaskListBase;
 # Asana support to quickly look up the incident that caused the server
 # error.
 public type ErrorResponse record {
-    Error[] errors?;
+    Error[]? errors?;
 };
 
 public type TimeTrackingEntryCompact record {
     *AsanaResource;
     # Time in minutes tracked by the entry.
-    int duration_minutes?;
+    int? duration_minutes?;
     # The day that this entry is logged on.
-    string entered_on?;
-    UserCompact created_by?;
+    string? entered_on?;
+    UserCompact? created_by?;
 };
 
 public type TimeTrackingEntryBase record {
     *TimeTrackingEntryCompact;
-    TaskCompact task?;
+    TaskCompact? task?;
     # The time at which this resource was created.
-    string created_at?;
+    string? created_at?;
 };
 
 public type TaskTemplateResponse record {
     *TaskTemplateBase;
     # Name of the task template.
-    string name?;
+    string? name?;
     # The project that this task template belongs to.
-    ProjectCompact? project?;
+    ProjectCompact?? project?;
     # The configuration for the task that will be created from this template.
-    TaskTemplateRecipe template?;
+    TaskTemplateRecipe?? template?;
     # The user who created this task template.
-    UserCompact created_by?;
+    UserCompact?? created_by?;
     # The time at which this task template was created.
-    string created_at?;
+    string? created_at?;
 };
 
 public type GoalBase record {
     *AsanaResource;
     # The name of the goal.
-    string name?;
+    string? name?;
     # The notes of the goal with formatting as HTML.
-    string html_notes?;
+    string? html_notes?;
     # Free-form textual information associated with the goal (i.e. its description).
-    string notes?;
+    string? notes?;
     # The localized day on which this goal is due. This takes a date with format `YYYY-MM-DD`.
     string? due_on?;
     # The day on which work for this goal begins, or null if the goal has no start date. This takes a date with `YYYY-MM-DD` format, and cannot be set unless there is an accompanying due date.
     string? start_on?;
     # *Conditional*. This property is only present when the `workspace` provided is an organization. Whether the goal belongs to the `workspace` (and is listed as part of the workspace’s goals) or not. If it isn’t a workspace-level goal, it is a team-level goal, and is associated with the goal’s team.
-    boolean is_workspace_level?;
+    boolean? is_workspace_level?;
     # True if the goal is liked by the authorized user, false if not.
-    boolean liked?;
+    boolean? liked?;
 };
 
 public type MembershipUpdateRequest record {
     # The role given to the member. Can be `editor` or `commenter`.
-    string access_level?;
+    string? access_level?;
 };
 
-public type MembershipCompact GoalMembershipCompact|ProjectMembershipCompactResponse;
+public type MembershipCompact GoalMembershipCompact|ProjectMembershipCompactResponse?;
 
 public type ProjectBriefBase record {
     *ProjectBriefCompact;
     # The title of the project brief.
-    string title?;
+    string? title?;
     # HTML formatted text for the project brief.
-    string html_text?;
+    string? html_text?;
 };
 
-public type OrganizationExportBase OrganizationExportCompact;
+public type OrganizationExportBase OrganizationExportCompact?;
 
 public type Project_gid_sections_body record {
-    SectionRequest data?;
+    SectionRequest? data?;
 };
 
 public type AsanaNamedResource record {
     *AsanaResource;
     # The name of the object.
-    string name?;
+    string? name?;
 };
 
 public type WebhookUpdateRequest record {
     # An array of WebhookFilter objects to specify a whitelist of filters to apply to events from this webhook. If a webhook event passes any of the filters the event will be delivered; otherwise no event will be sent to the receiving server.
-    record {*WebhookFilter;}[] filters?;
+    record {*WebhookFilter;}[]? filters?;
 };
 
 public type Tasks_task_gid_body record {
-    TaskRequest data?;
+    TaskRequest? data?;
 };
 
 public type Goal_relationships_goal_relationship_gid_body record {
-    GoalRelationshipRequest data?;
+    GoalRelationshipRequest? data?;
 };
 
 public type Task_template_gid_instantiateTask_body record {
-    TaskTemplateInstantiateTaskRequest data?;
+    TaskTemplateInstantiateTaskRequest? data?;
 };
 
 public type AllocationResponse record {
     *AllocationCompact;
-    UserCompact created_by?;
+    UserCompact? created_by?;
     # The subtype of the allocation.
-    string resource_subtype?;
+    string? resource_subtype?;
 };
 
 public type GoalMetricCurrentValueRequest record {
     *AsanaResource;
     # *Conditional*. This number is the current value of a goal metric of type number.
-    decimal current_number_value?;
+    decimal? current_number_value?;
 };
 
 public type Projects_body record {
-    ProjectRequest data?;
+    ProjectRequest? data?;
 };
 
 public type TaskTemplateRecipeCompact record {
     # Name of the task that will be created from this template.
-    string name?;
+    string? name?;
     # The subtype of the task that will be created from this template.
     "default_task"|"milestone_task"|"approval_task" task_resource_subtype?;
 };
@@ -784,46 +784,46 @@ public type TaskTemplateRecipeCompact record {
 public type SectionBase SectionCompact;
 
 public type Goal_gid_removeSupportingRelationship_body record {
-    GoalRemoveSupportingRelationshipRequest data?;
+    GoalRemoveSupportingRelationshipRequest? data?;
 };
 
 public type Project_template_gid_instantiateProject_body record {
-    ProjectTemplateInstantiateProjectRequest data?;
+    ProjectTemplateInstantiateProjectRequest? data?;
 };
 
 public type UserTaskListCompact record {
     *AsanaResource;
     # The name of the user task list.
-    string name?;
+    string? name?;
     # The owner of the user task list, i.e. the person whose My Tasks is represented by this resource.
-    UserCompact owner?;
+    UserCompact?? owner?;
     # The workspace in which the user task list is located.
-    WorkspaceCompact workspace?;
+    WorkspaceCompact?? workspace?;
 };
 
 # A user identification object for specification with the addUser/removeUser endpoints.
 public type WorkspaceRemoveUserRequest record {
     # A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    string user?;
+    string? user?;
 };
 
 public type PortfolioAddItemRequest record {
     # The item to add to the portfolio.
-    string item;
+    string? item;
     # An id of an item in this portfolio. The new item will be added before the one specified here. `insert_before` and `insert_after` parameters cannot both be specified.
-    string insert_before?;
+    string? insert_before?;
     # An id of an item in this portfolio. The new item will be added after the one specified here. `insert_before` and `insert_after` parameters cannot both be specified.
-    string insert_after?;
+    string? insert_after?;
 };
 
 public type TaskTemplateCompact record {
     *AsanaResource;
     # Name of the task template.
-    string name?;
+    string? name?;
 };
 
 public type Portfolio_gid_addCustomFieldSetting_body record {
-    AddCustomFieldSettingRequest data?;
+    AddCustomFieldSettingRequest? data?;
 };
 
 public type PortfolioBase record {
@@ -832,53 +832,53 @@ public type PortfolioBase record {
     "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray" color?;
 };
 
-public type UserRequest UserBase;
+public type UserRequest UserBase?;
 
 public type Workspace_gid_projects_body record {
-    ProjectRequest data?;
+    ProjectRequest? data?;
 };
 
 public type TaskSetParentRequest record {
     # The new parent of the task, or `null` for no parent.
-    string parent;
+    string? parent;
     # A subtask of the parent to insert the task after, or `null` to insert at the beginning of the list.
-    string insert_after?;
+    string? insert_after?;
     # A subtask of the parent to insert the task before, or `null` to insert at the end of the list.
-    string insert_before?;
+    string? insert_before?;
 };
 
 public type RemoveMembersRequest record {
     # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string members;
+    string? members;
 };
 
 public type EnumOption record {
     *AsanaResource;
     # The name of the enum option.
-    string name?;
+    string? name?;
     # Whether or not the enum option is a selectable value for the custom field.
-    boolean enabled?;
+    boolean? enabled?;
     # The color of the enum option. Defaults to ‘none’.
-    string color?;
+    string? color?;
 };
 
 public type UserCompact record {
     *AsanaResource;
     # *Read-only except when same user as requester*. The user’s name.
-    string name?;
+    string? name?;
 };
 
 public type TaskAddFollowersRequest record {
     # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string[] followers;
+    string[]? followers;
 };
 
 public type EnumOptionRequest record {
     *EnumOptionBase;
     # An existing enum option within this custom field before which the new enum option should be inserted. Cannot be provided together with after_enum_option.
-    string insert_before?;
+    string? insert_before?;
     # An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
-    string insert_after?;
+    string? insert_after?;
 };
 
 public type ProjectBriefCompact record {
@@ -888,24 +888,24 @@ public type ProjectBriefCompact record {
 public type ProjectResponse record {
     *ProjectBase;
     # Array of Custom Fields.
-    CustomFieldCompact[] custom_fields?;
+    CustomFieldCompact[]? custom_fields?;
     # True if the project is currently marked complete, false if not.
-    boolean completed?;
+    boolean? completed?;
     # The time at which this project was completed, or null if the project is not completed.
     string? completed_at?;
-    UserCompact completed_by?;
+    UserCompact?? completed_by?;
     # Array of users following this project. Followers are a subset of members who have opted in to receive "tasks added" notifications for a project.
-    UserCompact[] followers?;
+    UserCompact[]? followers?;
     # The current owner of the project, may be null.
-    record {*UserCompact;} owner?;
-    record {*TeamCompact;} team?;
+    record {*UserCompact;}? owner?;
+    record {*TeamCompact;}? team?;
     # The icon for a project.
     "list"|"board"|"timeline"|"calendar"|"rocket"|"people"|"graph"|"star"|"bug"|"light_bulb"|"globe"|"gear"|"notebook"|"computer"|"check"|"target"|"html"|"megaphone"|"chat_bubbles"|"briefcase"|"page_layout"|"mountain_flag"|"puzzle"|"presentation"|"line_and_symbols"|"speed_dial"|"ribbon"|"shoe"|"shopping_basket"|"map"|"ticket"|"coins" icon?;
     # A url that points directly to the object within Asana.
-    string permalink_url?;
-    record {*ProjectBriefCompact;} project_brief?;
-    record {*ProjectTemplateCompact;} created_from_template?;
-    record {*WorkspaceCompact;} workspace?;
+    string? permalink_url?;
+    record {*ProjectBriefCompact;}? project_brief?;
+    record {*ProjectTemplateCompact;}? created_from_template?;
+    record {*WorkspaceCompact;}? workspace?;
 };
 
 public type TeamBase TeamCompact;
@@ -913,13 +913,13 @@ public type TeamBase TeamCompact;
 public type UserBase UserCompact;
 
 public type Portfolios_portfolio_gid_body record {
-    PortfolioRequest data?;
+    PortfolioRequest? data?;
 };
 
 public type ProjectBriefRequest record {
     *ProjectBriefBase;
     # The plain text of the project brief. When writing to a project brief, you can specify either `html_text` (preferred) or `text`, but not both.
-    string text?;
+    string? text?;
 };
 
 public type GoalMetricBase record {
@@ -928,36 +928,36 @@ public type GoalMetricBase record {
     "number" resource_subtype?;
     # *Conditional*. Only relevant for goal metrics of type ‘Number’. This field dictates the number of places after the decimal to round to, i.e. 0 is integer values, 1 rounds to the nearest tenth, and so on. Must be between 0 and 6, inclusive.
     # For percentage format, this may be unintuitive, as a value of 0.25 has a precision of 0, while a value of 0.251 has a precision of 1. This is due to 0.25 being displayed as 25%.
-    int precision?;
+    int? precision?;
     # A supported unit of measure for the goal metric, or none.
     "none"|"currency"|"percentage" unit?;
     # ISO 4217 currency code to format this custom field. This will be null if the `unit` is not `currency`.
     string? currency_code?;
     # This number is the start value of a goal metric of type number.
-    decimal initial_number_value?;
+    decimal? initial_number_value?;
     # This number is the end value of a goal metric of type number. This number cannot equal `initial_number_value`.
-    decimal target_number_value?;
+    decimal? target_number_value?;
     # This number is the current value of a goal metric of type number.
-    decimal current_number_value?;
+    decimal? current_number_value?;
     # This string is the current value of a goal metric of type string.
-    string current_display_value?;
+    string? current_display_value?;
     # This field defines how the progress value of a goal metric is being calculated. A goal's progress can be provided manually by the user, calculated automatically from contributing subgoals, projects, or tasks, or managed by an integration with an external data source, such as Salesforce.
     "manual"|"subgoal_progress"|"project_task_completion"|"project_milestone_completion"|"task_completion"|"external" progress_source?;
 };
 
 public type Task_gid_removeProject_body record {
-    TaskRemoveProjectRequest data?;
+    TaskRemoveProjectRequest? data?;
 };
 
 public type ProjectStatusResponse record {
     *ProjectStatusBase;
-    UserCompact author?;
+    UserCompact? author?;
     # The time at which this resource was created.
-    string created_at?;
-    UserCompact created_by?;
+    string? created_at?;
+    UserCompact? created_by?;
     # The time at which this project status was last modified.
     # *Note: This does not currently reflect any changes in associations such as comments that may have been added or removed from the project status.*
-    string modified_at?;
+    string? modified_at?;
 };
 
 # The context from which this event originated.
@@ -969,100 +969,100 @@ public type AuditLogEventContext record {
     # Only present if the `context_type` is `api`. Can be one of `cookie`, `oauth`, `personal_access_token`, or `service_account`.
     "cookie"|"oauth"|"personal_access_token"|"service_account" api_authentication_method?;
     # The IP address of the client that initiated the event, if applicable.
-    string client_ip_address?;
+    string? client_ip_address?;
     # The user agent of the client that initiated the event, if applicable.
-    string user_agent?;
+    string? user_agent?;
     # The name of the OAuth App that initiated the event.
     # Only present if the `api_authentication_method` is `oauth`.
-    string oauth_app_name?;
+    string? oauth_app_name?;
 };
 
 public type Rule_trigger_gid_run_body record {
-    RuleTriggerRequest data?;
+    RuleTriggerRequest? data?;
 };
 
-public type OrganizationExportResponse OrganizationExportBase;
+public type OrganizationExportResponse OrganizationExportBase?;
 
 public type Project_gid_removeMembers_body record {
-    RemoveMembersRequest data?;
+    RemoveMembersRequest? data?;
 };
 
 public type SectionCompact record {
     *AsanaResource;
     # The name of the section (i.e. the text displayed as the section header).
-    string name?;
+    string? name?;
 };
 
 public type Enum_options_enum_option_gid_body record {
-    EnumOptionBase data?;
+    EnumOptionBase? data?;
 };
 
 public type Task_gid_addProject_body record {
-    TaskAddProjectRequest data?;
+    TaskAddProjectRequest? data?;
 };
 
 public type ProjectSaveAsTemplateRequest record {
     # The name of the new project template.
-    string name;
+    string? name;
     # Sets the team of the new project template. If the project exists in an organization, specify team and not workspace.
-    string team?;
+    string? team?;
     # Sets the workspace of the new project template. Only specify workspace if the project exists in a workspace.
-    string workspace?;
+    string? workspace?;
     # Sets the project template to public to its team.
-    boolean 'public;
+    boolean? 'public;
 };
 
 public type MembershipRequest record {
     # *Optional*. Denotes if a member is active. Applies to all memberships
-    boolean is_active?;
+    boolean? is_active?;
 };
 
 public type TimePeriodCompact record {
     *AsanaResource;
     # The localized end date of the time period in `YYYY-MM-DD` format.
-    string end_on?;
+    string? end_on?;
     # The localized start date of the time period in `YYYY-MM-DD` format.
-    string start_on?;
+    string? start_on?;
     # The cadence and index of the time period. The value is one of: `FY`, `H1`, `H2`, `Q1`, `Q2`, `Q3`, or `Q4`.
     "FY"|"H1"|"H2"|"Q1"|"Q2"|"Q3"|"Q4" period?;
     # A string representing the cadence code and the fiscal year.
-    string display_name?;
+    string? display_name?;
 };
 
 # *Conditional*. Only relevant for custom fields of type `date`. This object reflects the chosen date (and optionally, time) value of a `date` custom field. If no date is selected, the value of `date_value` will be `null`.
 public type CustomFieldCompact_date_value record {
     # A string representing the date in YYYY-MM-DD format.
-    string date?;
+    string? date?;
     # A string representing the date in ISO 8601 format. If no time value is selected, the value of `date-time` will be `null`.
-    string date_time?;
+    string? date_time?;
 };
 
 # Pagination (`limit` and `offset`) and output options (`fields` or `expand`) for the action. “Pretty” JSON output is not an available option on individual actions; if you want pretty output, specify that option on the parent request.
 public type BatchRequestAction_options record {
     # Pagination limit for the request.
-    int 'limit?;
+    int? 'limit?;
     # Pagination offset for the request.
-    int offset?;
+    int? offset?;
     # The fields to retrieve in the request.
-    string[] fields?;
+    string[]? fields?;
 };
 
 public type WorkspaceBase WorkspaceCompact;
 
 public type GoalRemoveSubgoalRequest record {
     # The goal gid to remove as subgoal from the parent goal
-    string subgoal;
+    string? subgoal;
 };
 
 public type TeamResponse record {
     *TeamBase;
     # [Opt In](/docs/inputoutput-options). The description of the team.
-    string description?;
+    string? description?;
     # [Opt In](/docs/inputoutput-options). The description of the team with formatting as HTML.
-    string html_description?;
-    record {*WorkspaceCompact;} organization?;
+    string? html_description?;
+    record {*WorkspaceCompact;}? organization?;
     # A url that points directly to the object within Asana.
-    string permalink_url?;
+    string? permalink_url?;
     # The visibility of the team to users in the same organization
     "secret"|"request_to_join"|"public" visibility?;
     # Controls who can edit team name and description
@@ -1082,57 +1082,57 @@ public type TeamResponse record {
 # A set of dependent tasks.
 public type ModifyDependentsRequest record {
     # An array of task gids that are dependents of the given task.
-    string[] dependents?;
+    string[]? dependents?;
 };
 
 public type UserTaskListBase UserTaskListCompact;
 
 public type Project_gid_project_briefs_body record {
-    ProjectBriefRequest data?;
+    ProjectBriefRequest? data?;
 };
 
-public type GoalMetricRequest GoalMetricBase;
+public type GoalMetricRequest GoalMetricBase?;
 
 public type StatusUpdateBase record {
     *StatusUpdateCompact;
     # The text content of the status update.
-    string text;
+    string? text;
     # [Opt In](/docs/inputoutput-options). The text content of the status update with formatting as HTML.
-    string html_text?;
+    string? html_text?;
     # The type associated with the status update. This represents the current state of the object this object is on.
     "on_track"|"at_risk"|"off_track"|"on_hold"|"complete"|"achieved"|"partial"|"missed"|"dropped" status_type;
 };
 
 public type StatusUpdateResponse record {
     *StatusUpdateBase;
-    UserCompact author?;
+    UserCompact? author?;
     # The time at which this resource was created.
-    string created_at?;
-    UserCompact created_by?;
+    string? created_at?;
+    UserCompact? created_by?;
     # *Deprecated - please use liked instead* True if the status is hearted by the authorized user, false if not.
-    boolean hearted?;
+    boolean? hearted?;
     # *Deprecated - please use likes instead* Array of likes for users who have hearted this status.
-    Like[] hearts?;
+    Like[]? hearts?;
     # True if the status is liked by the authorized user, false if not.
-    boolean liked?;
+    boolean? liked?;
     # Array of likes for users who have liked this status.
-    Like[] likes?;
+    Like[]? likes?;
     # The time at which this project status was last modified.
     # *Note: This does not currently reflect any changes in associations such as comments that may have been added or removed from the status.*
-    string modified_at?;
+    string? modified_at?;
     # *Deprecated - please use likes instead* The number of users who have hearted this status.
-    int num_hearts?;
+    int? num_hearts?;
     # The number of users who have liked this status.
-    int num_likes?;
-    record {*ProjectCompact;} parent?;
+    int? num_likes?;
+    record {*ProjectCompact;}? parent?;
 };
 
 public type Portfolio_gid_removeCustomFieldSetting_body record {
-    RemoveCustomFieldSettingRequest data?;
+    RemoveCustomFieldSettingRequest? data?;
 };
 
 public type Inline_response_200_9 record {
-    GoalRelationshipCompact[] data?;
+    GoalRelationshipCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
@@ -1140,54 +1140,54 @@ public type Inline_response_200_9 record {
 public type AllocationBase record {
     *AsanaResource;
     # The localized day on which the allocation starts.
-    string start_date?;
+    string? start_date?;
     # The localized day on which the allocation ends.
-    string end_date?;
+    string? end_date?;
 };
 
 # The full record for all events that have occurred since the sync token was created.
 public type Inline_response_200_7 record {
-    EventResponse[] data?;
+    EventResponse[]? data?;
     # A sync token to be used with the next call to the /events endpoint.
-    string sync?;
+    string? sync?;
     # Indicates whether there are more events to pull.
-    boolean has_more?;
+    boolean? has_more?;
 };
 
 public type Inline_response_200_8 record {
-    GoalRelationshipResponse data?;
+    GoalRelationshipResponse? data?;
 };
 
 public type Inline_response_200_5 record {
-    CustomFieldSettingResponse[] data?;
+    CustomFieldSettingResponse[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Tags_body record {
-    TagRequest data?;
+    TagRequest? data?;
 };
 
 public type Inline_response_200_6 record {
-    CustomFieldResponse[] data?;
+    CustomFieldResponse[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type StatusUpdateRequest record {
     *StatusUpdateBase;
-    string parent;
+    string?? parent;
 };
 
 public type Project_gid_duplicate_body record {
-    ProjectDuplicateRequest data?;
+    ProjectDuplicateRequest? data?;
 };
 
 public type UserResponse record {
     *UserBaseResponse;
     # Workspaces and organizations this user may access.
     # Note\: The API will only return workspaces and organizations that also contain the authenticated user.
-    WorkspaceCompact[] workspaces?;
+    WorkspaceCompact[]? workspaces?;
 };
 
 # An object representing a single event within an Asana domain.
@@ -1195,199 +1195,199 @@ public type UserResponse record {
 # Every audit log event is comprised of an `event_type`, `actor`, `resource`, and `context`. Some events will include additional metadata about the event under `details`. See our [currently supported list of events](/docs/audit-log-events#supported-audit-log-events) for more details.
 public type AuditLogEvent record {
     # Globally unique identifier of the `AuditLogEvent`, as a string.
-    string gid?;
+    string? gid?;
     # The time the event was created.
-    string created_at?;
+    string? created_at?;
     # The type of the event.
-    string event_type?;
+    string? event_type?;
     # The category that this `event_type` belongs to.
-    string event_category?;
+    string? event_category?;
     # The entity that triggered the event. Will typically be a user.
-    AuditLogEventActor actor?;
+    AuditLogEventActor? actor?;
     # The primary object that was affected by this event.
-    AuditLogEventResource 'resource?;
+    AuditLogEventResource? 'resource?;
     # Event specific details. The schema will vary depending on the `event_type`.
-    AuditLogEventDetails details?;
+    AuditLogEventDetails? details?;
     # The context from which this event originated.
-    AuditLogEventContext context?;
+    AuditLogEventContext? context?;
 };
 
 public type RemoveFollowersRequest record {
     # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string followers;
+    string? followers;
 };
 
 # A user identification object for specification with the addUser/removeUser endpoints.
 public type TeamAddUserRequest record {
     # A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    string user?;
+    string? user?;
 };
 
 public type TeamMembershipCompact record {
     *AsanaResource;
-    UserCompact user?;
-    TeamCompact team?;
+    UserCompact? user?;
+    TeamCompact? team?;
     # Describes if the user is a guest in the team.
-    boolean is_guest?;
+    boolean? is_guest?;
     # Describes if the user has limited access to the team.
-    boolean is_limited_access?;
+    boolean? is_limited_access?;
     # Describes if the user is a team admin.
-    boolean is_admin?;
+    boolean? is_admin?;
 };
 
 public type PortfolioMembershipCompact record {
     *AsanaResource;
-    PortfolioCompact portfolio?;
-    UserCompact user?;
+    PortfolioCompact? portfolio?;
+    UserCompact? user?;
 };
 
 public type Projects_project_gid_body record {
-    ProjectUpdateRequest data?;
+    ProjectUpdateRequest? data?;
 };
 
 # A response object returned from the task count endpoint.
 public type TaskCountResponse record {
     # The number of tasks in a project.
-    int num_tasks?;
+    int? num_tasks?;
     # The number of incomplete tasks in a project.
-    int num_incomplete_tasks?;
+    int? num_incomplete_tasks?;
     # The number of completed tasks in a project.
-    int num_completed_tasks?;
+    int? num_completed_tasks?;
     # The number of milestones in a project.
-    int num_milestones?;
+    int? num_milestones?;
     # The number of incomplete milestones in a project.
-    int num_incomplete_milestones?;
+    int? num_incomplete_milestones?;
     # The number of completed milestones in a project.
-    int num_completed_milestones?;
+    int? num_completed_milestones?;
 };
 
 public type TaskTemplateInstantiateTaskRequest record {
     # The name of the new task. If not provided, the name of the task template will be used.
-    string name?;
+    string? name?;
 };
 
 public type GoalAddSupportingRelationshipRequest record {
     # The gid of the supporting resource to add to the parent goal. Must be the gid of a goal, project, task, or portfolio.
-    string supporting_resource;
+    string? supporting_resource;
     # An id of a subgoal of this parent goal. The new subgoal will be added before the one specified here. `insert_before` and `insert_after` parameters cannot both be specified. Currently only supported when adding a subgoal.
-    string insert_before?;
+    string? insert_before?;
     # An id of a subgoal of this parent goal. The new subgoal will be added after the one specified here. `insert_before` and `insert_after` parameters cannot both be specified. Currently only supported when adding a subgoal.
-    string insert_after?;
+    string? insert_after?;
     # The weight that the supporting resource's progress will contribute to the supported goal's progress. This can only be 0 or 1.
-    decimal contribution_weight?;
+    decimal? contribution_weight?;
 };
 
 public type StoryResponse record {
     *StoryBase;
-    UserCompact created_by?;
+    UserCompact? created_by?;
     "comment"|"system" 'type?;
     # *Conditional*. Whether the text of the story can be edited after creation.
-    boolean is_editable?;
+    boolean? is_editable?;
     # *Conditional*. Whether the text of the story has been edited after creation.
-    boolean is_edited?;
+    boolean? is_edited?;
     # *Deprecated - please use likes instead*
     # *Conditional*. True if the story is hearted by the authorized user, false if not.
-    boolean hearted?;
+    boolean? hearted?;
     # *Deprecated - please use likes instead*
     # 
     # *Conditional*. Array of likes for users who have hearted this story.
-    Like[] hearts?;
+    Like[]? hearts?;
     # *Deprecated - please use likes instead*
     # 
     # *Conditional*. The number of users who have hearted this story.
-    int num_hearts?;
+    int? num_hearts?;
     # *Conditional*. True if the story is liked by the authorized user, false if not.
-    boolean liked?;
+    boolean? liked?;
     # *Conditional*. Array of likes for users who have liked this story.
-    Like[] likes?;
+    Like[]? likes?;
     # *Conditional*. The number of users who have liked this story.
-    int num_likes?;
+    int? num_likes?;
     # *Conditional*. A collection of previews to be displayed in the story.
     # 
     # *Note: This property only exists for comment stories.*
-    Preview[] previews?;
+    Preview[]? previews?;
     # *Conditional*'
-    string old_name?;
+    string? old_name?;
     # *Conditional*
     string? new_name?;
     # *Conditional*
-    StoryResponseDates old_dates?;
+    StoryResponseDates? old_dates?;
     # *Conditional*
-    StoryResponseDates new_dates?;
+    StoryResponseDates? new_dates?;
     # *Conditional*
-    string old_resource_subtype?;
+    string? old_resource_subtype?;
     # *Conditional*
-    string new_resource_subtype?;
-    StoryCompact story?;
-    UserCompact assignee?;
-    UserCompact follower?;
-    SectionCompact old_section?;
-    SectionCompact new_section?;
-    TaskCompact task?;
-    ProjectCompact project?;
-    TagCompact tag?;
-    CustomFieldCompact custom_field?;
+    string? new_resource_subtype?;
+    StoryCompact? story?;
+    UserCompact? assignee?;
+    UserCompact? follower?;
+    SectionCompact? old_section?;
+    SectionCompact? new_section?;
+    TaskCompact? task?;
+    ProjectCompact? project?;
+    TagCompact? tag?;
+    CustomFieldCompact? custom_field?;
     # *Conditional*
-    string old_text_value?;
+    string? old_text_value?;
     # *Conditional*
-    string new_text_value?;
+    string? new_text_value?;
     # *Conditional*
     int? old_number_value?;
     # *Conditional*
-    int new_number_value?;
-    EnumOption old_enum_value?;
-    EnumOption new_enum_value?;
-    StoryResponseDates old_date_value?;
-    StoryResponseDates new_date_value?;
+    int? new_number_value?;
+    EnumOption? old_enum_value?;
+    EnumOption? new_enum_value?;
+    StoryResponseDates?? old_date_value?;
+    StoryResponseDates?? new_date_value?;
     # *Conditional*. The old value of a people custom field story.
-    UserCompact[] old_people_value?;
+    UserCompact[]? old_people_value?;
     # *Conditional*. The new value of a people custom field story.
-    UserCompact[] new_people_value?;
+    UserCompact[]? new_people_value?;
     # *Conditional*. The old value of a multi-enum custom field story.
-    EnumOption[] old_multi_enum_values?;
+    EnumOption[]? old_multi_enum_values?;
     # *Conditional*. The new value of a multi-enum custom field story.
-    EnumOption[] new_multi_enum_values?;
+    EnumOption[]? new_multi_enum_values?;
     # *Conditional*. The new value of approval status.
-    string new_approval_status?;
+    string? new_approval_status?;
     # *Conditional*. The old value of approval status.
-    string old_approval_status?;
-    TaskCompact duplicate_of?;
-    TaskCompact duplicated_from?;
-    TaskCompact dependency?;
+    string? old_approval_status?;
+    TaskCompact? duplicate_of?;
+    TaskCompact? duplicated_from?;
+    TaskCompact? dependency?;
     # The component of the Asana product the user used to trigger the story.
     "web"|"email"|"mobile"|"api"|"unknown" 'source?;
-    record {*TaskCompact;} target?;
+    record {*TaskCompact;}? target?;
 };
 
 public type GoalMembershipBase record {
     *AsanaResource;
     # The base type of this resource.
-    string resource_type?;
+    string? resource_type?;
     # The type of membership.
-    string resource_subtype?;
-    MemberCompact member?;
-    record {*GoalCompact;} parent?;
+    string? resource_subtype?;
+    MemberCompact? member?;
+    record {*GoalCompact;}? parent?;
     # *Deprecated: Describes if the member is a commenter or editor in goal.*
     "commenter"|"editor" role?;
     # Describes if member is commenter or editor in goal. This is preferred over role
     "commenter"|"editor" access_level?;
-    record {*GoalCompact;} goal?;
+    record {*GoalCompact;}? goal?;
 };
 
 public type Inline_response_200_3 record {
-    AuditLogEvent[] data?;
+    AuditLogEvent[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Inline_response_200_4 record {
-    BatchResponse[] data?;
+    BatchResponse[]? data?;
 };
 
 public type StatusUpdateCompact record {
     *AsanaResource;
     # The title of the status update.
-    string title?;
+    string? title?;
     # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
     # The `resource_subtype`s for `status` objects represent the type of their parent.
     "project_status_update"|"portfolio_status_update"|"goal_status_update" resource_subtype?;
@@ -1395,19 +1395,19 @@ public type StatusUpdateCompact record {
 
 public type Inline_response_200_1 record {
     # An empty object. Some endpoints do not return an object on success. The success is conveyed through a 2-- status code and returning an empty object.
-    EmptyResponse data?;
+    EmptyResponse? data?;
 };
 
 public type Inline_response_200_2 record {
-    AttachmentCompact[] data?;
+    AttachmentCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type ProjectMembershipCompact record {
     *AsanaResource;
-    ProjectCompact parent?;
-    MemberCompact member?;
+    ProjectCompact? parent?;
+    MemberCompact? member?;
     # Whether the member has admin, editor, commenter, or viewer access to the project.
     "admin"|"editor"|"commenter"|"viewer" access_level?;
 };
@@ -1415,54 +1415,54 @@ public type ProjectMembershipCompact record {
 # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
 public type NextPage record {
     # Pagination offset for the request.
-    string offset?;
+    string? offset?;
     # A relative path containing the query parameters to fetch for next_page
-    string path?;
+    string? path?;
     # A full uri containing the query parameters to fetch for next_page
-    string uri?;
+    string? uri?;
 };
 
 public type Task_gid_time_tracking_entries_body record {
-    CreateTimeTrackingEntryRequest data?;
+    CreateTimeTrackingEntryRequest? data?;
 };
 
 public type TaskRemoveTagRequest record {
     # The tag's gid to remove from the task.
-    string tag;
+    string? tag;
 };
 
 public type CustomFieldSettingResponse record {
     *CustomFieldSettingBase;
-    record {*ProjectCompact;} project?;
+    record {*ProjectCompact;}? project?;
     # `is_important` is used in the Asana web application to determine if this custom field is displayed in the list/grid view of a project or portfolio.
-    boolean is_important?;
-    record {*ProjectCompact;} parent?;
-    record {*CustomFieldResponse;} custom_field?;
+    boolean? is_important?;
+    record {*ProjectCompact;}? parent?;
+    record {*CustomFieldResponse;}? custom_field?;
 };
 
 # A map of the user’s profile photo in various sizes, or null if no photo is set. Sizes provided are 21, 27, 36, 60, 128, and 1024. All images are in PNG format, except for 1024 (which is in JPEG format).
 public type UserBaseResponse_photo record {
-    string image_21x21?;
-    string image_27x27?;
-    string image_36x36?;
-    string image_60x60?;
-    string image_128x128?;
-    string image_1024x1024?;
+    string? image_21x21?;
+    string? image_27x27?;
+    string? image_36x36?;
+    string? image_60x60?;
+    string? image_128x128?;
+    string? image_1024x1024?;
 };
 
 public type Inline_response_200_49 record {
-    UserCompact[] data?;
+    UserCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type DateVariableCompact record {
     # Globally unique identifier of the date field in the project template. A value of `1` refers to the project start date, while `2` refers to the project due date.
-    string gid?;
+    string? gid?;
     # The name of the date variable.
-    string name?;
+    string? name?;
     # The description of what the date variable is used for when instantiating a project.
-    string description?;
+    string? description?;
 };
 
 public type EffortCompact record {
@@ -1470,47 +1470,47 @@ public type EffortCompact record {
     # The units used for tracking effort on an allocation, either "hours" or "percent".
     "hours"|"percent" 'type?;
     # The numeric effort value on the allocation.
-    decimal value?;
+    decimal? value?;
 };
 
 # A generic list of objects, such as those returned by the typeahead search endpoint.
 public type Inline_response_200_47 record {
-    AsanaNamedResource[] data?;
+    AsanaNamedResource[]? data?;
 };
 
 public type GoalMembershipResponse record {
     *GoalMembershipBase;
-    record {*UserCompact;} user?;
-    record {*WorkspaceCompact;} workspace?;
+    record {*UserCompact;}? user?;
+    record {*WorkspaceCompact;}? workspace?;
 };
 
 public type Inline_response_200_48 record {
-    UserTaskListResponse data?;
+    UserTaskListResponse? data?;
 };
 
 public type SectionRequest record {
     # The text to be displayed as the section name. This cannot be an empty string.
-    string name;
+    string? name;
     # An existing section within this project before which the added section should be inserted. Cannot be provided together with insert_after.
-    string insert_before?;
+    string? insert_before?;
     # An existing section within this project after which the added section should be inserted. Cannot be provided together with insert_before.
-    string insert_after?;
+    string? insert_after?;
 };
 
 public type Inline_response_200_45 record {
-    TimePeriodCompact[] data?;
+    TimePeriodCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Inline_response_200_46 record {
-    TimeTrackingEntryCompact[] data?;
+    TimeTrackingEntryCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Inline_response_200_43 record {
-    TeamCompact[] data?;
+    TeamCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
@@ -1518,154 +1518,154 @@ public type Inline_response_200_43 record {
 public type CustomFieldRequest record {
     *CustomFieldBase;
     # *Create-Only* The workspace to create a custom field in.
-    string workspace;
+    string? workspace;
     # *Allow-listed*. Instructs the API that this Custom Field is app-owned. This parameter is allow-listed to specific apps at this point in time. For apps that are not allow-listed, providing this parameter will result in a `403 Forbidden`.
-    boolean owned_by_app?;
+    boolean? owned_by_app?;
     # *Conditional*. Only relevant for custom fields of type `people`. This array of user GIDs reflects the users to be written to a `people` custom field. Note that *write* operations will replace existing users (if any) in the custom field with the users specified in this array.
-    string[] people_value?;
+    string[]? people_value?;
 };
 
 public type Inline_response_200_44 record {
-    TimePeriodResponse data?;
+    TimePeriodResponse? data?;
 };
 
 public type Inline_response_200_41 record {
-    TeamMembershipResponse data?;
+    TeamMembershipResponse? data?;
 };
 
 # An action object for use in a batch request.
 public type BatchRequestAction record {
     # The path of the desired endpoint relative to the API’s base URL. Query parameters are not accepted here; put them in `data` instead.
-    string relative_path;
+    string? relative_path;
     # The HTTP method you wish to emulate for the action.
     "get"|"post"|"put"|"delete"|"patch"|"head" method;
     # For `GET` requests, this should be a map of query parameters you would have normally passed in the URL. Options and pagination are not accepted here; put them in `options` instead. For `POST`, `PATCH`, and `PUT` methods, this should be the content you would have normally put in the data field of the body.
-    record {} data?;
+    record {}? data?;
     # Pagination (`limit` and `offset`) and output options (`fields` or `expand`) for the action. “Pretty” JSON output is not an available option on individual actions; if you want pretty output, specify that option on the parent request.
-    BatchRequestAction_options options?;
+    BatchRequestAction_options? options?;
 };
 
 public type ProjectBriefResponse record {
     *ProjectBriefBase;
     # [Opt In](/docs/inputoutput-options). The plain text of the project brief.
-    string text?;
+    string? text?;
     # A url that points directly to the object within Asana.
-    string permalink_url?;
-    record {*ProjectCompact;} project?;
+    string? permalink_url?;
+    record {*ProjectCompact;}? project?;
 };
 
 public type ProjectTemplateInstantiateProjectRequest record {
     # The name of the new project.
-    string name;
+    string? name;
     # *Optional*. Sets the team of the new project. If the project template exists in an _organization_, you may specify a value for `team`. If no value is provided then it defaults to the same team as the project template.
-    string team?;
+    string? team?;
     # Sets the project to public to its team.
-    boolean 'public?;
+    boolean? 'public?;
     # *Optional*. If set to `true`, the endpoint returns an "Unprocessable Entity" error if you fail to provide a calendar date value for any date variable. If set to `false`, a default date is used for each unfulfilled date variable (e.g., the current date is used as the Start Date of a project).
-    boolean is_strict?;
+    boolean? is_strict?;
     # Array of mappings of date variables to calendar dates.
-    DateVariableRequest[] requested_dates?;
+    DateVariableRequest[]? requested_dates?;
     # Array of mappings of template roles to user ids
-    RequestedRoleRequest[] requested_roles?;
+    RequestedRoleRequest[]? requested_roles?;
 };
 
 public type Inline_response_200_42 record {
-    TeamMembershipCompact[] data?;
+    TeamMembershipCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Inline_response_201_10 record {
-    WebhookResponse data?;
+    WebhookResponse? data?;
 };
 
 public type Project_gid_removeCustomFieldSetting_body record {
-    RemoveCustomFieldSettingRequest data?;
+    RemoveCustomFieldSettingRequest? data?;
 };
 
 public type Inline_response_200_40 record {
-    TaskCompact[] data?;
+    TaskCompact[]? data?;
 };
 
 public type ProjectTemplateCompact record {
     *AsanaResource;
     # Name of the project template.
-    string name?;
+    string? name?;
 };
 
 public type Teams_team_gid_body record {
-    TeamRequest data?;
+    TeamRequest? data?;
 };
 
 public type RequestedRoleRequest record {
     # Globally unique identifier of the template role in the project template.
-    string gid?;
+    string? gid?;
     # The user id that should be assigned to the template role.
-    string value?;
+    string? value?;
 };
 
 public type AttachmentRequest record {
     # The type of the attachment. Must be one of the given values. If not specified, a file attachment of type `asana` will be assumed. Note that if the value of `resource_subtype` is `external`, a `parent`, `name`, and `url` must also be provided.
     "asana"|"dropbox"|"gdrive"|"onedrive"|"box"|"vimeo"|"external" resource_subtype?;
     # Required for `asana` attachments.
-    record {byte[] fileContent; string fileName;} file?;
+    record {byte[] fileContent; string fileName;}? file?;
     # Required identifier of the parent task, project, or project_brief, as a string.
-    string parent;
+    string? parent;
     # The URL of the external resource being attached. Required for attachments of type `external`.
-    string url?;
+    string? url?;
     # The name of the external resource being attached. Required for attachments of type `external`.
-    string name?;
+    string? name?;
     # *Optional*. Only relevant for external attachments with a parent task. A boolean indicating whether the current app should be connected with the attachment for the purposes of showing an app components widget. Requires the app to have been added to a project the parent task is in.
-    boolean connect_to_app?;
+    boolean? connect_to_app?;
 };
 
 public type TaskResponse record {
     *TaskBase;
-    UserCompact assignee?;
-    record {*SectionCompact;} assignee_section?;
+    UserCompact?? assignee?;
+    record {*SectionCompact;}? assignee_section?;
     # Array of custom field values applied to the task. These represent the custom field values recorded on this project for a particular custom field. For example, these custom field values will contain an `enum_value` property for custom fields of type `enum`, a `text_value` property for custom fields of type `text`, and so on. Please note that the `gid` returned on each custom field value *is identical* to the `gid` of the custom field, which allows referencing the custom field metadata through the `/custom_fields/custom_field-gid` endpoint.
-    CustomFieldResponse[] custom_fields?;
+    CustomFieldResponse[]? custom_fields?;
     # Array of users following this task.
-    UserCompact[] followers?;
-    record {*TaskCompact;} parent?;
+    UserCompact[]? followers?;
+    record {*TaskCompact;}? parent?;
     # *Create-only.* Array of projects this task is associated with. At task creation time, this array can be used to add the task to many projects at once. After task creation, these associations can be modified using the addProject and removeProject endpoints.
-    ProjectCompact[] projects?;
+    ProjectCompact[]? projects?;
     # Array of tags associated with this task. In order to change tags on an existing task use `addTag` and `removeTag`.
-    TagCompact[] tags?;
-    record {*WorkspaceCompact;} workspace?;
+    TagCompact[]? tags?;
+    record {*WorkspaceCompact;}? workspace?;
     # A url that points directly to the object within Asana.
-    string permalink_url?;
+    string? permalink_url?;
 };
 
 public type Task_gid_removeFollowers_body record {
-    TaskRemoveFollowersRequest data?;
+    TaskRemoveFollowersRequest? data?;
 };
 
 public type WorkspaceMembershipResponse record {
     *WorkspaceMembershipBase;
-    UserTaskListResponse user_task_list?;
+    UserTaskListResponse? user_task_list?;
     # Reflects if this user still a member of the workspace.
-    boolean is_active?;
+    boolean? is_active?;
     # Reflects if this user is an admin of the workspace.
-    boolean is_admin?;
+    boolean? is_admin?;
     # Reflects if this user is a guest of the workspace.
-    boolean is_guest?;
+    boolean? is_guest?;
     # Contains keys `start_on` and `end_on` for the vacation dates for the user in this workspace. If `start_on` is null, the entire `vacation_dates` object will be null. If `end_on` is before today, the entire `vacation_dates` object will be null.
     WorkspaceMembershipResponse_vacation_dates? vacation_dates?;
     # The time at which this resource was created.
-    string created_at?;
+    string? created_at?;
 };
 
 public type Inline_response_200_38 record {
-    TaskTemplateResponse data?;
+    TaskTemplateResponse? data?;
 };
 
 public type Goal_gid_setMetric_body record {
-    GoalMetricRequest data?;
+    GoalMetricRequest? data?;
 };
 
 public type Inline_response_200_39 record {
-    TaskCompact[] data?;
+    TaskCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
@@ -1673,21 +1673,21 @@ public type Inline_response_200_39 record {
 public type GoalResponse record {
     *GoalBase;
     # Array of likes for users who have liked this goal.
-    Like[] likes?;
+    Like[]? likes?;
     # The number of users who have liked this goal.
-    int num_likes?;
-    record {*TeamCompact;} team?;
-    record {*WorkspaceCompact;} workspace?;
+    int? num_likes?;
+    record {*TeamCompact;}? team?;
+    record {*WorkspaceCompact;}? workspace?;
     # Array of users who are members of this goal.
-    UserCompact[] followers?;
-    record {*TimePeriodCompact;} time_period?;
+    UserCompact[]? followers?;
+    record {*TimePeriodCompact;}? time_period?;
     record {
         *GoalMetricBase;
         # *Conditional*. Only relevant for `progress_source` of type `external`. This boolean indicates whether the requester has the ability to update the current value of this metric. This returns `true` if the external metric was created by the requester, `false` otherwise.
-        boolean can_manage?;
-    } metric?;
-    record {*UserCompact;} owner?;
-    StatusUpdateCompact current_status_update?;
+        boolean? can_manage?;
+    }? metric?;
+    record {*UserCompact;}? owner?;
+    StatusUpdateCompact?? current_status_update?;
     # The current status of this goal. When the goal is open, its status can be `green`, `yellow`, and `red` to reflect "On Track", "At Risk", and "Off Track", respectively. When the goal is closed, the value can be `missed`, `achieved`, `partial`, or `dropped`.
     # *Note* you can only write to this property if `metric` is set.
     string? status?;
@@ -1696,15 +1696,15 @@ public type GoalResponse record {
 public type ProjectStatusBase record {
     *ProjectStatusCompact;
     # The text content of the status update.
-    string text?;
+    string? text?;
     # [Opt In](/docs/inputoutput-options). The text content of the status update with formatting as HTML.
-    string html_text?;
+    string? html_text?;
     # The color associated with the status update.
     "green"|"yellow"|"red"|"blue"|"complete" color?;
 };
 
 public type Inline_response_200_36 record {
-    TagCompact[] data?;
+    TagCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
@@ -1712,66 +1712,66 @@ public type Inline_response_200_36 record {
 # An *organization_export* request starts a job to export the complete data of the given Organization.
 public type OrganizationExportRequest record {
     # Globally unique identifier for the workspace or organization.
-    string organization?;
+    string? organization?;
 };
 
 public type TaskCompact record {
     *AsanaResource;
     # The name of the task.
-    string name?;
+    string? name?;
     # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
     # The resource_subtype `milestone` represent a single moment in time. This means tasks with this subtype cannot have a start_date.
     "default_task"|"milestone"|"section"|"approval" resource_subtype?;
     # [Opt In](/docs/inputoutput-options). A *user* object represents an account in Asana that can be given access to various workspaces, projects, and tasks.
-    TaskCompact_created_by created_by?;
+    TaskCompact_created_by? created_by?;
 };
 
 public type Inline_response_200_37 record {
-    TaskTemplateCompact[] data?;
+    TaskTemplateCompact[]? data?;
 };
 
 public type Inline_response_200_34 record {
-    StoryResponse data?;
+    StoryResponse? data?;
 };
 
 # Information about the type of change that has occurred. This field is only present when the value of the property `action`, describing the action taken on the **resource**, is `changed`.
 public type EventResponse_change record {
     # The name of the field that has changed in the resource.
-    string 'field?;
+    string? 'field?;
     # The type of action taken on the **field** which has been changed.  This can be one of `changed`, `added`, or `removed` depending on the nature of the change.
-    string action?;
+    string? action?;
     # *Conditional.* This property is only present when the value of the event's `change.action` is `changed` _and_ the `new_value` is an Asana resource. This will be only the `gid` and `resource_type` of the resource when the events come from webhooks; this will be the compact representation (and can have fields expanded with [opt_fields](/docs/inputoutput-options)) when using the [get events](/reference/getevents) endpoint.
-    anydata new_value?;
+    anydata? new_value?;
     # *Conditional.* This property is only present when the value of the event's `change.action` is `added` _and_ the `added_value` is an Asana resource. This will be only the `gid` and `resource_type` of the resource when the events come from webhooks; this will be the compact representation (and can have fields expanded with [opt_fields](/docs/inputoutput-options)) when using the [get events](/reference/getevents) endpoint.
-    anydata added_value?;
+    anydata? added_value?;
     # *Conditional.* This property is only present when the value of the event's `change.action` is `removed` _and_ the `removed_value` is an Asana resource. This will be only the `gid` and `resource_type` of the resource when the events come from webhooks; this will be the compact representation (and can have fields expanded with [opt_fields](/docs/inputoutput-options)) when using the [get events](/reference/getevents) endpoint.
-    anydata removed_value?;
+    anydata? removed_value?;
 };
 
 public type Inline_response_200_35 record {
-    StoryCompact[] data?;
+    StoryCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
-public type TimePeriodResponse TimePeriodBase;
+public type TimePeriodResponse TimePeriodBase?;
 
 public type Inline_response_200_32 record {
-    StatusUpdateResponse data?;
+    StatusUpdateResponse? data?;
 };
 
 public type Inline_response_200_33 record {
-    StatusUpdateCompact[] data?;
+    StatusUpdateCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Inline_response_200_30 record {
-    SectionResponse data?;
+    SectionResponse? data?;
 };
 
 public type Inline_response_200_31 record {
-    SectionCompact[] data?;
+    SectionCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
@@ -1779,27 +1779,27 @@ public type Inline_response_200_31 record {
 public type ProjectRequest record {
     *ProjectBase;
     # An object where each key is the GID of a custom field and its corresponding value is either an enum GID, string, number, or object (depending on the custom field type). See the [custom fields guide](/docs/custom-fields-guide) for details on creating and updating custom field values.
-    record {|string...;|} custom_fields?;
+    record {|string?...;|}? custom_fields?;
     # *Create-only*. Comma separated string of users. Followers are a subset of members who have opted in to receive "tasks added" notifications for a project.
-    string followers?;
+    string? followers?;
     # The current owner of the project, may be null.
     string? owner?;
     # The team that this project is shared with.
-    string team?;
+    string? team?;
     # The `gid` of a workspace.
-    string workspace?;
+    string? workspace?;
 };
 
 public type CustomFieldBase record {
     *CustomFieldCompact;
     # [Opt In](/docs/inputoutput-options). The description of the custom field.
-    string description?;
+    string? description?;
     # *Conditional*. Only relevant for custom fields of type `enum`. This array specifies the possible values which an `enum` custom field can adopt. To modify the enum options, refer to [working with enum options](/reference/createenumoptionforcustomfield).
-    EnumOption[] enum_options?;
+    EnumOption[]? enum_options?;
     # Only relevant for custom fields of type ‘Number’. This field dictates the number of places after the decimal to round to, i.e. 0 is integer values, 1 rounds to the nearest tenth, and so on. Must be between 0 and 6, inclusive.
     # For percentage format, this may be unintuitive, as a value of 0.25 has a precision of 0, while a value of 0.251 has a precision of 1. This is due to 0.25 being displayed as 25%.
     # The identifier format will always have a precision of 0.
-    int precision?;
+    int? precision?;
     # The format of this custom field.
     "currency"|"identifier"|"percentage"|"custom"|"duration"|"none" format?;
     # ISO 4217 currency code to format this custom field. This will be null if the `format` is not `currency`.
@@ -1809,9 +1809,9 @@ public type CustomFieldBase record {
     # Only relevant for custom fields with `custom` format. This depicts where to place the custom label. This will be null if the `format` is not `custom`.
     "prefix"|"suffix"? custom_label_position?;
     # This flag describes whether this custom field is available to every container in the workspace. Before project-specific custom fields, this field was always true.
-    boolean is_global_to_workspace?;
+    boolean? is_global_to_workspace?;
     # *Conditional*. This flag describes whether a follower of a task with this field should receive inbox notifications from changes to this field.
-    boolean has_notifications_enabled?;
+    boolean? has_notifications_enabled?;
     # *Conditional*. A unique identifier to associate this field with the template source of truth.
     "a_v_requirements"|"account_name"|"actionable"|"align_shipping_link"|"align_status"|"allotted_time"|"appointment"|"approval_stage"|"approved"|"article_series"|"board_committee"|"browser"|"campaign_audience"|"campaign_project_status"|"campaign_regions"|"channel_primary"|"client_topic_type"|"complete_by"|"contact"|"contact_email_address"|"content_channels"|"content_channels_needed"|"content_stage"|"content_type"|"contract"|"contract_status"|"cost"|"creation_stage"|"creative_channel"|"creative_needed"|"creative_needs"|"data_sensitivity"|"deal_size"|"delivery_appt"|"delivery_appt_date"|"department"|"department_responsible"|"design_request_needed"|"design_request_type"|"discussion_category"|"do_this_task"|"editorial_content_status"|"editorial_content_tag"|"editorial_content_type"|"effort"|"effort_level"|"est_completion_date"|"estimated_time"|"estimated_value"|"expected_cost"|"external_steps_needed"|"favorite_idea"|"feedback_type"|"financial"|"funding_amount"|"grant_application_process"|"hiring_candidate_status"|"idea_status"|"ids_link"|"ids_patient_link"|"implementation_stage"|"insurance"|"interview_area"|"interview_question_score"|"itero_scan_link"|"job_s_applied_to"|"lab"|"launch_status"|"lead_status"|"localization_language"|"localization_market_team"|"localization_status"|"meeting_minutes"|"meeting_needed"|"minutes"|"mrr"|"must_localize"|"name_of_foundation"|"need_to_follow_up"|"next_appointment"|"next_steps_sales"|"num_people"|"number_of_user_reports"|"office_location"|"onboarding_activity"|"owner"|"participants_needed"|"patient_date_of_birth"|"patient_email"|"patient_phone"|"patient_status"|"phone_number"|"planning_category"|"point_of_contact"|"position"|"post_format"|"prescription"|"priority"|"priority_level"|"product"|"product_stage"|"progress"|"project_size"|"project_status"|"proposed_budget"|"publish_status"|"reason_for_scan"|"referral"|"request_type"|"research_status"|"responsible_department"|"responsible_team"|"risk_assessment_status"|"room_name"|"sales_counterpart"|"sentiment"|"shipping_link"|"social_channels"|"stage"|"status"|"status_design"|"status_of_initiative"|"system_setup"|"task_progress"|"team"|"team_marketing"|"team_responsible"|"time_it_takes_to_complete_tasks"|"timeframe"|"treatment_type"|"type_work_requests_it"|"use_agency"|"user_name"|"vendor_category"|"vendor_type"|"word_count"? asana_created_field?;
 };
@@ -1819,7 +1819,7 @@ public type CustomFieldBase record {
 public type AttachmentBase AttachmentCompact;
 
 public type Inline_response_200_29 record {
-    RuleTriggerResponse data?;
+    RuleTriggerResponse? data?;
 };
 
 public type GoalRelationshipRequest record {
@@ -1827,26 +1827,26 @@ public type GoalRelationshipRequest record {
 };
 
 public type Inline_response_200_27 record {
-    ProjectTemplateCompact[] data?;
+    ProjectTemplateCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Custom_field_gid_enum_options_body record {
-    EnumOptionRequest data?;
+    EnumOptionRequest? data?;
 };
 
 public type Portfolio_gid_removeItem_body record {
-    PortfolioRemoveItemRequest data?;
+    PortfolioRemoveItemRequest? data?;
 };
 
 public type Inline_response_200_28 record {
     # A response object returned from the task count endpoint.
-    TaskCountResponse data?;
+    TaskCountResponse? data?;
 };
 
 public type Inline_response_200_25 record {
-    ProjectStatusCompact[] data?;
+    ProjectStatusCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
@@ -1856,7 +1856,7 @@ public type GoalRequestBase record {
     # *Conditional*. This property is only present when the `workspace` provided is an organization.
     string? team?;
     # The `gid` of a workspace.
-    string workspace?;
+    string? workspace?;
     # The `gid` of a time period.
     string? time_period?;
     # The `gid` of a user.
@@ -1864,16 +1864,16 @@ public type GoalRequestBase record {
 };
 
 public type Inline_response_200_26 record {
-    ProjectTemplateResponse data?;
+    ProjectTemplateResponse? data?;
 };
 
 public type Inline_response_200_23 record {
-    ProjectMembershipCompact[] data?;
+    ProjectMembershipCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
-public type JobResponse JobBase;
+public type JobResponse JobBase?;
 
 public type TaskBase record {
     *TaskCompact;
@@ -1882,37 +1882,37 @@ public type TaskBase record {
     # *Deprecated* Scheduling status of this task for the user it is assigned to. This field can only be set if the assignee is non-null. Setting this field to "inbox" or "upcoming" inserts it at the top of the section, while the other options will insert at the bottom.
     "today"|"upcoming"|"later"|"new"|"inbox" assignee_status?;
     # True if the task is currently marked complete, false if not.
-    boolean completed?;
+    boolean? completed?;
     # The time at which this task was completed, or null if the task is incomplete.
     string? completed_at?;
-    UserCompact completed_by?;
+    UserCompact?? completed_by?;
     # The time at which this resource was created.
-    string created_at?;
+    string? created_at?;
     # [Opt In](/docs/inputoutput-options). Array of resources referencing tasks that this task depends on. The objects contain only the gid of the dependency.
-    AsanaResource[] dependencies?;
+    AsanaResource[]? dependencies?;
     # [Opt In](/docs/inputoutput-options). Array of resources referencing tasks that depend on this task. The objects contain only the ID of the dependent.
-    AsanaResource[] dependents?;
+    AsanaResource[]? dependents?;
     # The UTC date and time on which this task is due, or null if the task has no due time. This takes an ISO 8601 date string in UTC and should not be used together with `due_on`.
     string? due_at?;
     # The localized date on which this task is due, or null if the task has no due date. This takes a date with `YYYY-MM-DD` format and should not be used together with `due_at`.
     string? due_on?;
     # *OAuth Required*. *Conditional*. This field is returned only if external values are set or included by using [Opt In] (/docs/inputoutput-options).
     # The external field allows you to store app-specific metadata on tasks, including a gid that can be used to retrieve tasks and a data blob that can store app-specific character strings. Note that you will need to authenticate with Oauth to access or modify this data. Once an external gid is set, you can use the notation `external:custom_gid` to reference your object anywhere in the API where you may use the original object gid. See the page on Custom External Data for more details.
-    TaskBase_external 'external?;
+    TaskBase_external? 'external?;
     # [Opt In](/docs/inputoutput-options). The notes of the text with formatting as HTML.
-    string html_notes?;
+    string? html_notes?;
     # *Deprecated - please use liked instead* True if the task is hearted by the authorized user, false if not.
-    boolean hearted?;
+    boolean? hearted?;
     # *Deprecated - please use likes instead* Array of likes for users who have hearted this task.
-    Like[] hearts?;
+    Like[]? hearts?;
     # [Opt In](/docs/inputoutput-options). In some contexts tasks can be rendered as a visual separator; for instance, subtasks can appear similar to [sections](/reference/sections) without being true `section` objects. If a `task` object is rendered this way in any context it will have the property `is_rendered_as_separator` set to `true`.
-    boolean is_rendered_as_separator?;
+    boolean? is_rendered_as_separator?;
     # True if the task is liked by the authorized user, false if not.
-    boolean liked?;
+    boolean? liked?;
     # Array of likes for users who have liked this task.
-    Like[] likes?;
+    Like[]? likes?;
     # *Create-only*. Array of projects this task is associated with and the section it is in. At task creation time, this array can be used to add the task to specific sections. After task creation, these associations can be modified using the `addProject` and `removeProject` endpoints. Note that over time, more types of memberships may be added to this property.
-    TaskBase_memberships[] memberships?;
+    TaskBase_memberships[]? memberships?;
     # The time at which this task was last modified.
     # 
     # The following conditions will change `modified_at`:
@@ -1937,17 +1937,17 @@ public type TaskBase record {
     # - moving to a new container (project, portfolio, etc)
     # - comments being added to the task (but the stories they generate
     #   _will_ affect `modified_at`)
-    string modified_at?;
+    string? modified_at?;
     # Name of the task. This is generally a short sentence fragment that fits on a line in the UI for maximum readability. However, it can be longer.
-    string name?;
+    string? name?;
     # Free-form textual information associated with the task (i.e. its description).
-    string notes?;
+    string? notes?;
     # *Deprecated - please use likes instead* The number of users who have hearted this task.
-    int num_hearts?;
+    int? num_hearts?;
     # The number of users who have liked this task.
-    int num_likes?;
+    int? num_likes?;
     # [Opt In](/docs/inputoutput-options). The number of subtasks on this task.
-    int num_subtasks?;
+    int? num_subtasks?;
     # Date and time on which work begins for the task, or null if the task has no start time. This takes an ISO 8601 date string in UTC and should not be used together with `start_on`.
     # *Note: `due_at` must be present in the request when setting or unsetting the `start_at` parameter.*
     string? start_at?;
@@ -1959,35 +1959,35 @@ public type TaskBase record {
 };
 
 public type Inline_response_200_24 record {
-    ProjectStatusResponse data?;
+    ProjectStatusResponse? data?;
 };
 
 public type Inline_response_200_21 record {
-    ProjectBriefResponse data?;
+    ProjectBriefResponse? data?;
 };
 
 # [Opt In](/docs/inputoutput-options). A *user* object represents an account in Asana that can be given access to various workspaces, projects, and tasks.
 public type TaskCompact_created_by record {
     # Globally unique identifier of the resource.
-    string gid?;
+    string? gid?;
     # The type of resource.
-    string resource_type?;
+    string? resource_type?;
 };
 
 public type Goal_gid_setMetricCurrentValue_body record {
-    GoalMetricCurrentValueRequest data?;
+    GoalMetricCurrentValueRequest? data?;
 };
 
 public type Inline_response_200_22 record {
-    ProjectMembershipNormalResponse data?;
+    ProjectMembershipNormalResponse? data?;
 };
 
 public type Inline_response_200_20 record {
-    CustomFieldSettingResponse data?;
+    CustomFieldSettingResponse? data?;
 };
 
 public type Task_gid_duplicate_body record {
-    TaskDuplicateRequest data?;
+    TaskDuplicateRequest? data?;
 };
 
 # An *event* is an object representing a change to a resource that was
@@ -2030,145 +2030,145 @@ public type Task_gid_duplicate_body record {
 # `Event.change.action` will be `added`, and `added_value` will be
 # an object with the user's `id` and `type`.
 public type EventResponse record {
-    UserCompact user?;
-    AsanaNamedResource 'resource?;
+    UserCompact?? user?;
+    AsanaNamedResource?? 'resource?;
     # *Deprecated: Refer to the resource_type of the resource.* The type of the resource that generated the event.
-    string 'type?;
+    string? 'type?;
     # The type of action taken on the **resource** that triggered the event.  This can be one of `changed`, `added`, `removed`, `deleted`, or `undeleted` depending on the nature of the event.
-    string action?;
-    AsanaNamedResource parent?;
+    string? action?;
+    AsanaNamedResource?? parent?;
     # The timestamp when the event occurred.
-    string created_at?;
+    string? created_at?;
     # Information about the type of change that has occurred. This field is only present when the value of the property `action`, describing the action taken on the **resource**, is `changed`.
-    EventResponse_change change?;
+    EventResponse_change? change?;
 };
 
 public type TeamCompact record {
     *AsanaResource;
     # The name of the team.
-    string name?;
+    string? name?;
 };
 
 public type ModifyDependenciesRequest record {
     # An array of task gids that a task depends on.
-    string[] dependencies?;
+    string[]? dependencies?;
 };
 
 public type StoryCompact record {
     *AsanaResource;
     # The time at which this resource was created.
-    string created_at?;
-    UserCompact created_by?;
+    string? created_at?;
+    UserCompact? created_by?;
     # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
-    string resource_subtype?;
+    string? resource_subtype?;
     # *Create-only*. Human-readable text for the story or comment.
     # This will not include the name of the creator.
     # *Note: This is not guaranteed to be stable for a given type of story. For example, text for a reassignment may not always say “assigned to …” as the text for a story can both be edited and change based on the language settings of the user making the request.*
     # Use the `resource_subtype` property to discover the action that created the story.
-    string text?;
+    string? text?;
 };
 
 public type ProjectSectionInsertRequest record {
     # The section to reorder.
-    string section;
+    string? section;
     # Insert the given section immediately before the section specified by this parameter.
-    string before_section?;
+    string? before_section?;
     # Insert the given section immediately after the section specified by this parameter.
-    string after_section?;
+    string? after_section?;
 };
 
 public type Project_gid_removeFollowers_body record {
-    RemoveFollowersRequest data?;
+    RemoveFollowersRequest? data?;
 };
 
 public type Task_gid_addTag_body record {
-    TaskAddTagRequest data?;
+    TaskAddTagRequest? data?;
 };
 
 # A user identification object for specification with the addUser/removeUser endpoints.
 public type TeamRemoveUserRequest record {
     # A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    string user?;
+    string? user?;
 };
 
 public type Inline_response_200_18 record {
-    PortfolioCompact[] data?;
+    PortfolioCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Inline_response_200_19 record {
-    ProjectCompact[] data?;
+    ProjectCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Inline_response_200_16 record {
-    PortfolioMembershipCompact[] data?;
+    PortfolioMembershipCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Inline_response_200_17 record {
-    PortfolioMembershipResponse data?;
+    PortfolioMembershipResponse? data?;
 };
 
 public type GoalRequest record {
     *GoalRequestBase;
-    string[] followers?;
+    string[]? followers?;
 };
 
 public type Inline_response_200_14 record {
-    MembershipCompact[] data?;
+    MembershipCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Goal_gid_removeFollowers_body record {
-    TaskAddFollowersRequest data?;
+    TaskAddFollowersRequest? data?;
 };
 
 public type Inline_response_200_15 record {
-    ProjectMembershipCompactResponse data?;
+    ProjectMembershipCompactResponse? data?;
 };
 
 public type Batch_body record {
     # A request object for use in a batch request.
-    BatchRequest data?;
+    BatchRequest? data?;
 };
 
 public type Inline_response_200_12 record {
-    GoalCompact[] data?;
+    GoalCompact[]? data?;
 };
 
 public type Inline_response_200_13 record {
-    JobResponse data?;
+    JobResponse? data?;
 };
 
 public type GoalAddSubgoalRequest record {
     # The goal gid to add as subgoal to a parent goal
-    string subgoal;
+    string? subgoal;
     # An id of a subgoal of this parent goal. The new subgoal will be added before the one specified here. `insert_before` and `insert_after` parameters cannot both be specified.
-    string insert_before?;
+    string? insert_before?;
     # An id of a subgoal of this parent goal. The new subgoal will be added after the one specified here. `insert_before` and `insert_after` parameters cannot both be specified.
-    string insert_after?;
+    string? insert_after?;
 };
 
 public type Inline_response_200_10 record {
-    GoalResponse data?;
+    GoalResponse? data?;
 };
 
 public type Inline_response_200_11 record {
-    GoalCompact[] data?;
+    GoalCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type AllocationCompact record {
     *AllocationBase;
-    UserCompact assignee?;
-    ProjectCompact parent?;
-    EffortCompact effort?;
+    UserCompact? assignee?;
+    ProjectCompact? parent?;
+    EffortCompact? effort?;
 };
 
 public type GoalRelationshipResponse record {
@@ -2177,186 +2177,186 @@ public type GoalRelationshipResponse record {
 
 public type Task_gid_addDependents_body record {
     # A set of dependent tasks.
-    ModifyDependentsRequest data?;
+    ModifyDependentsRequest? data?;
 };
 
 public type Goals_goal_gid_body record {
-    GoalUpdateRequest data?;
+    GoalUpdateRequest? data?;
 };
 
 public type Task_gid_removeTag_body record {
-    TaskRemoveTagRequest data?;
+    TaskRemoveTagRequest? data?;
 };
 
 public type CreateMembershipRequest record {
     *MembershipRequest;
     # The gid of the user or team.
-    string member?;
+    string? member?;
     # The gid of the `goal` or `project` to add the member to.
-    string parent?;
+    string? parent?;
     # The role given to the member. Optional argument, will default to `commenter` for goals and the default project role for projects. Can be `editor` or `commenter` for goals. Can be `admin`,`editor` or `commenter` for projects.
-    string role?;
+    string? role?;
 };
 
-public type JobBase JobCompact;
+public type JobBase JobCompact?;
 
 public type TaskBase_memberships record {
-    ProjectCompact project?;
-    SectionCompact section?;
+    ProjectCompact? project?;
+    SectionCompact? section?;
 };
 
 public type AllocationRequest record {
     *AllocationBase;
     # Globally unique identifier for the user who is assigned to the allocation.
-    string assignee?;
+    string? assignee?;
     # Globally unique identifier for the project the allocation is on.
-    string parent?;
-    EffortCompact effort?;
+    string? parent?;
+    EffortCompact? effort?;
 };
 
 public type Team_gid_addUser_body record {
     # A user identification object for specification with the addUser/removeUser endpoints.
-    TeamAddUserRequest data?;
+    TeamAddUserRequest? data?;
 };
 
-public type StoryRequest StoryBase;
+public type StoryRequest StoryBase?;
 
 public type ProjectStatusCompact record {
     *AsanaResource;
     # The title of the project status update.
-    string title?;
+    string? title?;
 };
 
 public type Project_gid_saveAsTemplate_body record {
-    ProjectSaveAsTemplateRequest data?;
+    ProjectSaveAsTemplateRequest? data?;
 };
 
 public type GoalAddSupportingWorkRequest record {
     # The project/task/portfolio gid to add as supporting work for a goal
-    string supporting_work;
+    string? supporting_work;
 };
 
 public type Workspaces_workspace_gid_body record {
-    WorkspaceRequest data?;
+    WorkspaceRequest? data?;
 };
 
 public type PortfolioCompact record {
     *AsanaResource;
     # The name of the portfolio.
-    string name?;
+    string? name?;
 };
 
 public type ProjectTemplateBase record {
     *ProjectTemplateCompact;
     # Free-form textual information associated with the project template
-    string description?;
+    string? description?;
     # The description of the project template with formatting as HTML.
-    string html_description?;
+    string? html_description?;
     # True if the project template is public to its team.
-    boolean 'public?;
+    boolean? 'public?;
     # The current owner of the project template, may be null.
-    record {*UserCompact;} owner?;
-    TeamCompact team?;
+    record {*UserCompact;}? owner?;
+    TeamCompact?? team?;
     # Array of date variables in this project template. Calendar dates must be provided for these variables when instantiating a project.
-    DateVariableCompact[] requested_dates?;
+    DateVariableCompact[]? requested_dates?;
     # Color of the project template.
     "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray"? color?;
     # Array of template roles in this project template. User Ids can be provided for these variables when instantiating a project to assign template tasks to the user.
-    TemplateRole[] requested_roles?;
+    TemplateRole[]? requested_roles?;
 };
 
-public type WorkspaceMembershipRequest WorkspaceMembershipBase;
+public type WorkspaceMembershipRequest WorkspaceMembershipBase?;
 
 public type Inline_response_201 record {
-    CustomFieldResponse data?;
+    CustomFieldResponse? data?;
 };
 
 public type Inline_response_200 record {
-    AttachmentResponse data?;
+    AttachmentResponse? data?;
 };
 
 public type TagRequest record {
     *TagBase;
     # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string[] followers?;
+    string[]? followers?;
     # Gid of an object.
-    string workspace?;
+    string? workspace?;
 };
 
 # An object to represent a user's like.
 public type Like record {
     # Globally unique identifier of the object, as a string.
-    string gid?;
-    UserCompact user?;
+    string? gid?;
+    UserCompact? user?;
 };
 
 public type UpdateTimeTrackingEntryRequest record {
     # *Optional*. Time in minutes tracked by the entry
-    int duration_minutes?;
+    int? duration_minutes?;
     # *Optional*. The day that this entry is logged on. Defaults to today if no day specified
-    string entered_on?;
+    string? entered_on?;
 };
 
 public type GoalRelationshipBase record {
     *GoalRelationshipCompact;
-    record {*GoalCompact;} supported_goal?;
+    record {*GoalCompact;}? supported_goal?;
 };
 
 public type AttachmentResponse record {
     *AttachmentBase;
     # The time at which this resource was created.
-    string created_at?;
+    string? created_at?;
     # The URL containing the content of the attachment.
     # *Note:* May be null if the attachment is hosted by [Box](https://www.box.com/) and will be null if the attachment is a Video Message hosted by [Vimeo](https://vimeo.com/). If present, this URL may only be valid for two minutes from the time of retrieval. You should avoid persisting this URL somewhere and just refresh it on demand to ensure you do not keep stale URLs.
     string? download_url?;
     # 
     string? permanent_url?;
     # The service hosting the attachment. Valid values are `asana`, `dropbox`, `gdrive`, `box`, and `vimeo`.
-    string host?;
+    string? host?;
     record {
         *TaskCompact;
         # The resource subtype of the parent resource that the filter applies to.
         "default_task"|"milestone"|"section"|"approval" resource_subtype?;
-    } parent?;
+    }? parent?;
     # The size of the attachment in bytes. Only present when the `resource_subtype` is `asana`.
-    int size?;
+    int? size?;
     # The URL where the attachment can be viewed, which may be friendlier to users in a browser than just directing them to a raw file. May be null if no view URL exists for the service.
     string? view_url?;
     # Whether the attachment is connected to the app making the request for the purposes of showing an app components widget. Only present when the `resource_subtype` is `external` or `gdrive`.
-    boolean connected_to_app?;
+    boolean? connected_to_app?;
 };
 
 public type TagCreateTagForWorkspaceRequest record {
     *TagBase;
     # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string[] followers?;
+    string[]? followers?;
 };
 
-public type WorkspaceRequest WorkspaceBase;
+public type WorkspaceRequest WorkspaceBase?;
 
 public type AddMembersRequest record {
     # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string members;
+    string? members;
 };
 
 public type Project_gid_addCustomFieldSetting_body record {
-    AddCustomFieldSettingRequest data?;
+    AddCustomFieldSettingRequest? data?;
 };
 
 public type Section_gid_addTask_body record {
-    SectionTaskInsertRequest data?;
+    SectionTaskInsertRequest? data?;
 };
 
 public type Project_gid_addFollowers_body record {
-    AddFollowersRequest data?;
+    AddFollowersRequest? data?;
 };
 
 public type ProjectMembershipNormalResponse record {
     *ProjectMembershipBase;
-    UserCompact user?;
-    ProjectCompact project?;
+    UserCompact? user?;
+    ProjectCompact? project?;
     # The base type of this resource.
-    string resource_type?;
+    string? resource_type?;
     # Whether the member has full access or comment-only access to the project.
     "full_write"|"comment_only" write_access?;
 };
@@ -2364,35 +2364,35 @@ public type ProjectMembershipNormalResponse record {
 public type EnumOptionBase EnumOption;
 
 public type Memberships_membership_gid_body record {
-    MembershipRequest data?;
+    MembershipRequest? data?;
 };
 
 public type TemplateRole record {
     *AsanaResource;
     # Name of the template role.
-    string name?;
+    string? name?;
 };
 
 public type WebhookCompact record {
     *AsanaResource;
     # If true, the webhook will send events - if false it is considered inactive and will not generate events.
-    boolean active?;
-    AsanaNamedResource 'resource?;
+    boolean? active?;
+    AsanaNamedResource? 'resource?;
     # The URL to receive the HTTP POST.
-    string target?;
+    string? target?;
 };
 
 public type Status_updates_body record {
-    StatusUpdateRequest data?;
+    StatusUpdateRequest? data?;
 };
 
 public type Teams_body record {
-    TeamRequest data?;
+    TeamRequest? data?;
 };
 
 public type AddFollowersRequest record {
     # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string followers;
+    string? followers;
 };
 
 public type TagBase record {
@@ -2400,16 +2400,16 @@ public type TagBase record {
     # Color of the tag.
     "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray"? color?;
     # Free-form textual information associated with the tag (i.e. its description).
-    string notes?;
+    string? notes?;
 };
 
 public type Enum_options_insert_body record {
-    EnumOptionInsertRequest data?;
+    EnumOptionInsertRequest? data?;
 };
 
 public type GoalRemoveSupportingRelationshipRequest record {
     # The gid of the supporting resource to remove from the parent goal. Must be the gid of a goal, project, task, or portfolio.
-    string supporting_resource;
+    string? supporting_resource;
 };
 
 # An empty object. Some endpoints do not return an object on success. The success is conveyed through a 2-- status code and returning an empty object.
@@ -2418,29 +2418,29 @@ public type EmptyResponse record {
 
 public type RemoveCustomFieldSettingRequest record {
     # The custom field to remove from this portfolio.
-    string custom_field;
+    string? custom_field;
 };
 
 public type ProjectUpdateRequest record {
     *ProjectBase;
     # An object where each key is the GID of a custom field and its corresponding value is either an enum GID, string, number, or object (depending on the custom field type). See the [custom fields guide](/docs/custom-fields-guide) for details on creating and updating custom field values.
-    record {|string...;|} custom_fields?;
+    record {|string?...;|}? custom_fields?;
     # *Create-only*. Comma separated string of users. Followers are a subset of members who have opted in to receive "tasks added" notifications for a project.
-    string followers?;
+    string? followers?;
     # The current owner of the project, may be null.
     string? owner?;
     # The team that this project is shared with.
-    string team?;
+    string? team?;
 };
 
 public type TaskTemplateRecipe record {
     *TaskTemplateRecipeCompact;
     # Description of the task that will be created from this template.
-    string description?;
+    string? description?;
     # HTML description of the task that will be created from this template.
-    string html_description?;
+    string? html_description?;
     # Array of projects that the task created from this template will be added to
-    ProjectCompact[] memberships?;
+    ProjectCompact[]? memberships?;
     # The number of days after the task has been instantiated on which that the task will start
     int? relative_start_on?;
     # The number of days after the task has been instantiated on which that the task will be due
@@ -2448,23 +2448,23 @@ public type TaskTemplateRecipe record {
     # The time of day that the task will be due
     string? due_time?;
     # Array of task templates that the task created from this template will depend on
-    TaskTemplateRecipeCompact[] dependencies?;
+    TaskTemplateRecipeCompact[]? dependencies?;
     # Array of task templates that will depend on the task created from this template
-    TaskTemplateRecipeCompact[] dependents?;
+    TaskTemplateRecipeCompact[]? dependents?;
     # Array of users that will be added as followers to the task created from this template
-    UserCompact[] followers?;
+    UserCompact[]? followers?;
     # Array of attachments that will be added to the task created from this template
-    AttachmentCompact[] attachments?;
+    AttachmentCompact[]? attachments?;
     # Array of subtasks that will be added to the task created from this template
-    TaskTemplateRecipeCompact[] subtasks?;
+    TaskTemplateRecipeCompact[]? subtasks?;
     # Array of custom fields that will be added to the task created from this template
-    CustomFieldCompact[] custom_fields?;
+    CustomFieldCompact[]? custom_fields?;
 };
 
 public type WorkspaceMembershipCompact record {
     *AsanaResource;
-    UserCompact user?;
-    WorkspaceCompact workspace?;
+    UserCompact? user?;
+    WorkspaceCompact? workspace?;
 };
 
 public type GoalUpdateRequest record {
@@ -2476,7 +2476,7 @@ public type GoalUpdateRequest record {
 
 public type TaskDuplicateRequest record {
     # The name of the new task.
-    string name?;
+    string? name?;
     # A comma-separated list of fields that will be duplicated to the new task.
     # ##### Fields
     # - assignee
@@ -2489,25 +2489,25 @@ public type TaskDuplicateRequest record {
     # - projects
     # - subtasks
     # - tags
-    string include?;
+    string? include?;
 };
 
 public type DateVariableRequest record {
     # Globally unique identifier of the date field in the project template. A value of `1` refers to the project start date, while `2` refers to the project due date.
-    string gid?;
+    string? gid?;
     # The date with which the date variable should be replaced when instantiating a project. This takes a date with `YYYY-MM-DD` format.
     string? value?;
 };
 
 public type Goals_body record {
-    GoalRequest data?;
+    GoalRequest? data?;
 };
 
 public type ProjectDuplicateRequest record {
     # The name of the new project.
-    string name;
+    string? name;
     # Sets the team of the new project. If team is not defined, the new project will be in the same team as the the original project.
-    string team?;
+    string? team?;
     # A comma-separated list of elements that will be duplicated to the new project. Tasks are always included.
     # ##### Fields
     # - allocations
@@ -2523,63 +2523,63 @@ public type ProjectDuplicateRequest record {
     # - task_projects
     # - task_subtasks
     # - task_tags
-    string include?;
+    string? include?;
     # A dictionary of options to auto-shift dates. `task_dates` must be included to use this option. Requires either `start_on` or `due_on`, but not both.
-    ProjectDuplicateRequest_schedule_dates schedule_dates?;
+    ProjectDuplicateRequest_schedule_dates? schedule_dates?;
 };
 
 public type TagCompact record {
     *AsanaResource;
     # Name of the tag. This is generally a short sentence fragment that fits on a line in the UI for maximum readability. However, it can be longer.
-    string name?;
+    string? name?;
 };
 
 # A generic Asana Resource, containing a globally unique identifier.
 public type AsanaResource record {
     # Globally unique identifier of the resource, as a string.
-    string gid?;
+    string? gid?;
     # The base type of this resource.
-    string resource_type?;
+    string? resource_type?;
 };
 
 public type Custom_fields_body record {
-    CustomFieldRequest data?;
+    CustomFieldRequest? data?;
 };
 
 public type Task_gid_addFollowers_body record {
-    TaskAddFollowersRequest data?;
+    TaskAddFollowersRequest? data?;
 };
 
-public type UserTaskListResponse UserTaskListBase;
+public type UserTaskListResponse UserTaskListBase?;
 
 public type CreateTimeTrackingEntryRequest record {
     # Time in minutes tracked by the entry. Must be greater than 0
-    int duration_minutes?;
+    int? duration_minutes?;
     # *Optional*. The day that this entry is logged on. Defaults to today if not specified
-    string entered_on?;
+    string? entered_on?;
 };
 
 public type Goal_gid_addFollowers_body record {
-    TaskAddFollowersRequest data?;
+    TaskAddFollowersRequest? data?;
 };
 
 public type Webhooks_webhook_gid_body record {
-    WebhookUpdateRequest data?;
+    WebhookUpdateRequest? data?;
 };
 
 public type Project_gid_addMembers_body record {
-    AddMembersRequest data?;
+    AddMembersRequest? data?;
 };
 
 public type Workspace_gid_removeUser_body record {
     # A user identification object for specification with the addUser/removeUser endpoints.
-    WorkspaceRemoveUserRequest data?;
+    WorkspaceRemoveUserRequest? data?;
 };
 
 public type OrganizationExportCompact record {
     *AsanaResource;
     # The time at which this resource was created.
-    string created_at?;
+    string? created_at?;
     # Download this URL to retreive the full export of the organization
     # in JSON format. It will be compressed in a gzip (.gz) container.
     # 
@@ -2591,56 +2591,56 @@ public type OrganizationExportCompact record {
     string? download_url?;
     # The current state of the export.
     "pending"|"started"|"finished"|"error" state?;
-    WorkspaceCompact organization?;
+    WorkspaceCompact? organization?;
 };
 
-public type TeamMembershipResponse TeamMembershipBase;
+public type TeamMembershipResponse TeamMembershipBase?;
 
 public type Tasks_body record {
-    TaskRequest data?;
+    TaskRequest? data?;
 };
 
 public type WorkspaceMembershipBase WorkspaceMembershipCompact;
 
 public type Sections_section_gid_body record {
-    SectionRequest data?;
+    SectionRequest? data?;
 };
 
 public type Workspace_gid_tags_body record {
-    TagCreateTagForWorkspaceRequest data?;
+    TagCreateTagForWorkspaceRequest? data?;
 };
 
 # The primary object that was affected by this event.
 public type AuditLogEventResource record {
     # The type of resource.
-    string resource_type?;
+    string? resource_type?;
     # The subtype of resource. Most resources will not have a subtype.
-    string resource_subtype?;
+    string? resource_subtype?;
     # Globally unique identifier of the resource.
-    string gid?;
+    string? gid?;
     # The name of the resource.
     string? name?;
     # The email of the resource, if applicable.
-    string email?;
+    string? email?;
 };
 
 public type Inline_response_200_58 record {
-    UserBaseResponse data?;
+    UserBaseResponse? data?;
 };
 
 public type Inline_response_200_56 record {
-    WorkspaceCompact[] data?;
+    WorkspaceCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Error record {
     # Message providing more detail about the error that occurred, if available.
-    string message?;
+    string? message?;
     # Additional information directing developers to resources on how to address and fix the problem, if available.
-    string help?;
+    string? help?;
     # *500 errors only*. A unique error phrase which can be used when contacting developer support to help identify the exact occurrence of the problem in Asana’s logs.
-    string phrase?;
+    string? phrase?;
 };
 
 # A collection of rich text that will be displayed as a preview to another app.
@@ -2648,82 +2648,82 @@ public type Error record {
 # This is read-only except for a small group of whitelisted apps.
 public type Preview record {
     # Some fallback text to display if unable to display the full preview.
-    string fallback?;
+    string? fallback?;
     # Text to display in the footer.
-    string footer?;
+    string? footer?;
     # Text to display in the header.
-    string header?;
+    string? header?;
     # Where the header will link to.
-    string header_link?;
+    string? header_link?;
     # HTML formatted text for the body of the preview.
-    string html_text?;
+    string? html_text?;
     # Text for the body of the preview.
-    string text?;
+    string? text?;
     # Text to display as the title.
-    string title?;
+    string? title?;
     # Where to title will link to.
-    string title_link?;
+    string? title_link?;
 };
 
 public type Inline_response_200_57 record {
-    WorkspaceResponse data?;
+    WorkspaceResponse? data?;
 };
 
 public type Inline_response_412 record {
-    Inline_response_412_errors[] errors?;
+    Inline_response_412_errors[]? errors?;
     # A sync token to be used with the next call to the /events endpoint.
-    string sync?;
+    string? sync?;
 };
 
 public type Inline_response_200_54 record {
-    WorkspaceMembershipResponse data?;
+    WorkspaceMembershipResponse? data?;
 };
 
 public type Inline_response_200_55 record {
-    WorkspaceMembershipCompact[] data?;
+    WorkspaceMembershipCompact[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type TimePeriodBase record {
     *TimePeriodCompact;
-    TimePeriodCompact parent?;
+    TimePeriodCompact?? parent?;
 };
 
 public type Team_gid_removeUser_body record {
     # A user identification object for specification with the addUser/removeUser endpoints.
-    TeamRemoveUserRequest data?;
+    TeamRemoveUserRequest? data?;
 };
 
 public type Inline_response_200_52 record {
-    UserCompact[] data?;
+    UserCompact[]? data?;
 };
 
-public type PortfolioMembershipBase PortfolioMembershipCompact;
+public type PortfolioMembershipBase PortfolioMembershipCompact?;
 
 public type Inline_response_200_53 record {
-    WebhookResponse[] data?;
+    WebhookResponse[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Inline_response_200_50 record {
-    UserResponse data?;
+    UserResponse? data?;
 };
 
 public type Inline_response_200_51 record {
-    AsanaNamedResource[] data?;
+    AsanaNamedResource[]? data?;
     # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
     NextPage? next_page?;
 };
 
 public type Time_tracking_entries_time_tracking_entry_gid_body record {
-    UpdateTimeTrackingEntryRequest data?;
+    UpdateTimeTrackingEntryRequest? data?;
 };
 
 public type Organization_exports_body record {
     # An *organization_export* request starts a job to export the complete data of the given Organization.
-    OrganizationExportRequest data?;
+    OrganizationExportRequest? data?;
 };
 
 # Event specific details. The schema will vary depending on the `event_type`.
@@ -2731,7 +2731,7 @@ public type AuditLogEventDetails record {
 };
 
 public type Task_gid_subtasks_body record {
-    TaskRequest data?;
+    TaskRequest? data?;
 };
 
 # *Conditional*
@@ -2741,37 +2741,37 @@ public type StoryResponseDates record {
     # The UTC date and time on which this task is due, or null if the task has no due time. This takes an ISO 8601 date string in UTC and should not be used together with `due_on`.
     string? due_at?;
     # The localized day on which this goal is due. This takes a date with format `YYYY-MM-DD`.
-    string due_on?;
+    string? due_on?;
 };
 
 public type WorkspaceCompact record {
     *AsanaResource;
     # The name of the workspace.
-    string name?;
+    string? name?;
 };
 
 public type EnumOptionInsertRequest record {
     # The gid of the enum option to relocate.
-    string enum_option;
+    string? enum_option;
     # An existing enum option within this custom field before which the new enum option should be inserted. Cannot be provided together with after_enum_option.
-    string before_enum_option?;
+    string? before_enum_option?;
     # An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
-    string after_enum_option?;
+    string? after_enum_option?;
 };
 
 public type TaskRemoveFollowersRequest record {
     # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string[] followers;
+    string[]? followers;
 };
 
 # Contains keys `start_on` and `end_on` for the vacation dates for the user in this workspace. If `start_on` is null, the entire `vacation_dates` object will be null. If `end_on` is before today, the entire `vacation_dates` object will be null.
 public type WorkspaceMembershipResponse_vacation_dates record {
     # The day on which the user's vacation in this workspace starts. This is a date with `YYYY-MM-DD` format.
-    string start_on?;
+    string? start_on?;
     # The day on which the user's vacation in this workspace ends, or null if there is no end date. This is a date with `YYYY-MM-DD` format.
     string? end_on?;
 };
 
 public type Project_gid_project_statuses_body record {
-    ProjectStatusRequest data?;
+    ProjectStatusRequest? data?;
 };

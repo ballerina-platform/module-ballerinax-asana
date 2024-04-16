@@ -35,8 +35,7 @@ public function main() returns error? {
     asana:Projects_body projectBody = {
         data: {
             name: "Onboarding - " + newEmployeeName,
-            workspace: workspaceId,
-            team: teamId
+            workspace: workspaceId
         }
     };
 

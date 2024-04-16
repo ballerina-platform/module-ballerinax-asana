@@ -39,7 +39,7 @@ public function main() returns error? {
     }
 
     // Iterate through users to get their tasks
-    foreach asana:UserCompact user in userResponse.data ?: [] {
+    foreach asana:UserCompact user in userResponse?.data ?: [] {
         string? userId = user?.gid;
         if userId is () {
             log:printWarn(string `User ID for name: ${user?.name ?: "unknown"} is not found`);
@@ -52,7 +52,7 @@ public function main() returns error? {
             continue;
         }
 
-        asana:UserTaskListResponse? taskList = tasksResponse.data;
+        asana:UserTaskListResponse? taskList = tasksResponse?.data;
 
         if taskList is () {
             log:printWarn(string `User task list for user: ${user?.name ?: "unknown"} is not found`);
@@ -70,9 +70,9 @@ public function main() returns error? {
         int sum = userWorkloads.reduce(function(int total, int workload) returns int => total + workload, 0);
         int avgWorkload = sum / userWorkloads.length();
         foreach string usrId in userWorkloads.keys() {
-            if userWorkloads.get(userId) > avgWorkload {
+            if userWorkloads.get(usrId) > avgWorkload {
                 // Logic for users with high workload: suggest task reassignments or mark for review
-            } else if userWorkloads[userId] < avgWorkload {
+            } else if userWorkloads[usrId] < avgWorkload {
                 // Logic for users with low workload: identify as candidates for additional tasks
             }
         }
