@@ -2220,6 +2220,17 @@ components:
                 - word_count
                 - null
               example: priority
+      properties:
+        enum_options:
+          description: >-
+            *Conditional*. Only relevant for custom fields of type `enum`.
+            This array specifies the possible values which an `enum` custom
+            field can adopt. To modify the enum options, refer to [working
+            with enum
+            options](/reference/createenumoptionforcustomfield).
+          type: array
+          items:
+            $ref: '#/components/schemas/EnumOption'
     CustomFieldCompact:
       allOf:
         - $ref: '#/components/schemas/AsanaResource'
@@ -2456,6 +2467,34 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/UserCompact'
+      properties:
+        id_prefix:
+          description: >-
+            This field is the unique custom ID string for the custom field.
+          type: string
+          nullable: true
+          example: ID
+        is_formula_field:
+          description: >-
+            *Conditional*. This flag describes whether a custom field is a formula
+            custom field.
+          type: boolean
+          example: false
+        representation_type:
+          description: >-
+            This field tells the type of the custom field.
+          type: string
+          example: number
+          readOnly: true
+          enum:
+            - text
+            - enum
+            - multi_enum
+            - number
+            - date
+            - people
+            - formula
+            - custom_id
     CustomFieldSettingBase:
       $ref: '#/components/schemas/CustomFieldSettingCompact'
     CustomFieldSettingCompact:
@@ -2730,14 +2769,14 @@ components:
         user:
           allOf:
             - $ref: '#/components/schemas/UserCompact'
-            - description: >-
-                The user who triggered the event.
+          description: >-
+            The user who triggered the event.
         resource:
           allOf:
             - $ref: '#/components/schemas/AsanaNamedResource'
-            - description: >-
-                The resource which has triggered the event by being modified in
-                some way.
+          description: >-
+            The resource which has triggered the event by being modified in
+            some way.
         type:
           description: >-
             *Deprecated: Refer to the resource_type of the resource.*
@@ -2756,10 +2795,10 @@ components:
         parent:
           allOf:
             - $ref: '#/components/schemas/AsanaNamedResource'
-            - description: >-
-                For added/removed events, the parent object that resource was
-                added to or removed from. The parent will be `null` for other
-                event types.
+          description: >-
+            For added/removed events, the parent object that resource was
+            added to or removed from. The parent will be `null` for other
+            event types.
         created_at:
           description: The timestamp when the event occurred.
           type: string
@@ -3205,8 +3244,8 @@ components:
             current_status_update:
               allOf:
                 - $ref: '#/components/schemas/StatusUpdateCompact'
-                - description: The latest `status_update` posted to this goal.
-                  nullable: true
+              description: The latest `status_update` posted to this goal.
+              nullable: true
             status:
               type: string
               readOnly: true
@@ -3345,6 +3384,11 @@ components:
               type: string
               description: The type of the member (team or user)
               example: user
+      properties:
+        resource_type:
+          type: string
+          description: The type of the member (team or user)
+          example: user
     MembershipCompact:
       anyOf:
         - $ref: '#/components/schemas/GoalMembershipCompact'
@@ -3622,8 +3666,8 @@ components:
             current_status_update:
               allOf:
                 - $ref: '#/components/schemas/StatusUpdateCompact'
-                - description: The latest `status_update` posted to this portfolio.
-                  nullable: true
+              description: The latest `status_update` posted to this portfolio.
+              nullable: true
             due_on:
               description: >-
                 The localized day on which this portfolio is due. This takes a
@@ -4106,6 +4150,11 @@ components:
               description: Type of the membership.
               type: string
               example: project_membership
+      properties:
+        resource_type:
+          description: The base type of this resource.
+          type: string
+          example: membership
     ProjectMembershipNormalResponse:
       allOf:
         - $ref: '#/components/schemas/ProjectMembershipBase'
@@ -4133,6 +4182,11 @@ components:
                 - comment_only
               readOnly: true
               example: full_write
+      properties:
+        resource_type:
+          description: The base type of this resource.
+          type: string
+          example: project_membership
     ProjectRequest:
       allOf:
         - $ref: '#/components/schemas/ProjectBase'
@@ -4251,11 +4305,11 @@ components:
             completed_by:
               allOf:
                 - $ref: '#/components/schemas/UserCompact'
-                - description: >-
-                    The user that marked this project complete, or null if the project
-                    is not completed.
-                  readOnly: true
-                  nullable: true
+              description: >-
+                The user that marked this project complete, or null if the project
+                is not completed.
+              readOnly: true
+              nullable: true
             followers:
               description: >-
                 Array of users following this project. Followers are a subset
@@ -5275,14 +5329,14 @@ components:
             old_date_value:
               allOf:
                 - $ref: '#/components/schemas/StoryResponseDates'
-                - description: >-
-                    *Conditional*. The old value of a date custom field story.
+              dancing_unicornescription: >-
+                *Conditional*. The old value of a date custom field story.
               readOnly: true
             new_date_value:
               allOf:
                 - $ref: '#/components/schemas/StoryResponseDates'
-                - description: >-
-                    *Conditional* The new value of a date custom field story.
+              description: >-
+                *Conditional* The new value of a date custom field story.
               readOnly: true
             old_people_value:
               description: >-
@@ -5842,6 +5896,14 @@ components:
               example: 200
               readOnly: true
               nullable: true
+      properties:
+        name:
+          description: >-
+            Name of the task. This is generally a short sentence fragment that
+            fits on a line in the UI for maximum readability. However, it can
+            be longer.
+          type: string
+          example: Buy catnip
     TaskCompact:
       allOf:
         - $ref: '#/components/schemas/AsanaResource'
@@ -6041,6 +6103,12 @@ components:
               type: string
               format: date-time
               example: '2019-01-01T00:00:00.000Z'
+      properties:
+        name:
+          description: >-
+            Name of the task template.
+          type: string
+          example: Bug Report Template
     TaskCountResponse:
       description: A response object returned from the task count endpoint.
       type: object
@@ -6877,10 +6945,10 @@ components:
           items:
             allOf:
               - $ref: '#/components/schemas/WebhookFilter'
-              - description: >-
-                  A set of filters to specify a whitelist for what types of
-                  events will be delivered.
               - type: object
+            description: >-
+              A set of filters to specify a whitelist for what types of
+              events will be delivered.
       required:
         - resource
         - target
@@ -6927,9 +6995,9 @@ components:
               items:
                 allOf:
                   - $ref: '#/components/schemas/WebhookFilter'
-                  - description: A set of filters to specify a whitelist for what
-                      types of events will be delivered.
                   - type: object
+                description: A set of filters to specify a whitelist for what
+                  types of events will be delivered.
     WebhookUpdateRequest:
       type: object
       properties:
@@ -6943,10 +7011,10 @@ components:
           items:
             allOf:
               - $ref: '#/components/schemas/WebhookFilter'
-              - description: >-
-                  A set of filters to specify a whitelist for what types of
-                  events will be delivered.
               - type: object
+            description: >-
+              A set of filters to specify a whitelist for what types of
+              events will be delivered.
     WorkspaceAddUserRequest:
       type: object
       description: A user identification object for specification with the addUser/removeUser
@@ -7126,6 +7194,11 @@ components:
                     *Deprecated: new integrations should prefer the `parent`
                     field.* A *Goal* is an object in the goal-tracking system
                     that helps your organization drive measurable results.
+      properties:
+        resource_type:
+          description: The base type of this resource.
+          type: string
+          example: membership
     GoalMembershipCompact:
       allOf:
         - $ref: '#/components/schemas/GoalMembershipBase'
