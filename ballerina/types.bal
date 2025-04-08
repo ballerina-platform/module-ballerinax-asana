@@ -17,65 +17,1192 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/constraint;
+import ballerina/data.jsondata;
 import ballerina/http;
 
-# Provides a set of configurations for controlling the behaviours when communicating with a remote HTTP endpoint.
-@display {label: "Connection Config"}
-public type ConnectionConfig record {|
-    # Configurations related to client authentication
-    http:BearerTokenConfig|OAuth2RefreshTokenGrantConfig auth;
-    # The HTTP version understood by the client
-    http:HttpVersion httpVersion = http:HTTP_2_0;
-    # Configurations related to HTTP/1.x protocol
-    ClientHttp1Settings http1Settings?;
-    # Configurations related to HTTP/2 protocol
-    http:ClientHttp2Settings http2Settings?;
-    # The maximum time to wait (in seconds) for a response before closing the connection
-    decimal timeout = 60;
-    # The choice of setting `forwarded`/`x-forwarded` header
-    string forwarded = "disable";
-    # Configurations associated with request pooling
-    http:PoolConfiguration poolConfig?;
-    # HTTP caching related configurations
-    http:CacheConfig cache?;
-    # Specifies the way of handling compression (`accept-encoding`) header
-    http:Compression compression = http:COMPRESSION_AUTO;
-    # Configurations associated with the behaviour of the Circuit Breaker
-    http:CircuitBreakerConfig circuitBreaker?;
-    # Configurations associated with retrying
-    http:RetryConfig retryConfig?;
-    # Configurations associated with inbound response size limits
-    http:ResponseLimitConfigs responseLimits?;
-    # SSL/TLS-related options
-    http:ClientSecureSocket secureSocket?;
-    # Proxy server related options
-    http:ProxyConfig proxy?;
-    # Enables the inbound payload validation functionality which provided by the constraint package. Enabled by default
-    boolean validation = true;
-|};
+public type GoalRelationshipCompact record {
+    *AsanaResource;
+    *GoalRelationshipCompactAllOf2;
+};
 
-# Provides settings related to HTTP/1.x protocol.
-public type ClientHttp1Settings record {|
-    # Specifies whether to reuse a connection for multiple requests
-    http:KeepAlive keepAlive = http:KEEPALIVE_AUTO;
-    # The chunking behaviour of the request
-    http:Chunking chunking = http:CHUNKING_AUTO;
-    # Proxy server related options
-    ProxyConfig proxy?;
-|};
+public type ProjectStatusRequest ProjectStatusBase;
 
-# Proxy server configurations to be used with the HTTP client endpoint.
-public type ProxyConfig record {|
-    # Host name of the proxy server
-    string host = "";
-    # Proxy server port
-    int port = 0;
-    # Proxy server username
-    string userName = "";
-    # Proxy server password
-    @display {label: "", kind: "password"}
-    string password = "";
-|};
+public type TeamRequest record {
+    *TeamBase;
+    *TeamRequestAllOf2;
+};
+
+public type GoalGidAddSupportingRelationshipBody record {
+    GoalAddSupportingRelationshipRequest data?;
+};
+
+# Represents the Queries record for the operation: addMembersForPortfolio
+public type AddMembersForPortfolioQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"owner"|"owner.name"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: createTask
+public type CreateTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getProjectsForWorkspace
+public type GetProjectsForWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"offset"|"owner"|"path"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type PortfolioResponse record {
+    *PortfolioBase;
+    *PortfolioResponseAllOf2;
+};
+
+public type ProjectBaseAllOf2 record {
+    # The day on which work for this project begins, or null if the project has no start date. This takes a date with `YYYY-MM-DD` format. *Note: `due_on` or `due_at` must be present in the request when setting or unsetting the `start_on` parameter. Additionally, `start_on` and `due_on` cannot be the same date.*
+    @jsondata:Name {value: "start_on"}
+    string? startOn?;
+    # Array of Custom Field Settings (in compact form)
+    @jsondata:Name {value: "custom_field_settings"}
+    CustomFieldSettingResponse[] customFieldSettings?;
+    # Free-form textual information associated with the project (ie., its description)
+    string notes?;
+    # Color of the project
+    "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray"|"none"? color?;
+    # The default access for users or teams who join or are added as members to the project
+    @jsondata:Name {value: "default_access_level"}
+    "admin"|"editor"|"commenter"|"viewer" defaultAccessLevel?;
+    # *Deprecated: new integrations should prefer the `due_on` field.*
+    @jsondata:Name {value: "due_date"}
+    string? dueDate?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # The day on which this project is due. This takes a date with format YYYY-MM-DD
+    @jsondata:Name {value: "due_on"}
+    string? dueOn?;
+    # The privacy setting of the project. *Note: Administrators in your organization may restrict the values of `privacy_setting`.*
+    @jsondata:Name {value: "privacy_setting"}
+    "public_to_workspace"|"private_to_team"|"private" privacySetting?;
+    # The minimum access level needed for project members to share the project and manage project memberships
+    @jsondata:Name {value: "minimum_access_level_for_sharing"}
+    "admin"|"editor" minimumAccessLevelForSharing?;
+    # True if the project is archived, false if not. Archived projects do not show in the UI by default and may be treated differently for queries
+    boolean archived?;
+    # *Deprecated:* new integrations use `privacy_setting` instead
+    # 
+    # # Deprecated
+    @deprecated
+    boolean 'public?;
+    # [Opt In](/docs/inputoutput-options). The notes of the project with formatting as HTML
+    @jsondata:Name {value: "html_notes"}
+    string htmlNotes?;
+    @jsondata:Name {value: "current_status_update"}
+    record {*StatusUpdateCompact;} currentStatusUpdate?;
+    # Array of users who are members of this project
+    UserCompact[] members?;
+    # The minimum access level needed for project members to modify this project's workflow and appearance
+    @jsondata:Name {value: "minimum_access_level_for_customization"}
+    "admin"|"editor" minimumAccessLevelForCustomization?;
+    @jsondata:Name {value: "current_status"}
+    record {*ProjectStatusResponse;} currentStatus?;
+    # The time at which this project was last modified.
+    # *Note: This does not currently reflect any changes in associations such as tasks or comments that may have been added or removed from the project.*
+    @jsondata:Name {value: "modified_at"}
+    string modifiedAt?;
+    # The default view (list, board, calendar, or timeline) of a project
+    @jsondata:Name {value: "default_view"}
+    "list"|"board"|"calendar"|"timeline" defaultView?;
+};
+
+public type TaskGidAddDependenciesBody record {
+    ModifyDependenciesRequest data?;
+};
+
+public type StoryBase record {
+    *AsanaResource;
+    *StoryBaseAllOf2;
+};
+
+public type WebhookRequest record {
+    # A resource ID to subscribe to. Many Asana resources are valid to create webhooks on, but higher-level resources require filters
+    string 'resource;
+    # An array of WebhookFilter objects to specify a whitelist of filters to apply to events from this webhook. If a webhook event passes any of the filters the event will be delivered; otherwise no event will be sent to the receiving server
+    WebhookRequestFilters[] filters?;
+    # The URL to receive the HTTP POST. The full URL will be used to deliver events from this webhook (including parameters) which allows encoding of application-specific state when the webhook is created
+    string target;
+};
+
+# Represents the Queries record for the operation: createTeam
+public type CreateTeamQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("description"|"edit_team_name_or_description_access_level"|"edit_team_visibility_or_trash_team_access_level"|"guest_invite_management_access_level"|"html_description"|"join_request_management_access_level"|"member_invite_management_access_level"|"name"|"organization"|"organization.name"|"permalink_url"|"team_member_removal_access_level"|"visibility")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# A request object for use in a batch request
+public type BatchRequest record {
+    BatchRequestAction[] actions?;
+};
+
+public type GoalGidRemoveSupportingRelationshipBody record {
+    GoalRemoveSupportingRelationshipRequest data?;
+};
+
+public type RuleTriggerRequest record {
+    # The ID of the resource. For the duration of the beta, this resource is always a task, and this task must exist in the project in which the rule is created
+    string 'resource;
+    # The dynamic keys and values of the request. These fields are intended to be used in the action for the rule associated with this trigger
+    @jsondata:Name {value: "action_data"}
+    record {} actionData;
+};
+
+public type CustomFieldSettingCompact record {
+    *AsanaResource;
+    *CustomFieldSettingCompactAllOf2;
+};
+
+# Represents the Queries record for the operation: getProjects
+public type GetProjectsQueries record {
+    # The workspace or organization to filter projects on
+    string workspace?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"offset"|"owner"|"path"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # The team to filter projects on
+    string team?;
+};
+
+public type TagResponse record {
+    *TagBase;
+    *TagResponseAllOf2;
+};
+
+public type ProjectBriefRequestAllOf2 record {
+    # The plain text of the project brief. When writing to a project brief, you can specify either `html_text` (preferred) or `text`, but not both
+    string text?;
+};
+
+# Represents the Queries record for the operation: addDependenciesForTask
+public type AddDependenciesForTaskQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type WebhookResponse record {
+    *WebhookCompact;
+    *WebhookResponseAllOf2;
+};
+
+# A *job* is an object representing a process that handles asynchronous work
+public type JobCompactAllOf2 record {
+    @jsondata:Name {value: "new_project_template"}
+    ProjectTemplateCompact newProjectTemplate?;
+    @jsondata:Name {value: "new_project"}
+    ProjectCompact newProject?;
+    @jsondata:Name {value: "new_task"}
+    record {*TaskCompact;} newTask?;
+    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning
+    @jsondata:Name {value: "resource_subtype"}
+    string resourceSubtype?;
+    # The current status of this job. The value is one of: `not_started`, `in_progress`, `succeeded`, or `failed`
+    "not_started"|"in_progress"|"succeeded"|"failed" status?;
+};
+
+public type AddCustomFieldSettingRequest record {
+    # The custom field to associate with this container
+    @jsondata:Name {value: "custom_field"}
+    string customField;
+    # Whether this field should be considered important to this container (for instance, to display in the list view of items in the container)
+    @jsondata:Name {value: "is_important"}
+    boolean isImportant?;
+    # A gid of a Custom Field Setting on this container, before which the new Custom Field Setting will be added.  `insert_before` and `insert_after` parameters cannot both be specified
+    @jsondata:Name {value: "insert_before"}
+    string insertBefore?;
+    # A gid of a Custom Field Setting on this container, after which the new Custom Field Setting will be added.  `insert_before` and `insert_after` parameters cannot both be specified
+    @jsondata:Name {value: "insert_after"}
+    string insertAfter?;
+};
+
+public type TimePeriodCompactAllOf2 record {
+    # The localized start date of the time period in `YYYY-MM-DD` format
+    @jsondata:Name {value: "start_on"}
+    string startOn?;
+    # The cadence and index of the time period. The value is one of: `FY`, `H1`, `H2`, `Q1`, `Q2`, `Q3`, or `Q4`
+    "FY"|"H1"|"H2"|"Q1"|"Q2"|"Q3"|"Q4" period?;
+    # The localized end date of the time period in `YYYY-MM-DD` format
+    @jsondata:Name {value: "end_on"}
+    string endOn?;
+    # A string representing the cadence code and the fiscal year
+    @jsondata:Name {value: "display_name"}
+    string displayName?;
+};
+
+public type ProjectMembershipCompactResponse record {
+    *ProjectMembershipCompact;
+    # The base type of this resource
+    @jsondata:Name {value: "resource_type"}
+    string resourceType?;
+    # Type of the membership
+    @jsondata:Name {value: "resource_subtype"}
+    string resourceSubtype?;
+};
+
+# Represents the Queries record for the operation: getProjectStatusesForProject
+public type GetProjectStatusesForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("author"|"author.name"|"color"|"created_at"|"created_by"|"created_by.name"|"html_text"|"modified_at"|"offset"|"path"|"text"|"title"|"uri")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: addCustomFieldSettingForProject
+public type AddCustomFieldSettingForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("custom_field"|"custom_field.asana_created_field"|"custom_field.created_by"|"custom_field.created_by.name"|"custom_field.currency_code"|"custom_field.custom_label"|"custom_field.custom_label_position"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.description"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.format"|"custom_field.has_notifications_enabled"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.is_global_to_workspace"|"custom_field.is_value_read_only"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.people_value"|"custom_field.people_value.name"|"custom_field.precision"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"is_important"|"parent"|"parent.name"|"project"|"project.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type PortfolioGidRemoveMembersBody record {
+    RemoveMembersRequest data?;
+};
+
+# Represents the Queries record for the operation: getTasksForSection
+public type GetTasksForSectionQueries record {
+    # Only return tasks that are either incomplete or that have been completed since this time. Accepts a date-time string or the keyword *now*
+    @http:Query {name: "completed_since"}
+    string completedSince?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+# Represents the Queries record for the operation: addCustomFieldSettingForPortfolio
+public type AddCustomFieldSettingForPortfolioQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type CustomFieldCompact record {
+    *AsanaResource;
+    *CustomFieldCompactAllOf2;
+};
+
+# Represents the Queries record for the operation: updateProjectBrief
+public type UpdateProjectBriefQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("html_text"|"permalink_url"|"project"|"project.name"|"text"|"title")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse2009 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    GoalRelationshipCompact[] data?;
+};
+
+public type WorkspaceResponse record {
+    *WorkspaceBase;
+    *WorkspaceResponseAllOf2;
+};
+
+public type InlineResponse2008 record {
+    GoalRelationshipResponse data?;
+};
+
+public type GoalGidSetMetricBody record {
+    GoalMetricRequest data?;
+};
+
+public type SectionResponse record {
+    *SectionBase;
+    *SectionResponseAllOf2;
+};
+
+public type WorkspaceGidTagsBody record {
+    TagCreateTagForWorkspaceRequest data?;
+};
+
+public type TaskRemoveProjectRequest record {
+    # The project to remove the task from
+    string project;
+};
+
+public type AttachmentCompact record {
+    *AsanaResource;
+    *AttachmentCompactAllOf2;
+};
+
+public type ProjectCompact record {
+    *AsanaResource;
+    *ProjectCompactAllOf2;
+};
+
+# Represents the Queries record for the operation: updateEnumOption
+public type UpdateEnumOptionQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"enabled"|"name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getTasksForProject
+public type GetTasksForProjectQueries record {
+    # Only return tasks that are either incomplete or that have been completed since this time. Accepts a date-time string or the keyword *now*
+    @http:Query {name: "completed_since"}
+    string completedSince?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+public type ProjectGidProjectStatusesBody record {
+    ProjectStatusRequest data?;
+};
+
+public type GoalResponseAllOf2 record {
+    record {*UserCompact;} owner?;
+    record {*WorkspaceCompact;} workspace?;
+    # Array of users who are members of this goal
+    UserCompact[] followers?;
+    record {*GoalMetricBase; boolean can_manage?;} metric?;
+    # The latest `status_update` posted to this goal
+    @jsondata:Name {value: "current_status_update"}
+    StatusUpdateCompact? currentStatusUpdate?;
+    # The number of users who have liked this goal
+    @jsondata:Name {value: "num_likes"}
+    int numLikes?;
+    record {*TeamCompact;} team?;
+    @jsondata:Name {value: "time_period"}
+    record {*TimePeriodCompact;} timePeriod?;
+    # Array of likes for users who have liked this goal
+    Like[] likes?;
+    # The current status of this goal. When the goal is open, its status can be `green`, `yellow`, and `red` to reflect "On Track", "At Risk", and "Off Track", respectively. When the goal is closed, the value can be `missed`, `achieved`, `partial`, or `dropped`.
+    # *Note* you can only write to this property if `metric` is set
+    string? status?;
+};
+
+public type InlineResponse2012 record {
+    MembershipResponse data?;
+};
+
+# A set of filters to specify a whitelist for what types of events will be delivered
+public type WebhookUpdateRequestFilters record {
+    *WebhookFilter;
+    *FiltersAllOf22;
+};
+
+public type InlineResponse2011 record {
+    EnumOption data?;
+};
+
+public type InlineResponse2014 record {
+    PortfolioResponse data?;
+};
+
+public type ProjectGidRemoveFollowersBody record {
+    RemoveFollowersRequest data?;
+};
+
+public type FiltersAllOf22 record {
+};
+
+public type InlineResponse2013 record {
+    OrganizationExportResponse data?;
+};
+
+public type FiltersAllOf21 record {
+};
+
+public type ProjectGidAddCustomFieldSettingBody record {
+    AddCustomFieldSettingRequest data?;
+};
+
+public type InlineResponse2016 record {
+    TagResponse data?;
+};
+
+public type ProjectTemplateBaseAllOf2 record {
+    # The current owner of the project template, may be null
+    record {*UserCompact;} owner?;
+    # True if the project template is public to its team
+    boolean 'public?;
+    # Color of the project template
+    "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray"? color?;
+    # Free-form textual information associated with the project template
+    string description?;
+    TeamCompact team?;
+    # Array of date variables in this project template. Calendar dates must be provided for these variables when instantiating a project
+    @jsondata:Name {value: "requested_dates"}
+    DateVariableCompact[] requestedDates?;
+    # The description of the project template with formatting as HTML
+    @jsondata:Name {value: "html_description"}
+    string htmlDescription?;
+    # Array of template roles in this project template. User Ids can be provided for these variables when instantiating a project to assign template tasks to the user
+    @jsondata:Name {value: "requested_roles"}
+    TemplateRole[] requestedRoles?;
+};
+
+public type InlineResponse2015 record {
+    ProjectResponse data?;
+};
+
+public type InlineResponse2018 record {
+    TeamResponse data?;
+};
+
+# Represents the Queries record for the operation: createPortfolio
+public type CreatePortfolioQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"owner"|"owner.name"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse2017 record {
+    TaskResponse data?;
+};
+
+# Represents the Queries record for the operation: createAttachmentForObject
+public type CreateAttachmentForObjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("connected_to_app"|"created_at"|"download_url"|"host"|"name"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permanent_url"|"resource_subtype"|"size"|"view_url")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type GoalCompact record {
+    *AsanaResource;
+    *GoalCompactAllOf2;
+};
+
+# Represents the Queries record for the operation: getTagsForTask
+public type GetTagsForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"offset"|"path"|"permalink_url"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+# Represents the Queries record for the operation: createProjectForWorkspace
+public type CreateProjectForWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# This object represents a user's connection to a team
+public type TeamMembershipCompactAllOf2 record {
+    # Describes if the user is a team admin
+    @jsondata:Name {value: "is_admin"}
+    boolean isAdmin?;
+    # Describes if the user is a guest in the team
+    @jsondata:Name {value: "is_guest"}
+    boolean isGuest?;
+    TeamCompact team?;
+    # Describes if the user has limited access to the team
+    @jsondata:Name {value: "is_limited_access"}
+    boolean isLimitedAccess?;
+    UserCompact user?;
+};
+
+# Represents the Queries record for the operation: getTaskTemplates
+public type GetTaskTemplatesQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"created_by"|"name"|"project"|"template")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # The project to filter task templates on
+    string project?;
+};
+
+public type TaskRequest record {
+    *TaskBase;
+    *TaskRequestAllOf2;
+};
+
+# *Conditional*. Only relevant for custom fields of type `date`. This object reflects the chosen date (and optionally, time) value of a `date` custom field. If no date is selected, the value of `date_value` will be `null`
+public type CustomFieldCompactDateValue record {
+    # A string representing the date in YYYY-MM-DD format
+    string date?;
+    # A string representing the date in ISO 8601 format. If no time value is selected, the value of `date-time` will be `null`
+    @jsondata:Name {value: "date_time"}
+    string dateTime?;
+};
+
+public type TimeTrackingEntryBase record {
+    *TimeTrackingEntryCompact;
+    *TimeTrackingEntryBaseAllOf2;
+};
+
+# A *team* is used to group related projects and people together within an organization. Each project in an organization is associated with a team
+public type TeamCompactAllOf2 record {
+    # The name of the team
+    string name?;
+};
+
+public type InlineResponse2001 record {
+    EmptyResponse data?;
+};
+
+public type InlineResponse2003 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    AuditLogEvent[] data?;
+};
+
+public type InlineResponse2002 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    AttachmentCompact[] data?;
+};
+
+public type InlineResponse2005 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    CustomFieldSettingResponse[] data?;
+};
+
+# A *goal relationship* is an object representing the relationship between a goal and another goal, a project, a task, or a portfolio
+public type GoalRelationshipCompactAllOf2 record {
+    @jsondata:Name {value: "supporting_resource"}
+    record {*ProjectCompact;} supportingResource?;
+    # The weight that the supporting resource's progress contributes to the supported goal's progress. This can only be 0 or 1
+    @jsondata:Name {value: "contribution_weight"}
+    decimal contributionWeight?;
+    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning
+    @jsondata:Name {value: "resource_subtype"}
+    "subgoal"|"supporting_work" resourceSubtype?;
+};
+
+public type InlineResponse2004 record {
+    BatchResponse[] data?;
+};
+
+public type CustomFieldsBody record {
+    CustomFieldRequest data?;
+};
+
+# The full record for all events that have occurred since the sync token was created
+public type InlineResponse2007 record {
+    EventResponse[] data?;
+    # Indicates whether there are more events to pull
+    @jsondata:Name {value: "has_more"}
+    boolean hasMore?;
+    # A sync token to be used with the next call to the /events endpoint
+    string sync?;
+};
+
+public type InlineResponse2006 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    CustomFieldResponse[] data?;
+};
+
+public type OrganizationExportBase OrganizationExportCompact;
+
+public type AsanaNamedResource record {
+    *AsanaResource;
+    *AsanaNamedResourceAllOf2;
+};
+
+public type WebhookUpdateRequest record {
+    # An array of WebhookFilter objects to specify a whitelist of filters to apply to events from this webhook. If a webhook event passes any of the filters the event will be delivered; otherwise no event will be sent to the receiving server
+    WebhookUpdateRequestFilters[] filters?;
+};
+
+# Pagination (`limit` and `offset`) and output options (`fields` or `expand`) for the action. “Pretty” JSON output is not an available option on individual actions; if you want pretty output, specify that option on the parent request
+public type BatchRequestActionOptions record {
+    # Pagination offset for the request
+    int offset?;
+    # Pagination limit for the request
+    int 'limit?;
+    # The fields to retrieve in the request
+    string[] fields?;
+};
+
+# Represents the Queries record for the operation: getItemsForPortfolio
+public type GetItemsForPortfolioQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"offset"|"owner"|"path"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+public type ProjectsprojectGidBody record {
+    ProjectUpdateRequest data?;
+};
+
+# Represents the Queries record for the operation: addFollowersForTask
+public type AddFollowersForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: instantiateProject
+public type InstantiateProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getTasksForUserTaskList
+public type GetTasksForUserTaskListQueries record {
+    # Only return tasks that are either incomplete or that have been completed since this time. Accepts a date-time string or the keyword *now*
+    @http:Query {name: "completed_since"}
+    string completedSince?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+public type TimeTrackingEntryCompactAllOf2 record {
+    # The day that this entry is logged on
+    @jsondata:Name {value: "entered_on"}
+    string enteredOn?;
+    # Time in minutes tracked by the entry
+    @jsondata:Name {value: "duration_minutes"}
+    int durationMinutes?;
+    @jsondata:Name {value: "created_by"}
+    UserCompact createdBy?;
+};
+
+# Represents the Queries record for the operation: getWorkspaceMembershipsForWorkspace
+public type GetWorkspaceMembershipsForWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"is_active"|"is_admin"|"is_guest"|"offset"|"path"|"uri"|"user"|"user.name"|"user_task_list"|"user_task_list.name"|"user_task_list.owner"|"user_task_list.workspace"|"vacation_dates"|"vacation_dates.end_on"|"vacation_dates.start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+    # A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    string user?;
+};
+
+# A *section* is a subdivision of a project that groups tasks together. It can either be a header above a list of tasks in a list view or a column in a board view of a project
+public type SectionCompactAllOf2 record {
+    # The name of the section (i.e. the text displayed as the section header)
+    string name?;
+};
+
+public type TaskGidRemoveTagBody record {
+    TaskRemoveTagRequest data?;
+};
+
+public type GoalBaseAllOf2 record {
+    # The day on which work for this goal begins, or null if the goal has no start date. This takes a date with `YYYY-MM-DD` format, and cannot be set unless there is an accompanying due date
+    @jsondata:Name {value: "start_on"}
+    string? startOn?;
+    # Free-form textual information associated with the goal (i.e. its description)
+    string notes?;
+    # The notes of the goal with formatting as HTML
+    @jsondata:Name {value: "html_notes"}
+    string htmlNotes?;
+    # The name of the goal
+    string name?;
+    # The localized day on which this goal is due. This takes a date with format `YYYY-MM-DD`
+    @jsondata:Name {value: "due_on"}
+    string? dueOn?;
+    # *Conditional*. This property is only present when the `workspace` provided is an organization. Whether the goal belongs to the `workspace` (and is listed as part of the workspace’s goals) or not. If it isn’t a workspace-level goal, it is a team-level goal, and is associated with the goal’s team
+    @jsondata:Name {value: "is_workspace_level"}
+    boolean isWorkspaceLevel?;
+    # True if the goal is liked by the authorized user, false if not
+    boolean liked?;
+};
+
+public type PortfolioAddItemRequest record {
+    # An id of an item in this portfolio. The new item will be added before the one specified here. `insert_before` and `insert_after` parameters cannot both be specified
+    @jsondata:Name {value: "insert_before"}
+    string insertBefore?;
+    # The item to add to the portfolio
+    string item;
+    # An id of an item in this portfolio. The new item will be added after the one specified here. `insert_before` and `insert_after` parameters cannot both be specified
+    @jsondata:Name {value: "insert_after"}
+    string insertAfter?;
+};
+
+# Represents the Queries record for the operation: addFollowers
+public type AddFollowersQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getMemberships
+public type GetMembershipsQueries record {
+    # Globally unique identifier for `goal` or `project`
+    string parent?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("offset"|"path"|"uri")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Globally unique identifier for `team` or `user`
+    string member?;
+};
+
+# Represents the Queries record for the operation: getDependenciesForTask
+public type GetDependenciesForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+public type FiltersAllOf2 record {
+};
+
+public type GoalGidAddFollowersBody record {
+    TaskAddFollowersRequest data?;
+};
+
+public type RemoveMembersRequest record {
+    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user
+    string members;
+};
+
+public type TimeTrackingEntriestimeTrackingEntryGidBody record {
+    UpdateTimeTrackingEntryRequest data?;
+};
+
+public type StatusUpdatesBody record {
+    StatusUpdateRequest data?;
+};
+
+public type ProjectUpdateRequestAllOf2 record {
+    # The current owner of the project, may be null
+    string? owner?;
+    # *Create-only*. Comma separated string of users. Followers are a subset of members who have opted in to receive "tasks added" notifications for a project
+    string followers?;
+    # An object where each key is the GID of a custom field and its corresponding value is either an enum GID, string, number, or object (depending on the custom field type). See the [custom fields guide](/docs/custom-fields-guide) for details on creating and updating custom field values
+    @jsondata:Name {value: "custom_fields"}
+    record {|string...;|} customFields?;
+    # The team that this project is shared with
+    string team?;
+};
+
+# Represents the Queries record for the operation: updateWorkspace
+public type UpdateWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("email_domains"|"is_organization"|"name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type TaskAddFollowersRequest record {
+    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user
+    string[] followers;
+};
+
+# Represents the Queries record for the operation: getTag
+public type GetTagQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"permalink_url"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type GoalMetricBase record {
+    *AsanaResource;
+    *GoalMetricBaseAllOf2;
+};
+
+# Represents the Queries record for the operation: createCustomField
+public type CreateCustomFieldQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("asana_created_field"|"created_by"|"created_by.name"|"currency_code"|"custom_label"|"custom_label_position"|"date_value"|"date_value.date"|"date_value.date_time"|"description"|"display_value"|"enabled"|"enum_options"|"enum_options.color"|"enum_options.enabled"|"enum_options.name"|"enum_value"|"enum_value.color"|"enum_value.enabled"|"enum_value.name"|"format"|"has_notifications_enabled"|"id_prefix"|"is_formula_field"|"is_global_to_workspace"|"is_value_read_only"|"multi_enum_values"|"multi_enum_values.color"|"multi_enum_values.enabled"|"multi_enum_values.name"|"name"|"number_value"|"people_value"|"people_value.name"|"precision"|"representation_type"|"resource_subtype"|"text_value"|"type")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type SectionssectionGidBody record {
+    SectionRequest data?;
+};
+
+# Represents the Queries record for the operation: getTask
+public type GetTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type ProjectStatusResponse record {
+    *ProjectStatusBase;
+    *ProjectStatusResponseAllOf2;
+};
+
+public type StatusUpdateResponseAllOf2 record {
+    record {*ProjectCompact;} parent?;
+    UserCompact author?;
+    # *Deprecated - please use likes instead* Array of likes for users who have hearted this status
+    Like[] hearts?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # *Deprecated - please use liked instead* True if the status is hearted by the authorized user, false if not
+    boolean hearted?;
+    # The number of users who have liked this status
+    @jsondata:Name {value: "num_likes"}
+    int numLikes?;
+    # The time at which this project status was last modified.
+    # *Note: This does not currently reflect any changes in associations such as comments that may have been added or removed from the status.*
+    @jsondata:Name {value: "modified_at"}
+    string modifiedAt?;
+    # *Deprecated - please use likes instead* The number of users who have hearted this status
+    @jsondata:Name {value: "num_hearts"}
+    int numHearts?;
+    @jsondata:Name {value: "created_by"}
+    UserCompact createdBy?;
+    # True if the status is liked by the authorized user, false if not
+    boolean liked?;
+    # Array of likes for users who have liked this status
+    Like[] likes?;
+};
+
+# Custom Fields store the metadata that is used in order to add user-specified information to tasks in Asana. Be sure to reference the [custom fields](/reference/custom-fields) developer documentation for more information about how custom fields relate to various resources in Asana.
+# 
+# Users in Asana can [lock custom fields](https://asana.com/guide/help/premium/custom-fields#gl-lock-fields), which will make them read-only when accessed by other users. Attempting to edit a locked custom field will return HTTP error code `403 Forbidden`
+public type CustomFieldCompactAllOf2 record {
+    # A string representation for the value of the custom field. Integrations that don't require the underlying type should use this field to read values. Using this field will future-proof an app against new custom field types
+    @jsondata:Name {value: "display_value"}
+    string? displayValue?;
+    # *Conditional*. This number is the value of a `number` custom field
+    @jsondata:Name {value: "number_value"}
+    decimal? numberValue?;
+    @jsondata:Name {value: "date_value"}
+    CustomFieldCompactDateValue? dateValue?;
+    # *Conditional*. Only relevant for custom fields of type `enum`. This array specifies the possible values which an `enum` custom field can adopt. To modify the enum options, refer to [working with enum options](/reference/createenumoptionforcustomfield)
+    @jsondata:Name {value: "enum_options"}
+    EnumOption[] enumOptions?;
+    # *Conditional*. Only relevant for custom fields of type `multi_enum`. This object is the chosen values of a `multi_enum` custom field
+    @jsondata:Name {value: "multi_enum_values"}
+    EnumOption[] multiEnumValues?;
+    @jsondata:Name {value: "enum_value"}
+    record {*EnumOption;} enumValue?;
+    # *Deprecated: new integrations should prefer the resource_subtype field.* The type of the custom field. Must be one of the given values
+    "text"|"enum"|"multi_enum"|"number"|"date"|"people" 'type?;
+    # The type of the custom field. Must be one of the given values
+    @jsondata:Name {value: "resource_subtype"}
+    "text"|"enum"|"multi_enum"|"number"|"date"|"people" resourceSubtype?;
+    # *Conditional*. Determines if the custom field is enabled or not
+    boolean enabled?;
+    # *Conditional*. This string is the value of a `text` custom field
+    @jsondata:Name {value: "text_value"}
+    string? textValue?;
+    # This field tells the type of the custom field
+    @jsondata:Name {value: "representation_type"}
+    "text"|"enum"|"multi_enum"|"number"|"date"|"people"|"formula"|"custom_id" representationType?;
+    # The name of the custom field
+    string name?;
+    # *Conditional*. This flag describes whether a custom field is a formula custom field
+    @jsondata:Name {value: "is_formula_field"}
+    boolean isFormulaField?;
+    # This field is the unique custom ID string for the custom field
+    @jsondata:Name {value: "id_prefix"}
+    string? idPrefix?;
+};
+
+public type ProjectBriefBaseAllOf2 record {
+    # HTML formatted text for the project brief
+    @jsondata:Name {value: "html_text"}
+    string htmlText?;
+    # The title of the project brief
+    string title?;
+};
+
+public type SectionCompact record {
+    *AsanaResource;
+    *SectionCompactAllOf2;
+};
+
+public type TaskRequestAllOf2 record {
+    # Gid of a task
+    string? parent?;
+    # Gid of a workspace
+    string workspace?;
+    # *Create-Only* An array of strings identifying users. These can either be the string "me", an email, or the gid of a user. In order to change followers on an existing task use `addFollowers` and `removeFollowers`
+    string[] followers?;
+    # *Create-Only* Array of project gids. In order to change projects on an existing task use `addProject` and `removeProject`
+    string[] projects?;
+    # An object where each key is the GID of a custom field and its corresponding value is either an enum GID, string, number, object, or array (depending on the custom field type). See the [custom fields guide](/docs/custom-fields-guide) for details on creating and updating custom field values
+    @jsondata:Name {value: "custom_fields"}
+    record {|string...;|} customFields?;
+    # Gid of a user
+    string? assignee?;
+    # The *assignee section* is a subdivision of a project that groups tasks together in the assignee's "My Tasks" list. It can either be a header above a list of tasks in a list view or a column in a board view of "My Tasks."
+    # The `assignee_section` property will be returned in the response only if the request was sent by the user who is the assignee of the task. Note that you can only write to `assignee_section` with the gid of an existing section visible in the user's "My Tasks" list
+    @jsondata:Name {value: "assignee_section"}
+    string? assigneeSection?;
+    # *Create-Only* Array of tag gids. In order to change tags on an existing task use `addTag` and `removeTag`
+    string[] tags?;
+};
+
+# Represents the Queries record for the operation: updateCustomField
+public type UpdateCustomFieldQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("asana_created_field"|"created_by"|"created_by.name"|"currency_code"|"custom_label"|"custom_label_position"|"date_value"|"date_value.date"|"date_value.date_time"|"description"|"display_value"|"enabled"|"enum_options"|"enum_options.color"|"enum_options.enabled"|"enum_options.name"|"enum_value"|"enum_value.color"|"enum_value.enabled"|"enum_value.name"|"format"|"has_notifications_enabled"|"id_prefix"|"is_formula_field"|"is_global_to_workspace"|"is_value_read_only"|"multi_enum_values"|"multi_enum_values.color"|"multi_enum_values.enabled"|"multi_enum_values.name"|"name"|"number_value"|"people_value"|"people_value.name"|"precision"|"representation_type"|"resource_subtype"|"text_value"|"type")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type GoalUpdateRequestAllOf2 record {
+    # The current status of this goal. When the goal is open, its status can be `green`, `yellow`, and `red` to reflect "On Track", "At Risk", and "Off Track", respectively. When the goal is closed, the value can be `missed`, `achieved`, `partial`, or `dropped`.
+    # *Note* you can only write to this property if `metric` is set
+    string? status?;
+};
+
+public type MembershipRequest record {
+    # *Optional*. Denotes if a member is active. Applies to all memberships
+    @jsondata:Name {value: "is_active"}
+    boolean isActive?;
+};
+
+# Represents the Queries record for the operation: deleteWebhook
+public type DeleteWebhookQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type ProjectGidRemoveCustomFieldSettingBody record {
+    RemoveCustomFieldSettingRequest data?;
+};
+
+public type ProjectGidSaveAsTemplateBody record {
+    ProjectSaveAsTemplateRequest data?;
+};
+
+public type EnumOptionsenumOptionGidBody record {
+    EnumOptionBase data?;
+};
+
+public type WorkspaceBase WorkspaceCompact;
+
+# Represents the Queries record for the operation: getJob
+public type GetJobQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type TeamResponse record {
+    *TeamBase;
+    *TeamResponseAllOf2;
+};
+
+# Represents the Queries record for the operation: getTasksForTag
+public type GetTasksForTagQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+public type UserTaskListBase UserTaskListCompact;
+
+public type ProjectBriefsprojectBriefGidBody record {
+    ProjectBriefRequest data?;
+};
+
+# Represents the Queries record for the operation: getCustomFieldsForWorkspace
+public type GetCustomFieldsForWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("asana_created_field"|"created_by"|"created_by.name"|"currency_code"|"custom_label"|"custom_label_position"|"date_value"|"date_value.date"|"date_value.date_time"|"description"|"display_value"|"enabled"|"enum_options"|"enum_options.color"|"enum_options.enabled"|"enum_options.name"|"enum_value"|"enum_value.color"|"enum_value.enabled"|"enum_value.name"|"format"|"has_notifications_enabled"|"id_prefix"|"is_formula_field"|"is_global_to_workspace"|"is_value_read_only"|"multi_enum_values"|"multi_enum_values.color"|"multi_enum_values.enabled"|"multi_enum_values.name"|"name"|"number_value"|"offset"|"path"|"people_value"|"people_value.name"|"precision"|"representation_type"|"resource_subtype"|"text_value"|"type"|"uri")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
 
 # OAuth2 Refresh Token Grant Configs
 public type OAuth2RefreshTokenGrantConfig record {|
@@ -84,1835 +1211,804 @@ public type OAuth2RefreshTokenGrantConfig record {|
     string refreshUrl = "https://app.asana.com/-/oauth_token";
 |};
 
-public type PortfolioMembershipResponse PortfolioMembershipBase?;
-
-# The entity that triggered the event. Will typically be a user.
-public type AuditLogEventActor record {
-    # The type of actor.
-    # Can be one of `user`, `asana`, `asana_support`, `anonymous`, or `external_administrator`.
-    "user"|"asana"|"asana_support"|"anonymous"|"external_administrator" actor_type?;
-    # Globally unique identifier of the actor, if it is a user.
-    string? gid?;
-    # The name of the actor, if it is a user.
-    string? name?;
-    # The email of the actor, if it is a user.
-    string? email?;
-};
-
-public type GoalRelationshipCompact record {
-    *AsanaResource;
-    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
-    "subgoal"|"supporting_work" resource_subtype?;
-    record {*ProjectCompact;}? supporting_resource?;
-    # The weight that the supporting resource's progress contributes to the supported goal's progress. This can only be 0 or 1.
-    decimal? contribution_weight?;
-};
-
-public type Portfolio_gid_addMembers_body record {
-    AddMembersRequest? data?;
-};
-
-public type GoalMembershipCompact record {
-    *GoalMembershipBase;
-    # *Deprecated: new integrations should prefer the `role` field.* Describes if the member is comment only in goal.
-    boolean? is_commenter?;
-    # *Deprecated: new integrations should prefer the `role` field.* Describes if the member is editor in goal.
-    boolean? is_editor?;
-};
-
-public type Sections_insert_body record {
-    ProjectSectionInsertRequest? data?;
-};
-
-# A response object returned from a batch request.
-public type BatchResponse record {
-    # The HTTP status code that the invoked endpoint returned.
-    int? status_code?;
-    # A map of HTTP headers specific to this result. This is primarily used for returning a `Location` header to accompany a `201 Created` result.  The parent HTTP response will contain all common headers.
-    record {}? headers?;
-    # The JSON body that the invoked endpoint returned.
-    record {}? body?;
-};
-
-public type Stories_story_gid_body record {
-    StoryRequest? data?;
-};
-
-public type ProjectStatusRequest ProjectStatusBase?;
-
-public type Custom_fields_custom_field_gid_body record {
-    CustomFieldRequest? data?;
-};
-
-public type TeamRequest record {
-    *TeamBase;
-    # The description of the team.
-    string? description?;
-    # The description of the team with formatting as HTML.
-    string? html_description?;
-    # The organization/workspace the team belongs to. This must be the same organization you are in and cannot be changed once set.
-    string? organization?;
-    # The visibility of the team to users in the same organization
-    "secret"|"request_to_join"|"public" visibility?;
-    # Controls who can edit team name and description
-    "all_team_members"|"only_team_admins" edit_team_name_or_description_access_level?;
-    # Controls who can edit team visibility and trash teams
-    "all_team_members"|"only_team_admins" edit_team_visibility_or_trash_team_access_level?;
-    # Controls who can accept or deny member invites for a given team
-    "all_team_members"|"only_team_admins" member_invite_management_access_level?;
-    # Controls who can accept or deny guest invites for a given team
-    "all_team_members"|"only_team_admins" guest_invite_management_access_level?;
-    # Controls who can accept or deny join team requests for a Membership by Request team
-    "all_team_members"|"only_team_admins" join_request_management_access_level?;
-    # Controls who can remove team members
-    "all_team_members"|"only_team_admins" team_member_removal_access_level?;
-};
-
-public type SectionTaskInsertRequest record {
-    # The task to add to this section.
-    string? task;
-    # An existing task within this section before which the added task should be inserted. Cannot be provided together with insert_after.
-    string? insert_before?;
-    # An existing task within this section after which the added task should be inserted. Cannot be provided together with insert_before.
-    string? insert_after?;
-};
-
-public type ProjectMembershipBase ProjectMembershipCompact;
-
-public type CustomFieldSettingBase CustomFieldSettingCompact;
-
-public type PortfolioResponse record {
-    *PortfolioBase;
-    # The time at which this resource was created.
-    string? created_at?;
-    UserCompact? created_by?;
-    # Array of custom field settings applied to the portfolio.
-    CustomFieldSettingResponse[]? custom_field_settings?;
-    StatusUpdateCompact?? current_status_update?;
-    # The localized day on which this portfolio is due. This takes a date with format YYYY-MM-DD.
-    string? due_on?;
-    # Array of Custom Fields.
-    CustomFieldCompact[]? custom_fields?;
-    UserCompact[]? members?;
-    UserCompact? owner?;
-    # The day on which work for this portfolio begins, or null if the portfolio has no start date. This takes a date with `YYYY-MM-DD` format. *Note: `due_on` must be present in the request when setting or unsetting the `start_on` parameter. Additionally, `start_on` and `due_on` cannot be the same date.*
-    string? start_on?;
-    record {*WorkspaceCompact;}? workspace?;
-    # A url that points directly to the object within Asana.
-    string? permalink_url?;
-    # True if the portfolio is public to its workspace members.
-    boolean? 'public?;
-    # Array of project templates that are in the portfolio
-    ProjectTemplateCompact[]? project_templates?;
-};
-
-public type Memberships_body record {
-    CreateMembershipRequest? data?;
-};
-
-public type StoryBase record {
-    *AsanaResource;
-    # The time at which this resource was created.
-    string? created_at?;
-    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
-    string? resource_subtype?;
-    # The plain text of the comment to add. Cannot be used with html_text.
-    string? text?;
-    # [Opt In](/docs/inputoutput-options). HTML formatted text for a comment. This will not include the name of the creator.
-    string? html_text?;
-    # *Conditional*. Whether the story should be pinned on the resource.
-    boolean? is_pinned?;
-    # The name of the sticker in this story. `null` if there is no sticker.
-    "green_checkmark"|"people_dancing"|"dancing_unicorn"|"heart"|"party_popper"|"people_waving_flags"|"splashing_narwhal"|"trophy"|"yeti_riding_unicorn"|"celebrating_people"|"determined_climbers"|"phoenix_spreading_love" sticker_name?;
-};
-
-public type WebhookRequest record {
-    # A resource ID to subscribe to. Many Asana resources are valid to create webhooks on, but higher-level resources require filters.
-    string? 'resource;
-    # The URL to receive the HTTP POST. The full URL will be used to deliver events from this webhook (including parameters) which allows encoding of application-specific state when the webhook is created.
-    string? target;
-    # An array of WebhookFilter objects to specify a whitelist of filters to apply to events from this webhook. If a webhook event passes any of the filters the event will be delivered; otherwise no event will be sent to the receiving server.
-    record {*WebhookFilter;}[]? filters?;
-};
-
-public type TaskAddTagRequest record {
-    # The tag's gid to add to the task.
-    string? tag;
-};
-
-# A request object for use in a batch request.
-public type BatchRequest record {
-    BatchRequestAction[]? actions?;
-};
-
-public type RuleTriggerRequest record {
-    # The ID of the resource. For the duration of the beta, this resource is always a task, and this task must exist in the project in which the rule is created.
-    string? 'resource;
-    # The dynamic keys and values of the request. These fields are intended to be used in the action for the rule associated with this trigger.
-    record {}? action_data;
-};
-
-public type Inline_response_201_8 record {
-    TeamResponse? data?;
-};
-
-public type CustomFieldSettingCompact record {
-    *AsanaResource;
-};
-
-public type TagResponse record {
-    *TagBase;
-    # The time at which this resource was created.
-    string? created_at?;
-    # Array of users following this tag.
-    UserCompact[]? followers?;
-    WorkspaceCompact? workspace?;
-    # A url that points directly to the object within Asana.
-    string? permalink_url?;
-};
-
-public type Inline_response_201_9 record {
-    TimeTrackingEntryBase? data?;
-};
-
-public type Portfolio_gid_removeMembers_body record {
-    RemoveMembersRequest? data?;
-};
-
-public type Inline_response_201_6 record {
-    TagResponse? data?;
-};
-
-public type RuleTriggerResponse record {
-    # Message providing more detail about the result
-    string? message?;
-};
-
-public type Inline_response_201_7 record {
-    TaskResponse? data?;
-};
-
-# *OAuth Required*. *Conditional*. This field is returned only if external values are set or included by using [Opt In] (/docs/inputoutput-options).
-# The external field allows you to store app-specific metadata on tasks, including a gid that can be used to retrieve tasks and a data blob that can store app-specific character strings. Note that you will need to authenticate with Oauth to access or modify this data. Once an external gid is set, you can use the notation `external:custom_gid` to reference your object anywhere in the API where you may use the original object gid. See the page on Custom External Data for more details.
-public type TaskBase_external record {
-    string? gid?;
-    string? data?;
-};
-
-public type Inline_response_201_4 record {
-    PortfolioResponse? data?;
-};
-
-public type Inline_response_201_5 record {
-    ProjectResponse? data?;
-};
-
-public type Portfolios_body record {
-    PortfolioRequest? data?;
-};
-
-public type TaskAddProjectRequest record {
-    # The project to add the task to.
-    string? project;
-    # A task in the project to insert the task after, or `null` to insert at the beginning of the list.
-    string? insert_after?;
-    # A task in the project to insert the task before, or `null` to insert at the end of the list.
-    string? insert_before?;
-    # A section in the project to insert the task into. The task will be inserted at the bottom of the section.
-    string? section?;
-};
-
-public type WebhookResponse record {
-    *WebhookCompact;
-    # The time at which this resource was created.
-    string? created_at?;
-    # The timestamp when the webhook last received an error when sending an event to the target.
-    string? last_failure_at?;
-    # The contents of the last error response sent to the webhook when attempting to deliver events to the target.
-    string? last_failure_content?;
-    # The timestamp when the webhook last successfully sent an event to the target.
-    string? last_success_at?;
-    # Whitelist of filters to apply to events from this webhook. If a webhook event passes any of the filters the event will be delivered; otherwise no event will be sent to the receiving server.
-    record {*WebhookFilter;}[]? filters?;
-};
-
-public type Webhooks_body record {
-    WebhookRequest? data?;
-};
-
-public type MemberCompact record {
-    *AsanaResource;
-    # The name of the member
-    string? name?;
-    # The type of the member (team or user)
-    string? resource_type?;
-};
-
-public type AddCustomFieldSettingRequest record {
-    # The custom field to associate with this container.
-    string? custom_field;
-    # Whether this field should be considered important to this container (for instance, to display in the list view of items in the container).
-    boolean? is_important?;
-    # A gid of a Custom Field Setting on this container, before which the new Custom Field Setting will be added.  `insert_before` and `insert_after` parameters cannot both be specified.
-    string? insert_before?;
-    # A gid of a Custom Field Setting on this container, after which the new Custom Field Setting will be added.  `insert_before` and `insert_after` parameters cannot both be specified.
-    string? insert_after?;
-};
-
-public type Workspace_gid_addUser_body record {
-    # A user identification object for specification with the addUser/removeUser endpoints.
-    WorkspaceAddUserRequest? data?;
-};
-
-public type Team_gid_projects_body record {
-    ProjectRequest? data?;
-};
-
-public type ProjectMembershipCompactResponse record {
-    *ProjectMembershipCompact;
-    # The base type of this resource.
-    string? resource_type?;
-    # Type of the membership.
-    string? resource_subtype?;
-};
-
-public type ProjectBase record {
-    *ProjectCompact;
-    # True if the project is archived, false if not. Archived projects do not show in the UI by default and may be treated differently for queries.
-    boolean? archived?;
-    # Color of the project.
-    "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray"|"none"? color?;
-    # The time at which this resource was created.
-    string? created_at?;
-    record {*ProjectStatusResponse;}? current_status?;
-    record {*StatusUpdateCompact;}? current_status_update?;
-    # Array of Custom Field Settings (in compact form).
-    CustomFieldSettingResponse[]? custom_field_settings?;
-    # The default view (list, board, calendar, or timeline) of a project.
-    "list"|"board"|"calendar"|"timeline" default_view?;
-    # *Deprecated: new integrations should prefer the `due_on` field.*
-    string? due_date?;
-    # The day on which this project is due. This takes a date with format YYYY-MM-DD.
-    string? due_on?;
-    # [Opt In](/docs/inputoutput-options). The notes of the project with formatting as HTML.
-    string? html_notes?;
-    # Array of users who are members of this project.
-    UserCompact[]? members?;
-    # The time at which this project was last modified.
-    # *Note: This does not currently reflect any changes in associations such as tasks or comments that may have been added or removed from the project.*
-    string? modified_at?;
-    # Free-form textual information associated with the project (ie., its description).
-    string? notes?;
-    # *Deprecated:* new integrations use `privacy_setting` instead.
-    boolean? 'public?;
-    # The privacy setting of the project. *Note: Administrators in your organization may restrict the values of `privacy_setting`.*
-    "public_to_workspace"|"private_to_team"|"private" privacy_setting?;
-    # The day on which work for this project begins, or null if the project has no start date. This takes a date with `YYYY-MM-DD` format. *Note: `due_on` or `due_at` must be present in the request when setting or unsetting the `start_on` parameter. Additionally, `start_on` and `due_on` cannot be the same date.*
-    string? start_on?;
-    # The default access for users or teams who join or are added as members to the project.
-    "admin"|"editor"|"commenter"|"viewer" default_access_level?;
-    # The minimum access level needed for project members to modify this project's workflow and appearance.
-    "admin"|"editor" minimum_access_level_for_customization?;
-    # The minimum access level needed for project members to share the project and manage project memberships.
-    "admin"|"editor" minimum_access_level_for_sharing?;
-};
-
-public type Inline_response_201_2 record {
-    MembershipResponse? data?;
-};
-
-public type Inline_response_201_3 record {
-    OrganizationExportResponse? data?;
-};
-
-public type CustomFieldResponse record {
-    *CustomFieldBase;
-    # This field tells the type of the custom field.
-    "text"|"enum"|"multi_enum"|"number"|"date"|"people"|"formula"|"custom_id" representation_type?;
-    # This field is the unique custom ID string for the custom field.
-    string? id_prefix?;
-    # *Conditional*. This flag describes whether a custom field is a formula custom field.
-    boolean? is_formula_field?;
-    # *Conditional*. This flag describes whether a custom field is read only.
-    boolean? is_value_read_only?;
-    UserCompact?? created_by?;
-    # *Conditional*. Only relevant for custom fields of type `people`. This array of [compact user](/reference/users) objects reflects the values of a `people` custom field.
-    UserCompact[]? people_value?;
-};
-
-public type Inline_response_201_1 record {
-    EnumOption? data?;
-};
-
-public type CustomFieldCompact record {
-    *AsanaResource;
-    # The name of the custom field.
-    string? name?;
-    # The type of the custom field. Must be one of the given values.
-    "text"|"enum"|"multi_enum"|"number"|"date"|"people" resource_subtype?;
-    # *Deprecated: new integrations should prefer the resource_subtype field.* The type of the custom field. Must be one of the given values.
-    "text"|"enum"|"multi_enum"|"number"|"date"|"people" 'type?;
-    # *Conditional*. Only relevant for custom fields of type `enum`. This array specifies the possible values which an `enum` custom field can adopt. To modify the enum options, refer to [working with enum options](/reference/createenumoptionforcustomfield).
-    EnumOption[]? enum_options?;
-    # *Conditional*. Determines if the custom field is enabled or not.
-    boolean? enabled?;
-    # This field tells the type of the custom field.
-    "text"|"enum"|"multi_enum"|"number"|"date"|"people"|"formula"|"custom_id" representation_type?;
-    # This field is the unique custom ID string for the custom field.
-    string? id_prefix?;
-    # *Conditional*. This flag describes whether a custom field is a formula custom field.
-    boolean? is_formula_field?;
-    # *Conditional*. Only relevant for custom fields of type `date`. This object reflects the chosen date (and optionally, time) value of a `date` custom field. If no date is selected, the value of `date_value` will be `null`.
-    CustomFieldCompact_date_value? date_value?;
-    record {*EnumOption;}? enum_value?;
-    # *Conditional*. Only relevant for custom fields of type `multi_enum`. This object is the chosen values of a `multi_enum` custom field.
-    EnumOption[]? multi_enum_values?;
-    # *Conditional*. This number is the value of a `number` custom field.
-    decimal? number_value?;
-    # *Conditional*. This string is the value of a `text` custom field.
-    string? text_value?;
-    # A string representation for the value of the custom field. Integrations that don't require the underlying type should use this field to read values. Using this field will future-proof an app against new custom field types.
-    string? display_value?;
-};
-
-public type JobCompact record {
-    *AsanaResource;
-    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
-    string? resource_subtype?;
-    # The current status of this job. The value is one of: `not_started`, `in_progress`, `succeeded`, or `failed`.
-    "not_started"|"in_progress"|"succeeded"|"failed" status?;
-    ProjectCompact? new_project?;
-    record {*TaskCompact;}? new_task?;
-    ProjectTemplateCompact? new_project_template?;
-};
-
-public type WorkspaceResponse record {
-    *WorkspaceBase;
-    # The email domains that are associated with this workspace.
-    string[]? email_domains?;
-    # Whether the workspace is an *organization*.
-    boolean? is_organization?;
-};
-
-public type PortfolioRequest record {
-    *PortfolioBase;
-    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string[]? members?;
-    # Gid of an object.
-    string? workspace?;
-    # True if the portfolio is public to its workspace members.
-    boolean? 'public?;
-};
-
-public type Project_briefs_project_brief_gid_body record {
-    ProjectBriefRequest? data?;
-};
-
-public type SectionResponse record {
-    *SectionBase;
-    # The time at which this resource was created.
-    string? created_at?;
-    ProjectCompact? project?;
-    # *Deprecated - please use project instead*
-    ProjectCompact[]? projects?;
-};
-
-public type Goal_gid_addSupportingRelationship_body record {
-    GoalAddSupportingRelationshipRequest? data?;
-};
-
-public type TaskTemplateBase TaskTemplateCompact;
-
-# A dictionary of options to auto-shift dates. `task_dates` must be included to use this option. Requires either `start_on` or `due_on`, but not both.
-public type ProjectDuplicateRequest_schedule_dates record {
-    # Determines if the auto-shifted dates should skip weekends.
-    boolean? should_skip_weekends;
-    # Sets the last due date in the duplicated project to the given date. The rest of the due dates will be offset by the same amount as the due dates in the original project.
-    string? due_on?;
-    # Sets the first start date in the duplicated project to the given date. The rest of the start dates will be offset by the same amount as the start dates in the original project.
-    string? start_on?;
-};
-
-public type TaskRemoveProjectRequest record {
-    # The project to remove the task from.
-    string? project;
-};
-
-public type Task_gid_setParent_body record {
-    TaskSetParentRequest? data?;
-};
-
-public type AttachmentCompact record {
-    *AsanaResource;
-    # The name of the file.
-    string? name?;
-    # The service hosting the attachment. Valid values are `asana`, `dropbox`, `gdrive`, `onedrive`, `box`, `vimeo`, and `external`.
-    string? resource_subtype?;
-};
-
-public type Task_gid_removeDependencies_body record {
-    ModifyDependenciesRequest? data?;
-};
-
-public type Task_gid_addDependencies_body record {
-    ModifyDependenciesRequest? data?;
-};
-
-# A user identification object for specification with the addUser/removeUser endpoints.
-public type WorkspaceAddUserRequest record {
-    # A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    string? user?;
-};
-
-public type Task_gid_stories_body record {
-    StoryRequest? data?;
-};
-
-public type ProjectCompact record {
-    *AsanaResource;
-    # Name of the project. This is generally a short sentence fragment that fits on a line in the UI for maximum readability. However, it can be longer.
-    string? name?;
-};
-
-# A WebhookFilter can be passed on creation of a webhook in order to filter the types of actions that trigger delivery of an [event](/reference/events)
-public type WebhookFilter record {
-    # The type of the resource which created the event when modified; for example, to filter to changes on regular tasks this field should be set to `task`.
-    string? resource_type?;
-    # The resource subtype of the resource that the filter applies to. This should be set to the same value as is returned on the `resource_subtype` field on the resources themselves.
-    string? resource_subtype?;
-    # The type of change on the **resource** to pass through the filter. For more information refer to `Event.action` in the [event](/reference/events) schema. This can be one of `changed`, `added`, `removed`, `deleted`, and `undeleted` depending on the nature of what has occurred on the resource.
-    string? action?;
-    # *Conditional.* A whitelist of fields for events which will pass the filter when the resource is changed. These can be any combination of the fields on the resources themselves. This field is only valid for `action` of type `changed`
-    string[]? fields?;
-};
-
-public type Task_gid_removeDependents_body record {
-    # A set of dependent tasks.
-    ModifyDependentsRequest? data?;
-};
-
-public type TeamMembershipBase TeamMembershipCompact?;
-
-public type UserBaseResponse record {
-    *UserBase;
-    # The user's email address.
-    string? email?;
-    # A map of the user’s profile photo in various sizes, or null if no photo is set. Sizes provided are 21, 27, 36, 60, 128, and 1024. All images are in PNG format, except for 1024 (which is in JPEG format).
-    UserBaseResponse_photo? photo?;
-};
-
-public type GoalCompact record {
-    *AsanaResource;
-    # The name of the goal.
-    string? name?;
-    record {*UserCompact;}? owner?;
-};
-
-public type Portfolio_gid_addItem_body record {
-    PortfolioAddItemRequest? data?;
-};
-
-public type Inline_response_412_errors record {
-    # Message providing more detail about the error that occurred, if available.
-    string? message?;
-};
-
-public type MembershipResponse GoalMembershipResponse|ProjectMembershipCompactResponse?;
-
-public type PortfolioRemoveItemRequest record {
-    # The item to remove from the portfolio.
-    string? item;
-};
-
-public type ProjectTemplateResponse ProjectTemplateBase?;
-
-public type TaskRequest record {
-    *TaskBase;
-    # Gid of a user.
-    string? assignee?;
-    # The *assignee section* is a subdivision of a project that groups tasks together in the assignee's "My Tasks" list. It can either be a header above a list of tasks in a list view or a column in a board view of "My Tasks."
-    # The `assignee_section` property will be returned in the response only if the request was sent by the user who is the assignee of the task. Note that you can only write to `assignee_section` with the gid of an existing section visible in the user's "My Tasks" list.
-    string? assignee_section?;
-    # An object where each key is the GID of a custom field and its corresponding value is either an enum GID, string, number, object, or array (depending on the custom field type). See the [custom fields guide](/docs/custom-fields-guide) for details on creating and updating custom field values.
-    record {|string?...;|}? custom_fields?;
-    # *Create-Only* An array of strings identifying users. These can either be the string "me", an email, or the gid of a user. In order to change followers on an existing task use `addFollowers` and `removeFollowers`.
-    string[]? followers?;
-    # Gid of a task.
-    string? parent?;
-    # *Create-Only* Array of project gids. In order to change projects on an existing task use `addProject` and `removeProject`.
-    string[]? projects?;
-    # *Create-Only* Array of tag gids. In order to change tags on an existing task use `addTag` and `removeTag`.
-    string[]? tags?;
-    # Gid of a workspace.
-    string? workspace?;
-};
-
-public type UserTaskListRequest UserTaskListBase?;
-
-# Sadly, sometimes requests to the API are not successful. Failures can
-# occur for a wide range of reasons. In all cases, the API should return
-# an HTTP Status Code that indicates the nature of the failure,
-# with a response body in JSON format containing additional information.
-# 
-# 
-# In the event of a server error the response body will contain an error
-# phrase. These phrases are automatically generated using the
-# [node-asana-phrase
-# library](https://github.com/Asana/node-asana-phrase) and can be used by
-# Asana support to quickly look up the incident that caused the server
-# error.
-public type ErrorResponse record {
-    Error[]? errors?;
-};
-
-public type TimeTrackingEntryCompact record {
-    *AsanaResource;
-    # Time in minutes tracked by the entry.
-    int? duration_minutes?;
-    # The day that this entry is logged on.
-    string? entered_on?;
-    UserCompact? created_by?;
-};
-
-public type TimeTrackingEntryBase record {
-    *TimeTrackingEntryCompact;
-    TaskCompact? task?;
-    # The time at which this resource was created.
-    string? created_at?;
-};
-
-public type TaskTemplateResponse record {
-    *TaskTemplateBase;
-    # Name of the task template.
-    string? name?;
-    # The project that this task template belongs to.
-    ProjectCompact?? project?;
-    # The configuration for the task that will be created from this template.
-    TaskTemplateRecipe?? template?;
-    # The user who created this task template.
-    UserCompact?? created_by?;
-    # The time at which this task template was created.
-    string? created_at?;
-};
-
-public type GoalBase record {
-    *AsanaResource;
-    # The name of the goal.
-    string? name?;
-    # The notes of the goal with formatting as HTML.
-    string? html_notes?;
-    # Free-form textual information associated with the goal (i.e. its description).
-    string? notes?;
-    # The localized day on which this goal is due. This takes a date with format `YYYY-MM-DD`.
-    string? due_on?;
-    # The day on which work for this goal begins, or null if the goal has no start date. This takes a date with `YYYY-MM-DD` format, and cannot be set unless there is an accompanying due date.
-    string? start_on?;
-    # *Conditional*. This property is only present when the `workspace` provided is an organization. Whether the goal belongs to the `workspace` (and is listed as part of the workspace’s goals) or not. If it isn’t a workspace-level goal, it is a team-level goal, and is associated with the goal’s team.
-    boolean? is_workspace_level?;
-    # True if the goal is liked by the authorized user, false if not.
-    boolean? liked?;
-};
-
-public type MembershipUpdateRequest record {
-    # The role given to the member. Can be `editor` or `commenter`.
-    string? access_level?;
-};
-
-public type MembershipCompact GoalMembershipCompact|ProjectMembershipCompactResponse?;
-
-public type ProjectBriefBase record {
-    *ProjectBriefCompact;
-    # The title of the project brief.
-    string? title?;
-    # HTML formatted text for the project brief.
-    string? html_text?;
-};
-
-public type OrganizationExportBase OrganizationExportCompact?;
-
-public type Project_gid_sections_body record {
-    SectionRequest? data?;
-};
-
-public type AsanaNamedResource record {
-    *AsanaResource;
-    # The name of the object.
-    string? name?;
-};
-
-public type WebhookUpdateRequest record {
-    # An array of WebhookFilter objects to specify a whitelist of filters to apply to events from this webhook. If a webhook event passes any of the filters the event will be delivered; otherwise no event will be sent to the receiving server.
-    record {*WebhookFilter;}[]? filters?;
-};
-
-public type Tasks_task_gid_body record {
-    TaskRequest? data?;
-};
-
-public type Goal_relationships_goal_relationship_gid_body record {
-    GoalRelationshipRequest? data?;
-};
-
-public type Task_template_gid_instantiateTask_body record {
-    TaskTemplateInstantiateTaskRequest? data?;
-};
-
-public type AllocationResponse record {
-    *AllocationCompact;
-    UserCompact? created_by?;
-    # The subtype of the allocation.
-    string? resource_subtype?;
-};
-
-public type GoalMetricCurrentValueRequest record {
-    *AsanaResource;
-    # *Conditional*. This number is the current value of a goal metric of type number.
-    decimal? current_number_value?;
-};
-
-public type Projects_body record {
-    ProjectRequest? data?;
-};
-
-public type TaskTemplateRecipeCompact record {
-    # Name of the task that will be created from this template.
-    string? name?;
-    # The subtype of the task that will be created from this template.
-    "default_task"|"milestone_task"|"approval_task" task_resource_subtype?;
-};
-
-public type SectionBase SectionCompact;
-
-public type Goal_gid_removeSupportingRelationship_body record {
-    GoalRemoveSupportingRelationshipRequest? data?;
-};
-
-public type Project_template_gid_instantiateProject_body record {
-    ProjectTemplateInstantiateProjectRequest? data?;
-};
-
-public type UserTaskListCompact record {
-    *AsanaResource;
-    # The name of the user task list.
-    string? name?;
-    # The owner of the user task list, i.e. the person whose My Tasks is represented by this resource.
-    UserCompact?? owner?;
-    # The workspace in which the user task list is located.
-    WorkspaceCompact?? workspace?;
-};
-
-# A user identification object for specification with the addUser/removeUser endpoints.
-public type WorkspaceRemoveUserRequest record {
-    # A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    string? user?;
-};
-
-public type PortfolioAddItemRequest record {
-    # The item to add to the portfolio.
-    string? item;
-    # An id of an item in this portfolio. The new item will be added before the one specified here. `insert_before` and `insert_after` parameters cannot both be specified.
-    string? insert_before?;
-    # An id of an item in this portfolio. The new item will be added after the one specified here. `insert_before` and `insert_after` parameters cannot both be specified.
-    string? insert_after?;
-};
-
-public type TaskTemplateCompact record {
-    *AsanaResource;
-    # Name of the task template.
-    string? name?;
-};
-
-public type Portfolio_gid_addCustomFieldSetting_body record {
-    AddCustomFieldSettingRequest? data?;
-};
-
-public type PortfolioBase record {
-    *PortfolioCompact;
-    # Color of the portfolio.
-    "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray" color?;
-};
-
-public type UserRequest UserBase?;
-
-public type Workspace_gid_projects_body record {
-    ProjectRequest? data?;
-};
-
-public type TaskSetParentRequest record {
-    # The new parent of the task, or `null` for no parent.
-    string? parent;
-    # A subtask of the parent to insert the task after, or `null` to insert at the beginning of the list.
-    string? insert_after?;
-    # A subtask of the parent to insert the task before, or `null` to insert at the end of the list.
-    string? insert_before?;
-};
-
-public type RemoveMembersRequest record {
-    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string? members;
-};
-
-public type EnumOption record {
-    *AsanaResource;
-    # The name of the enum option.
-    string? name?;
-    # Whether or not the enum option is a selectable value for the custom field.
-    boolean? enabled?;
-    # The color of the enum option. Defaults to ‘none’.
-    string? color?;
-};
-
-public type UserCompact record {
-    *AsanaResource;
-    # *Read-only except when same user as requester*. The user’s name.
-    string? name?;
-};
-
-public type TaskAddFollowersRequest record {
-    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string[]? followers;
-};
-
-public type EnumOptionRequest record {
-    *EnumOptionBase;
-    # An existing enum option within this custom field before which the new enum option should be inserted. Cannot be provided together with after_enum_option.
-    string? insert_before?;
-    # An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
-    string? insert_after?;
-};
-
-public type ProjectBriefCompact record {
-    *AsanaResource;
-};
-
-public type ProjectResponse record {
-    *ProjectBase;
-    # Array of Custom Fields.
-    CustomFieldCompact[]? custom_fields?;
-    # True if the project is currently marked complete, false if not.
-    boolean? completed?;
-    # The time at which this project was completed, or null if the project is not completed.
-    string? completed_at?;
-    UserCompact?? completed_by?;
-    # Array of users following this project. Followers are a subset of members who have opted in to receive "tasks added" notifications for a project.
-    UserCompact[]? followers?;
-    # The current owner of the project, may be null.
-    record {*UserCompact;}? owner?;
-    record {*TeamCompact;}? team?;
-    # The icon for a project.
-    "list"|"board"|"timeline"|"calendar"|"rocket"|"people"|"graph"|"star"|"bug"|"light_bulb"|"globe"|"gear"|"notebook"|"computer"|"check"|"target"|"html"|"megaphone"|"chat_bubbles"|"briefcase"|"page_layout"|"mountain_flag"|"puzzle"|"presentation"|"line_and_symbols"|"speed_dial"|"ribbon"|"shoe"|"shopping_basket"|"map"|"ticket"|"coins" icon?;
-    # A url that points directly to the object within Asana.
-    string? permalink_url?;
-    record {*ProjectBriefCompact;}? project_brief?;
-    record {*ProjectTemplateCompact;}? created_from_template?;
-    record {*WorkspaceCompact;}? workspace?;
-};
-
-public type TeamBase TeamCompact;
-
-public type UserBase UserCompact;
-
-public type Portfolios_portfolio_gid_body record {
-    PortfolioRequest? data?;
-};
-
-public type ProjectBriefRequest record {
-    *ProjectBriefBase;
-    # The plain text of the project brief. When writing to a project brief, you can specify either `html_text` (preferred) or `text`, but not both.
-    string? text?;
-};
-
-public type GoalMetricBase record {
-    *AsanaResource;
-    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
-    "number" resource_subtype?;
-    # *Conditional*. Only relevant for goal metrics of type ‘Number’. This field dictates the number of places after the decimal to round to, i.e. 0 is integer values, 1 rounds to the nearest tenth, and so on. Must be between 0 and 6, inclusive.
-    # For percentage format, this may be unintuitive, as a value of 0.25 has a precision of 0, while a value of 0.251 has a precision of 1. This is due to 0.25 being displayed as 25%.
-    int? precision?;
-    # A supported unit of measure for the goal metric, or none.
-    "none"|"currency"|"percentage" unit?;
-    # ISO 4217 currency code to format this custom field. This will be null if the `unit` is not `currency`.
-    string? currency_code?;
-    # This number is the start value of a goal metric of type number.
-    decimal? initial_number_value?;
-    # This number is the end value of a goal metric of type number. This number cannot equal `initial_number_value`.
-    decimal? target_number_value?;
-    # This number is the current value of a goal metric of type number.
-    decimal? current_number_value?;
-    # This string is the current value of a goal metric of type string.
-    string? current_display_value?;
-    # This field defines how the progress value of a goal metric is being calculated. A goal's progress can be provided manually by the user, calculated automatically from contributing subgoals, projects, or tasks, or managed by an integration with an external data source, such as Salesforce.
-    "manual"|"subgoal_progress"|"project_task_completion"|"project_milestone_completion"|"task_completion"|"external" progress_source?;
-};
-
-public type Task_gid_removeProject_body record {
-    TaskRemoveProjectRequest? data?;
-};
-
-public type ProjectStatusResponse record {
-    *ProjectStatusBase;
-    UserCompact? author?;
-    # The time at which this resource was created.
-    string? created_at?;
-    UserCompact? created_by?;
-    # The time at which this project status was last modified.
-    # *Note: This does not currently reflect any changes in associations such as comments that may have been added or removed from the project status.*
-    string? modified_at?;
-};
-
-# The context from which this event originated.
-public type AuditLogEventContext record {
-    # The type of context.
-    # Can be one of `web`, `desktop`, `mobile`, `asana_support`, `asana`, `email`, or `api`.
-    "web"|"desktop"|"mobile"|"asana_support"|"asana"|"email"|"api" context_type?;
-    # The authentication method used in the context of an API request.
-    # Only present if the `context_type` is `api`. Can be one of `cookie`, `oauth`, `personal_access_token`, or `service_account`.
-    "cookie"|"oauth"|"personal_access_token"|"service_account" api_authentication_method?;
-    # The IP address of the client that initiated the event, if applicable.
-    string? client_ip_address?;
-    # The user agent of the client that initiated the event, if applicable.
-    string? user_agent?;
-    # The name of the OAuth App that initiated the event.
-    # Only present if the `api_authentication_method` is `oauth`.
-    string? oauth_app_name?;
-};
-
-public type Rule_trigger_gid_run_body record {
-    RuleTriggerRequest? data?;
-};
-
-public type OrganizationExportResponse OrganizationExportBase?;
-
-public type Project_gid_removeMembers_body record {
-    RemoveMembersRequest? data?;
-};
-
-public type SectionCompact record {
-    *AsanaResource;
-    # The name of the section (i.e. the text displayed as the section header).
-    string? name?;
-};
-
-public type Enum_options_enum_option_gid_body record {
-    EnumOptionBase? data?;
-};
-
-public type Task_gid_addProject_body record {
-    TaskAddProjectRequest? data?;
-};
-
-public type ProjectSaveAsTemplateRequest record {
-    # The name of the new project template.
-    string? name;
-    # Sets the team of the new project template. If the project exists in an organization, specify team and not workspace.
-    string? team?;
-    # Sets the workspace of the new project template. Only specify workspace if the project exists in a workspace.
-    string? workspace?;
-    # Sets the project template to public to its team.
-    boolean? 'public;
-};
-
-public type MembershipRequest record {
-    # *Optional*. Denotes if a member is active. Applies to all memberships
-    boolean? is_active?;
-};
-
-public type TimePeriodCompact record {
-    *AsanaResource;
-    # The localized end date of the time period in `YYYY-MM-DD` format.
-    string? end_on?;
-    # The localized start date of the time period in `YYYY-MM-DD` format.
-    string? start_on?;
-    # The cadence and index of the time period. The value is one of: `FY`, `H1`, `H2`, `Q1`, `Q2`, `Q3`, or `Q4`.
-    "FY"|"H1"|"H2"|"Q1"|"Q2"|"Q3"|"Q4" period?;
-    # A string representing the cadence code and the fiscal year.
-    string? display_name?;
-};
-
-# *Conditional*. Only relevant for custom fields of type `date`. This object reflects the chosen date (and optionally, time) value of a `date` custom field. If no date is selected, the value of `date_value` will be `null`.
-public type CustomFieldCompact_date_value record {
-    # A string representing the date in YYYY-MM-DD format.
-    string? date?;
-    # A string representing the date in ISO 8601 format. If no time value is selected, the value of `date-time` will be `null`.
-    string? date_time?;
-};
-
-# Pagination (`limit` and `offset`) and output options (`fields` or `expand`) for the action. “Pretty” JSON output is not an available option on individual actions; if you want pretty output, specify that option on the parent request.
-public type BatchRequestAction_options record {
-    # Pagination limit for the request.
-    int? 'limit?;
-    # Pagination offset for the request.
-    int? offset?;
-    # The fields to retrieve in the request.
-    string[]? fields?;
-};
-
-public type WorkspaceBase WorkspaceCompact;
-
-public type GoalRemoveSubgoalRequest record {
-    # The goal gid to remove as subgoal from the parent goal
-    string? subgoal;
-};
-
-public type TeamResponse record {
-    *TeamBase;
-    # [Opt In](/docs/inputoutput-options). The description of the team.
-    string? description?;
-    # [Opt In](/docs/inputoutput-options). The description of the team with formatting as HTML.
-    string? html_description?;
-    record {*WorkspaceCompact;}? organization?;
-    # A url that points directly to the object within Asana.
-    string? permalink_url?;
-    # The visibility of the team to users in the same organization
-    "secret"|"request_to_join"|"public" visibility?;
-    # Controls who can edit team name and description
-    "all_team_members"|"only_team_admins" edit_team_name_or_description_access_level?;
-    # Controls who can edit team visibility and trash teams
-    "all_team_members"|"only_team_admins" edit_team_visibility_or_trash_team_access_level?;
-    # Controls who can accept or deny member invites for a given team
-    "all_team_members"|"only_team_admins" member_invite_management_access_level?;
-    # Controls who can accept or deny guest invites for a given team
-    "all_team_members"|"only_team_admins" guest_invite_management_access_level?;
-    # Controls who can accept or deny join team requests for a Membership by Request team
-    "all_team_members"|"only_team_admins" join_request_management_access_level?;
-    # Controls who can remove team members
-    "all_team_members"|"only_team_admins" team_member_removal_access_level?;
-};
-
-# A set of dependent tasks.
-public type ModifyDependentsRequest record {
-    # An array of task gids that are dependents of the given task.
-    string[]? dependents?;
-};
-
-public type UserTaskListBase UserTaskListCompact;
-
-public type Project_gid_project_briefs_body record {
-    ProjectBriefRequest? data?;
-};
-
-public type GoalMetricRequest GoalMetricBase?;
-
-public type StatusUpdateBase record {
-    *StatusUpdateCompact;
-    # The text content of the status update.
-    string? text;
-    # [Opt In](/docs/inputoutput-options). The text content of the status update with formatting as HTML.
-    string? html_text?;
-    # The type associated with the status update. This represents the current state of the object this object is on.
-    "on_track"|"at_risk"|"off_track"|"on_hold"|"complete"|"achieved"|"partial"|"missed"|"dropped" status_type;
-};
+# Represents the Queries record for the operation: getPortfolio
+public type GetPortfolioQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"owner"|"owner.name"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type GoalMetricRequest GoalMetricBase;
 
 public type StatusUpdateResponse record {
     *StatusUpdateBase;
-    UserCompact? author?;
-    # The time at which this resource was created.
-    string? created_at?;
-    UserCompact? created_by?;
-    # *Deprecated - please use liked instead* True if the status is hearted by the authorized user, false if not.
-    boolean? hearted?;
-    # *Deprecated - please use likes instead* Array of likes for users who have hearted this status.
-    Like[]? hearts?;
-    # True if the status is liked by the authorized user, false if not.
-    boolean? liked?;
-    # Array of likes for users who have liked this status.
-    Like[]? likes?;
-    # The time at which this project status was last modified.
-    # *Note: This does not currently reflect any changes in associations such as comments that may have been added or removed from the status.*
-    string? modified_at?;
-    # *Deprecated - please use likes instead* The number of users who have hearted this status.
-    int? num_hearts?;
-    # The number of users who have liked this status.
-    int? num_likes?;
-    record {*ProjectCompact;}? parent?;
+    *StatusUpdateResponseAllOf2;
 };
 
-public type Portfolio_gid_removeCustomFieldSetting_body record {
-    RemoveCustomFieldSettingRequest? data?;
+# Represents the Queries record for the operation: getTasks
+public type GetTasksQueries record {
+    # Only return tasks that are either incomplete or that have been completed since this time
+    @http:Query {name: "completed_since"}
+    string completedSince?;
+    # The workspace to filter tasks on.
+    # *Note: If you specify `workspace`, you must also specify the `assignee` to filter on.*
+    string workspace?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # The project to filter tasks on
+    string project?;
+    # Only return tasks that have been modified since the given time.
+    # 
+    # *Note: A task is considered “modified” if any of its properties
+    # change, or associations between it and other objects are modified
+    # (e.g.  a task being added to a project). A task is not considered
+    # modified just because another object it is associated with (e.g. a
+    # subtask) is modified. Actions that count as modifying the task
+    # include assigning, renaming, completing, and adding stories.*
+    @http:Query {name: "modified_since"}
+    string modifiedSince?;
+    # The section to filter tasks on
+    string section?;
+    # The assignee to filter tasks on. If searching for unassigned tasks, assignee.any = null can be specified.
+    # *Note: If you specify `assignee`, you must also specify the `workspace` to filter on.*
+    string assignee?;
 };
 
-public type Inline_response_200_9 record {
-    GoalRelationshipCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+# Represents the Queries record for the operation: removeSupportingRelationship
+public type RemoveSupportingRelationshipQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type AllocationBase record {
-    *AsanaResource;
-    # The localized day on which the allocation starts.
-    string? start_date?;
-    # The localized day on which the allocation ends.
-    string? end_date?;
+# Represents the Queries record for the operation: getPortfolioMemberships
+public type GetPortfolioMembershipsQueries record {
+    # The workspace to filter results on
+    string workspace?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("offset"|"path"|"portfolio"|"portfolio.name"|"uri"|"user"|"user.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # The portfolio to filter results on
+    string portfolio?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+    # A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    string user?;
 };
 
-# The full record for all events that have occurred since the sync token was created.
-public type Inline_response_200_7 record {
-    EventResponse[]? data?;
-    # A sync token to be used with the next call to the /events endpoint.
-    string? sync?;
-    # Indicates whether there are more events to pull.
-    boolean? has_more?;
+# Represents the Queries record for the operation: getProjectMembership
+public type GetProjectMembershipQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("access_level"|"member"|"member.name"|"parent"|"parent.name"|"project"|"project.name"|"user"|"user.name"|"write_access")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_8 record {
-    GoalRelationshipResponse? data?;
+# Represents the Queries record for the operation: getTimeTrackingEntriesForTask
+public type GetTimeTrackingEntriesForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_by"|"created_by.name"|"duration_minutes"|"entered_on"|"offset"|"path"|"uri")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_5 record {
-    CustomFieldSettingResponse[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+# Enum options are the possible values which an enum custom field can adopt. An enum custom field must contain at least 1 enum option but no more than 500.
+# 
+# You can add enum options to a custom field by using the `POST /custom_fields/custom_field_gid/enum_options` endpoint.
+# 
+# **It is not possible to remove or delete an enum option**. Instead, enum options can be disabled by updating the `enabled` field to false with the `PUT /enum_options/enum_option_gid` endpoint. Other attributes can be updated similarly.
+# 
+# On creation of an enum option, `enabled` is always set to `true`, meaning the enum option is a selectable value for the custom field. Setting `enabled=false` is equivalent to “trashing” the enum option in the Asana web app within the “Edit Fields” dialog. The enum option will no longer be selectable but, if the enum option value was previously set within a task, the task will retain the value.
+# 
+# Enum options are an ordered list and by default new enum options are inserted at the end. Ordering in relation to existing enum options can be specified on creation by using `insert_before` or `insert_after` to reference an existing enum option. Only one of `insert_before` and `insert_after` can be provided when creating a new enum option.
+# 
+# An enum options list can be reordered with the `POST /custom_fields/custom_field_gid/enum_options/insert` endpoint
+public type EnumOptionAllOf2 record {
+    # The color of the enum option. Defaults to ‘none’
+    string color?;
+    # The name of the enum option
+    string name?;
+    # Whether or not the enum option is a selectable value for the custom field
+    boolean enabled?;
 };
 
-public type Tags_body record {
-    TagRequest? data?;
+# Represents the Queries record for the operation: createGoal
+public type CreateGoalQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_6 record {
-    CustomFieldResponse[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+public type PortfolioGidAddItemBody record {
+    PortfolioAddItemRequest data?;
+};
+
+# Represents the Queries record for the operation: getProjectTemplate
+public type GetProjectTemplateQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"description"|"html_description"|"name"|"owner"|"public"|"requested_dates"|"requested_dates.description"|"requested_dates.name"|"requested_roles"|"requested_roles.name"|"team"|"team.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type StatusUpdateRequest record {
     *StatusUpdateBase;
-    string?? parent;
+    *StatusUpdateRequestAllOf2;
 };
 
-public type Project_gid_duplicate_body record {
-    ProjectDuplicateRequest? data?;
+# Represents the Queries record for the operation: getStory
+public type GetStoryQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("assignee"|"assignee.name"|"created_at"|"created_by"|"created_by.name"|"custom_field"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"dependency"|"dependency.created_by"|"dependency.name"|"dependency.resource_subtype"|"duplicate_of"|"duplicate_of.created_by"|"duplicate_of.name"|"duplicate_of.resource_subtype"|"duplicated_from"|"duplicated_from.created_by"|"duplicated_from.name"|"duplicated_from.resource_subtype"|"follower"|"follower.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"is_editable"|"is_edited"|"is_pinned"|"liked"|"likes"|"likes.user"|"likes.user.name"|"new_approval_status"|"new_date_value"|"new_dates"|"new_dates.due_at"|"new_dates.due_on"|"new_dates.start_on"|"new_enum_value"|"new_enum_value.color"|"new_enum_value.enabled"|"new_enum_value.name"|"new_multi_enum_values"|"new_multi_enum_values.color"|"new_multi_enum_values.enabled"|"new_multi_enum_values.name"|"new_name"|"new_number_value"|"new_people_value"|"new_people_value.name"|"new_resource_subtype"|"new_section"|"new_section.name"|"new_text_value"|"num_hearts"|"num_likes"|"old_approval_status"|"old_date_value"|"old_dates"|"old_dates.due_at"|"old_dates.due_on"|"old_dates.start_on"|"old_enum_value"|"old_enum_value.color"|"old_enum_value.enabled"|"old_enum_value.name"|"old_multi_enum_values"|"old_multi_enum_values.color"|"old_multi_enum_values.enabled"|"old_multi_enum_values.name"|"old_name"|"old_number_value"|"old_people_value"|"old_people_value.name"|"old_resource_subtype"|"old_section"|"old_section.name"|"old_text_value"|"previews"|"previews.fallback"|"previews.footer"|"previews.header"|"previews.header_link"|"previews.html_text"|"previews.text"|"previews.title"|"previews.title_link"|"project"|"project.name"|"resource_subtype"|"source"|"sticker_name"|"story"|"story.created_at"|"story.created_by"|"story.created_by.name"|"story.resource_subtype"|"story.text"|"tag"|"tag.name"|"target"|"target.created_by"|"target.name"|"target.resource_subtype"|"task"|"task.created_by"|"task.name"|"task.resource_subtype"|"text"|"type")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type UserResponse record {
-    *UserBaseResponse;
-    # Workspaces and organizations this user may access.
-    # Note\: The API will only return workspaces and organizations that also contain the authenticated user.
-    WorkspaceCompact[]? workspaces?;
+# A *tag* is a label that can be attached to any task in Asana. It exists in a single workspace or organization
+public type TagCompactAllOf2 record {
+    # Name of the tag. This is generally a short sentence fragment that fits on a line in the UI for maximum readability. However, it can be longer
+    string name?;
 };
 
-# An object representing a single event within an Asana domain.
-# 
-# Every audit log event is comprised of an `event_type`, `actor`, `resource`, and `context`. Some events will include additional metadata about the event under `details`. See our [currently supported list of events](/docs/audit-log-events#supported-audit-log-events) for more details.
-public type AuditLogEvent record {
-    # Globally unique identifier of the `AuditLogEvent`, as a string.
-    string? gid?;
-    # The time the event was created.
-    string? created_at?;
-    # The type of the event.
-    string? event_type?;
-    # The category that this `event_type` belongs to.
-    string? event_category?;
-    # The entity that triggered the event. Will typically be a user.
-    AuditLogEventActor? actor?;
-    # The primary object that was affected by this event.
-    AuditLogEventResource? 'resource?;
-    # Event specific details. The schema will vary depending on the `event_type`.
-    AuditLogEventDetails? details?;
-    # The context from which this event originated.
-    AuditLogEventContext? context?;
+# A map of the user’s profile photo in various sizes, or null if no photo is set. Sizes provided are 21, 27, 36, 60, 128, and 1024. All images are in PNG format, except for 1024 (which is in JPEG format)
+public type UserBaseResponsePhoto record {
+    @jsondata:Name {value: "image_21x21"}
+    string image21x21?;
+    @jsondata:Name {value: "image_36x36"}
+    string image36x36?;
+    @jsondata:Name {value: "image_27x27"}
+    string image27x27?;
+    @jsondata:Name {value: "image_128x128"}
+    string image128x128?;
+    @jsondata:Name {value: "image_1024x1024"}
+    string image1024x1024?;
+    @jsondata:Name {value: "image_60x60"}
+    string image60x60?;
 };
 
 public type RemoveFollowersRequest record {
-    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string? followers;
-};
-
-# A user identification object for specification with the addUser/removeUser endpoints.
-public type TeamAddUserRequest record {
-    # A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    string? user?;
+    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user
+    string followers;
 };
 
 public type TeamMembershipCompact record {
     *AsanaResource;
-    UserCompact? user?;
-    TeamCompact? team?;
-    # Describes if the user is a guest in the team.
-    boolean? is_guest?;
-    # Describes if the user has limited access to the team.
-    boolean? is_limited_access?;
-    # Describes if the user is a team admin.
-    boolean? is_admin?;
+    *TeamMembershipCompactAllOf2;
 };
 
 public type PortfolioMembershipCompact record {
     *AsanaResource;
-    PortfolioCompact? portfolio?;
-    UserCompact? user?;
-};
-
-public type Projects_project_gid_body record {
-    ProjectUpdateRequest? data?;
-};
-
-# A response object returned from the task count endpoint.
-public type TaskCountResponse record {
-    # The number of tasks in a project.
-    int? num_tasks?;
-    # The number of incomplete tasks in a project.
-    int? num_incomplete_tasks?;
-    # The number of completed tasks in a project.
-    int? num_completed_tasks?;
-    # The number of milestones in a project.
-    int? num_milestones?;
-    # The number of incomplete milestones in a project.
-    int? num_incomplete_milestones?;
-    # The number of completed milestones in a project.
-    int? num_completed_milestones?;
-};
-
-public type TaskTemplateInstantiateTaskRequest record {
-    # The name of the new task. If not provided, the name of the task template will be used.
-    string? name?;
+    *PortfolioMembershipCompactAllOf2;
 };
 
 public type GoalAddSupportingRelationshipRequest record {
-    # The gid of the supporting resource to add to the parent goal. Must be the gid of a goal, project, task, or portfolio.
-    string? supporting_resource;
-    # An id of a subgoal of this parent goal. The new subgoal will be added before the one specified here. `insert_before` and `insert_after` parameters cannot both be specified. Currently only supported when adding a subgoal.
-    string? insert_before?;
-    # An id of a subgoal of this parent goal. The new subgoal will be added after the one specified here. `insert_before` and `insert_after` parameters cannot both be specified. Currently only supported when adding a subgoal.
-    string? insert_after?;
-    # The weight that the supporting resource's progress will contribute to the supported goal's progress. This can only be 0 or 1.
-    decimal? contribution_weight?;
+    # An id of a subgoal of this parent goal. The new subgoal will be added before the one specified here. `insert_before` and `insert_after` parameters cannot both be specified. Currently only supported when adding a subgoal
+    @jsondata:Name {value: "insert_before"}
+    string insertBefore?;
+    # The gid of the supporting resource to add to the parent goal. Must be the gid of a goal, project, task, or portfolio
+    @jsondata:Name {value: "supporting_resource"}
+    string supportingResource;
+    # The weight that the supporting resource's progress will contribute to the supported goal's progress. This can only be 0 or 1
+    @jsondata:Name {value: "contribution_weight"}
+    decimal contributionWeight?;
+    # An id of a subgoal of this parent goal. The new subgoal will be added after the one specified here. `insert_before` and `insert_after` parameters cannot both be specified. Currently only supported when adding a subgoal
+    @jsondata:Name {value: "insert_after"}
+    string insertAfter?;
 };
 
 public type StoryResponse record {
     *StoryBase;
-    UserCompact? created_by?;
-    "comment"|"system" 'type?;
-    # *Conditional*. Whether the text of the story can be edited after creation.
-    boolean? is_editable?;
-    # *Conditional*. Whether the text of the story has been edited after creation.
-    boolean? is_edited?;
-    # *Deprecated - please use likes instead*
-    # *Conditional*. True if the story is hearted by the authorized user, false if not.
-    boolean? hearted?;
-    # *Deprecated - please use likes instead*
-    # 
-    # *Conditional*. Array of likes for users who have hearted this story.
-    Like[]? hearts?;
-    # *Deprecated - please use likes instead*
-    # 
-    # *Conditional*. The number of users who have hearted this story.
-    int? num_hearts?;
-    # *Conditional*. True if the story is liked by the authorized user, false if not.
-    boolean? liked?;
-    # *Conditional*. Array of likes for users who have liked this story.
-    Like[]? likes?;
-    # *Conditional*. The number of users who have liked this story.
-    int? num_likes?;
-    # *Conditional*. A collection of previews to be displayed in the story.
-    # 
-    # *Note: This property only exists for comment stories.*
-    Preview[]? previews?;
-    # *Conditional*'
-    string? old_name?;
-    # *Conditional*
-    string? new_name?;
-    # *Conditional*
-    StoryResponseDates? old_dates?;
-    # *Conditional*
-    StoryResponseDates? new_dates?;
-    # *Conditional*
-    string? old_resource_subtype?;
-    # *Conditional*
-    string? new_resource_subtype?;
-    StoryCompact? story?;
-    UserCompact? assignee?;
-    UserCompact? follower?;
-    SectionCompact? old_section?;
-    SectionCompact? new_section?;
-    TaskCompact? task?;
-    ProjectCompact? project?;
-    TagCompact? tag?;
-    CustomFieldCompact? custom_field?;
-    # *Conditional*
-    string? old_text_value?;
-    # *Conditional*
-    string? new_text_value?;
-    # *Conditional*
-    int? old_number_value?;
-    # *Conditional*
-    int? new_number_value?;
-    EnumOption? old_enum_value?;
-    EnumOption? new_enum_value?;
-    StoryResponseDates?? old_date_value?;
-    StoryResponseDates?? new_date_value?;
-    # *Conditional*. The old value of a people custom field story.
-    UserCompact[]? old_people_value?;
-    # *Conditional*. The new value of a people custom field story.
-    UserCompact[]? new_people_value?;
-    # *Conditional*. The old value of a multi-enum custom field story.
-    EnumOption[]? old_multi_enum_values?;
-    # *Conditional*. The new value of a multi-enum custom field story.
-    EnumOption[]? new_multi_enum_values?;
-    # *Conditional*. The new value of approval status.
-    string? new_approval_status?;
-    # *Conditional*. The old value of approval status.
-    string? old_approval_status?;
-    TaskCompact? duplicate_of?;
-    TaskCompact? duplicated_from?;
-    TaskCompact? dependency?;
-    # The component of the Asana product the user used to trigger the story.
-    "web"|"email"|"mobile"|"api"|"unknown" 'source?;
-    record {*TaskCompact;}? target?;
+    *StoryResponseAllOf2;
 };
 
-public type GoalMembershipBase record {
-    *AsanaResource;
-    # The base type of this resource.
-    string? resource_type?;
-    # The type of membership.
-    string? resource_subtype?;
-    MemberCompact? member?;
-    record {*GoalCompact;}? parent?;
-    # *Deprecated: Describes if the member is a commenter or editor in goal.*
-    "commenter"|"editor" role?;
-    # Describes if member is commenter or editor in goal. This is preferred over role
-    "commenter"|"editor" access_level?;
-    record {*GoalCompact;}? goal?;
-};
-
-public type Inline_response_200_3 record {
-    AuditLogEvent[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-public type Inline_response_200_4 record {
-    BatchResponse[]? data?;
-};
-
-public type StatusUpdateCompact record {
-    *AsanaResource;
-    # The title of the status update.
-    string? title?;
-    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
-    # The `resource_subtype`s for `status` objects represent the type of their parent.
-    "project_status_update"|"portfolio_status_update"|"goal_status_update" resource_subtype?;
-};
-
-public type Inline_response_200_1 record {
-    # An empty object. Some endpoints do not return an object on success. The success is conveyed through a 2-- status code and returning an empty object.
-    EmptyResponse? data?;
-};
-
-public type Inline_response_200_2 record {
-    AttachmentCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+# Represents the Queries record for the operation: getTeam
+public type GetTeamQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("description"|"edit_team_name_or_description_access_level"|"edit_team_visibility_or_trash_team_access_level"|"guest_invite_management_access_level"|"html_description"|"join_request_management_access_level"|"member_invite_management_access_level"|"name"|"organization"|"organization.name"|"permalink_url"|"team_member_removal_access_level"|"visibility")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type ProjectMembershipCompact record {
     *AsanaResource;
-    ProjectCompact? parent?;
-    MemberCompact? member?;
-    # Whether the member has admin, editor, commenter, or viewer access to the project.
-    "admin"|"editor"|"commenter"|"viewer" access_level?;
+    *ProjectMembershipCompactAllOf2;
 };
 
-# *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
+# Represents the Queries record for the operation: deleteTimeTrackingEntry
+public type DeleteTimeTrackingEntryQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed
 public type NextPage record {
-    # Pagination offset for the request.
-    string? offset?;
     # A relative path containing the query parameters to fetch for next_page
-    string? path?;
+    string path?;
+    # Pagination offset for the request
+    string offset?;
     # A full uri containing the query parameters to fetch for next_page
-    string? uri?;
+    string uri?;
 };
 
-public type Task_gid_time_tracking_entries_body record {
-    CreateTimeTrackingEntryRequest? data?;
+public type TaskGidRemoveFollowersBody record {
+    TaskRemoveFollowersRequest data?;
 };
 
 public type TaskRemoveTagRequest record {
-    # The tag's gid to remove from the task.
-    string? tag;
+    # The tag's gid to remove from the task
+    string tag;
 };
 
-public type CustomFieldSettingResponse record {
-    *CustomFieldSettingBase;
-    record {*ProjectCompact;}? project?;
-    # `is_important` is used in the Asana web application to determine if this custom field is displayed in the list/grid view of a project or portfolio.
-    boolean? is_important?;
-    record {*ProjectCompact;}? parent?;
-    record {*CustomFieldResponse;}? custom_field?;
-};
-
-# A map of the user’s profile photo in various sizes, or null if no photo is set. Sizes provided are 21, 27, 36, 60, 128, and 1024. All images are in PNG format, except for 1024 (which is in JPEG format).
-public type UserBaseResponse_photo record {
-    string? image_21x21?;
-    string? image_27x27?;
-    string? image_36x36?;
-    string? image_60x60?;
-    string? image_128x128?;
-    string? image_1024x1024?;
-};
-
-public type Inline_response_200_49 record {
-    UserCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+# Represents the Queries record for the operation: searchTasksForWorkspace
+public type SearchTasksForWorkspaceQueries record {
+    # Comma-separated list of project IDs
+    string projects\.any?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[] optFields?;
+    # Comma-separated list of user identifiers
+    string assigned_by\.any?;
+    # Filter to tasks with attachments
+    boolean has_attachment?;
+    # Comma-separated list of tag IDs
+    string tags\.not?;
+    # Comma-separated list of user identifiers
+    string created_by\.any?;
+    # Comma-separated list of user identifiers
+    string commented_on_by\.not?;
+    # ISO 8601 datetime string
+    string completed_at\.before?;
+    # Comma-separated list of section or column IDs
+    string sections\.any?;
+    # Comma-separated list of user identifiers
+    string assignee\.not?;
+    # ISO 8601 datetime string
+    string created_at\.before?;
+    # Performs full-text search on both task name and description
+    string text?;
+    # ISO 8601 date string
+    string start_on\.after?;
+    # ISO 8601 date string or `null`
+    string? start_on?;
+    # Comma-separated list of project IDs
+    string projects\.not?;
+    # ISO 8601 date string
+    string due_on\.after?;
+    # ISO 8601 datetime string
+    string due_at\.before?;
+    # ISO 8601 date string
+    string start_on\.before?;
+    # Comma-separated list of user identifiers
+    string followers\.not?;
+    # Filter to completed tasks
+    boolean completed?;
+    # Filter to subtasks
+    boolean is_subtask?;
+    # ISO 8601 date string
+    string created_on\.after?;
+    # ISO 8601 datetime string
+    string completed_at\.after?;
+    # Comma-separated list of team IDs
+    string teams\.any?;
+    # ISO 8601 date string or `null`
+    string? created_on?;
+    # ISO 8601 date string
+    string modified_on\.before?;
+    # Filter to incomplete tasks with dependents
+    boolean is_blocking?;
+    # Comma-separated list of user identifiers
+    string assigned_by\.not?;
+    # Comma-separated list of tag IDs
+    string tags\.all?;
+    # ISO 8601 datetime string
+    string due_at\.after?;
+    # ISO 8601 date string
+    string due_on\.before?;
+    # ISO 8601 date string
+    string created_on\.before?;
+    # ISO 8601 date string or `null`
+    string? completed_on?;
+    # One of `due_date`, `created_at`, `completed_at`, `likes`, or `modified_at`, defaults to `modified_at`
+    "due_date"|"created_at"|"completed_at"|"likes"|"modified_at" sort_by = "modified_at";
+    # ISO 8601 date string or `null`
+    string? due_on?;
+    # Comma-separated list of section or column IDs
+    string sections\.not?;
+    # ISO 8601 date string
+    string completed_on\.after?;
+    # Default `false`
+    boolean sort_ascending = false;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Comma-separated list of project IDs
+    string projects\.all?;
+    # ISO 8601 date string
+    string completed_on\.before?;
+    # ISO 8601 datetime string
+    string modified_at\.after?;
+    # Comma-separated list of section or column IDs
+    string sections\.all?;
+    # Comma-separated list of user identifiers
+    string liked_by\.not?;
+    # ISO 8601 date string or `null`
+    string? modified_on?;
+    # Comma-separated list of tag IDs
+    string tags\.any?;
+    # ISO 8601 datetime string
+    string created_at\.after?;
+    # Comma-separated list of portfolio IDs
+    string portfolios\.any?;
+    # Filters results by the task's resource_subtype
+    "default_task"|"milestone" resource_subtype = "milestone";
+    # Comma-separated list of user identifiers
+    string assignee\.any?;
+    # Comma-separated list of user identifiers
+    string created_by\.not?;
+    # ISO 8601 datetime string
+    string modified_at\.before?;
+    # Filter to tasks with incomplete dependencies
+    boolean is_blocked?;
+    # ISO 8601 date string
+    string modified_on\.after?;
 };
 
 public type DateVariableCompact record {
-    # Globally unique identifier of the date field in the project template. A value of `1` refers to the project start date, while `2` refers to the project due date.
-    string? gid?;
-    # The name of the date variable.
-    string? name?;
-    # The description of what the date variable is used for when instantiating a project.
-    string? description?;
+    # Globally unique identifier of the date field in the project template. A value of `1` refers to the project start date, while `2` refers to the project due date
+    string gid?;
+    # The name of the date variable
+    string name?;
+    # The description of what the date variable is used for when instantiating a project
+    string description?;
 };
 
-public type EffortCompact record {
-    *AsanaResource;
-    # The units used for tracking effort on an allocation, either "hours" or "percent".
-    "hours"|"percent" 'type?;
-    # The numeric effort value on the allocation.
-    decimal? value?;
-};
-
-# A generic list of objects, such as those returned by the typeahead search endpoint.
-public type Inline_response_200_47 record {
-    AsanaNamedResource[]? data?;
-};
-
-public type GoalMembershipResponse record {
-    *GoalMembershipBase;
-    record {*UserCompact;}? user?;
-    record {*WorkspaceCompact;}? workspace?;
-};
-
-public type Inline_response_200_48 record {
-    UserTaskListResponse? data?;
+# Represents the Queries record for the operation: createSectionForProject
+public type CreateSectionForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"name"|"project"|"project.name"|"projects"|"projects.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type SectionRequest record {
-    # The text to be displayed as the section name. This cannot be an empty string.
-    string? name;
-    # An existing section within this project before which the added section should be inserted. Cannot be provided together with insert_after.
-    string? insert_before?;
-    # An existing section within this project after which the added section should be inserted. Cannot be provided together with insert_before.
-    string? insert_after?;
-};
-
-public type Inline_response_200_45 record {
-    TimePeriodCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-public type Inline_response_200_46 record {
-    TimeTrackingEntryCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-public type Inline_response_200_43 record {
-    TeamCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+    # An existing section within this project before which the added section should be inserted. Cannot be provided together with insert_after
+    @jsondata:Name {value: "insert_before"}
+    string insertBefore?;
+    # The text to be displayed as the section name. This cannot be an empty string
+    string name;
+    # An existing section within this project after which the added section should be inserted. Cannot be provided together with insert_before
+    @jsondata:Name {value: "insert_after"}
+    string insertAfter?;
 };
 
 public type CustomFieldRequest record {
     *CustomFieldBase;
-    # *Create-Only* The workspace to create a custom field in.
-    string? workspace;
-    # *Allow-listed*. Instructs the API that this Custom Field is app-owned. This parameter is allow-listed to specific apps at this point in time. For apps that are not allow-listed, providing this parameter will result in a `403 Forbidden`.
-    boolean? owned_by_app?;
-    # *Conditional*. Only relevant for custom fields of type `people`. This array of user GIDs reflects the users to be written to a `people` custom field. Note that *write* operations will replace existing users (if any) in the custom field with the users specified in this array.
-    string[]? people_value?;
+    *CustomFieldRequestAllOf2;
 };
 
-public type Inline_response_200_44 record {
-    TimePeriodResponse? data?;
-};
-
-public type Inline_response_200_41 record {
-    TeamMembershipResponse? data?;
-};
-
-# An action object for use in a batch request.
+# An action object for use in a batch request
 public type BatchRequestAction record {
-    # The path of the desired endpoint relative to the API’s base URL. Query parameters are not accepted here; put them in `data` instead.
-    string? relative_path;
-    # The HTTP method you wish to emulate for the action.
+    # The HTTP method you wish to emulate for the action
     "get"|"post"|"put"|"delete"|"patch"|"head" method;
-    # For `GET` requests, this should be a map of query parameters you would have normally passed in the URL. Options and pagination are not accepted here; put them in `options` instead. For `POST`, `PATCH`, and `PUT` methods, this should be the content you would have normally put in the data field of the body.
-    record {}? data?;
-    # Pagination (`limit` and `offset`) and output options (`fields` or `expand`) for the action. “Pretty” JSON output is not an available option on individual actions; if you want pretty output, specify that option on the parent request.
-    BatchRequestAction_options? options?;
+    # For `GET` requests, this should be a map of query parameters you would have normally passed in the URL. Options and pagination are not accepted here; put them in `options` instead. For `POST`, `PATCH`, and `PUT` methods, this should be the content you would have normally put in the data field of the body
+    record {} data?;
+    BatchRequestActionOptions options?;
+    # The path of the desired endpoint relative to the API’s base URL. Query parameters are not accepted here; put them in `data` instead
+    @jsondata:Name {value: "relative_path"}
+    string relativePath;
 };
 
 public type ProjectBriefResponse record {
     *ProjectBriefBase;
-    # [Opt In](/docs/inputoutput-options). The plain text of the project brief.
-    string? text?;
-    # A url that points directly to the object within Asana.
-    string? permalink_url?;
-    record {*ProjectCompact;}? project?;
+    *ProjectBriefResponseAllOf2;
 };
 
 public type ProjectTemplateInstantiateProjectRequest record {
-    # The name of the new project.
-    string? name;
-    # *Optional*. Sets the team of the new project. If the project template exists in an _organization_, you may specify a value for `team`. If no value is provided then it defaults to the same team as the project template.
-    string? team?;
-    # Sets the project to public to its team.
-    boolean? 'public?;
-    # *Optional*. If set to `true`, the endpoint returns an "Unprocessable Entity" error if you fail to provide a calendar date value for any date variable. If set to `false`, a default date is used for each unfulfilled date variable (e.g., the current date is used as the Start Date of a project).
-    boolean? is_strict?;
-    # Array of mappings of date variables to calendar dates.
-    DateVariableRequest[]? requested_dates?;
+    # *Optional*. If set to `true`, the endpoint returns an "Unprocessable Entity" error if you fail to provide a calendar date value for any date variable. If set to `false`, a default date is used for each unfulfilled date variable (e.g., the current date is used as the Start Date of a project)
+    @jsondata:Name {value: "is_strict"}
+    boolean isStrict?;
+    # Sets the project to public to its team
+    boolean 'public?;
+    # The name of the new project
+    string name;
+    # *Optional*. Sets the team of the new project. If the project template exists in an _organization_, you may specify a value for `team`. If no value is provided then it defaults to the same team as the project template
+    string team?;
+    # Array of mappings of date variables to calendar dates
+    @jsondata:Name {value: "requested_dates"}
+    DateVariableRequest[] requestedDates?;
     # Array of mappings of template roles to user ids
-    RequestedRoleRequest[]? requested_roles?;
+    @jsondata:Name {value: "requested_roles"}
+    RequestedRoleRequest[] requestedRoles?;
 };
 
-public type Inline_response_200_42 record {
-    TeamMembershipCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+public type TasksBody record {
+    TaskRequest data?;
 };
 
-public type Inline_response_201_10 record {
-    WebhookResponse? data?;
+public type TeamsteamGidBody record {
+    TeamRequest data?;
 };
 
-public type Project_gid_removeCustomFieldSetting_body record {
-    RemoveCustomFieldSettingRequest? data?;
+public type TaskTemplateRecipeAllOf2 record {
+    # The time of day that the task will be due
+    @jsondata:Name {value: "due_time"}
+    string? dueTime?;
+    # The number of days after the task has been instantiated on which that the task will start
+    @jsondata:Name {value: "relative_start_on"}
+    int? relativeStartOn?;
+    # Array of users that will be added as followers to the task created from this template
+    UserCompact[] followers?;
+    # Array of attachments that will be added to the task created from this template
+    AttachmentCompact[] attachments?;
+    # Array of subtasks that will be added to the task created from this template
+    TaskTemplateRecipeCompact[] subtasks?;
+    # Array of custom fields that will be added to the task created from this template
+    @jsondata:Name {value: "custom_fields"}
+    CustomFieldCompact[] customFields?;
+    # Description of the task that will be created from this template
+    string description?;
+    # Array of task templates that will depend on the task created from this template
+    TaskTemplateRecipeCompact[] dependents?;
+    # HTML description of the task that will be created from this template
+    @jsondata:Name {value: "html_description"}
+    string htmlDescription?;
+    # Array of projects that the task created from this template will be added to
+    ProjectCompact[] memberships?;
+    # The number of days after the task has been instantiated on which that the task will be due
+    @jsondata:Name {value: "relative_due_on"}
+    int? relativeDueOn?;
+    # Array of task templates that the task created from this template will depend on
+    TaskTemplateRecipeCompact[] dependencies?;
 };
 
-public type Inline_response_200_40 record {
-    TaskCompact[]? data?;
+# Represents the Queries record for the operation: removeFollowers
+public type RemoveFollowersQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type ProjectTemplateCompact record {
-    *AsanaResource;
-    # Name of the project template.
-    string? name?;
+# Represents the Queries record for the operation: getProjectsForTask
+public type GetProjectsForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"offset"|"owner"|"path"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
 };
 
-public type Teams_team_gid_body record {
-    TeamRequest? data?;
+# Represents the Queries record for the operation: getProjectsForTeam
+public type GetProjectsForTeamQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"offset"|"owner"|"path"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type RequestedRoleRequest record {
-    # Globally unique identifier of the template role in the project template.
-    string? gid?;
-    # The user id that should be assigned to the template role.
-    string? value?;
+public type GoalMetricBaseAllOf2 record {
+    # This number is the end value of a goal metric of type number. This number cannot equal `initial_number_value`
+    @jsondata:Name {value: "target_number_value"}
+    decimal targetNumberValue?;
+    # A supported unit of measure for the goal metric, or none
+    "none"|"currency"|"percentage" unit?;
+    # This number is the start value of a goal metric of type number
+    @jsondata:Name {value: "initial_number_value"}
+    decimal initialNumberValue?;
+    # *Conditional*. Only relevant for goal metrics of type ‘Number’. This field dictates the number of places after the decimal to round to, i.e. 0 is integer values, 1 rounds to the nearest tenth, and so on. Must be between 0 and 6, inclusive.
+    # For percentage format, this may be unintuitive, as a value of 0.25 has a precision of 0, while a value of 0.251 has a precision of 1. This is due to 0.25 being displayed as 25%
+    int precision?;
+    # This number is the current value of a goal metric of type number
+    @jsondata:Name {value: "current_number_value"}
+    decimal currentNumberValue?;
+    # This string is the current value of a goal metric of type string
+    @jsondata:Name {value: "current_display_value"}
+    string currentDisplayValue?;
+    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning
+    @jsondata:Name {value: "resource_subtype"}
+    "number" resourceSubtype?;
+    # ISO 4217 currency code to format this custom field. This will be null if the `unit` is not `currency`
+    @jsondata:Name {value: "currency_code"}
+    string? currencyCode?;
+    # This field defines how the progress value of a goal metric is being calculated. A goal's progress can be provided manually by the user, calculated automatically from contributing subgoals, projects, or tasks, or managed by an integration with an external data source, such as Salesforce
+    @jsondata:Name {value: "progress_source"}
+    "manual"|"subgoal_progress"|"project_task_completion"|"project_milestone_completion"|"task_completion"|"external" progressSource?;
 };
 
-public type AttachmentRequest record {
-    # The type of the attachment. Must be one of the given values. If not specified, a file attachment of type `asana` will be assumed. Note that if the value of `resource_subtype` is `external`, a `parent`, `name`, and `url` must also be provided.
-    "asana"|"dropbox"|"gdrive"|"onedrive"|"box"|"vimeo"|"external" resource_subtype?;
-    # Required for `asana` attachments.
-    record {byte[] fileContent; string fileName;}? file?;
-    # Required identifier of the parent task, project, or project_brief, as a string.
-    string? parent;
-    # The URL of the external resource being attached. Required for attachments of type `external`.
-    string? url?;
-    # The name of the external resource being attached. Required for attachments of type `external`.
-    string? name?;
-    # *Optional*. Only relevant for external attachments with a parent task. A boolean indicating whether the current app should be connected with the attachment for the purposes of showing an app components widget. Requires the app to have been added to a project the parent task is in.
-    boolean? connect_to_app?;
+public type GoalMembershipResponseAllOf2 record {
+    record {*WorkspaceCompact;} workspace?;
+    record {*UserCompact;} user?;
 };
 
-public type TaskResponse record {
-    *TaskBase;
-    UserCompact?? assignee?;
-    record {*SectionCompact;}? assignee_section?;
-    # Array of custom field values applied to the task. These represent the custom field values recorded on this project for a particular custom field. For example, these custom field values will contain an `enum_value` property for custom fields of type `enum`, a `text_value` property for custom fields of type `text`, and so on. Please note that the `gid` returned on each custom field value *is identical* to the `gid` of the custom field, which allows referencing the custom field metadata through the `/custom_fields/custom_field-gid` endpoint.
-    CustomFieldResponse[]? custom_fields?;
-    # Array of users following this task.
-    UserCompact[]? followers?;
-    record {*TaskCompact;}? parent?;
-    # *Create-only.* Array of projects this task is associated with. At task creation time, this array can be used to add the task to many projects at once. After task creation, these associations can be modified using the addProject and removeProject endpoints.
-    ProjectCompact[]? projects?;
-    # Array of tags associated with this task. In order to change tags on an existing task use `addTag` and `removeTag`.
-    TagCompact[]? tags?;
-    record {*WorkspaceCompact;}? workspace?;
-    # A url that points directly to the object within Asana.
-    string? permalink_url?;
+public type TagBaseAllOf2 record {
+    # Free-form textual information associated with the tag (i.e. its description)
+    string notes?;
+    # Color of the tag
+    "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray"? color?;
 };
 
-public type Task_gid_removeFollowers_body record {
-    TaskRemoveFollowersRequest? data?;
+public type TaskGidTimeTrackingEntriesBody record {
+    CreateTimeTrackingEntryRequest data?;
 };
 
 public type WorkspaceMembershipResponse record {
     *WorkspaceMembershipBase;
-    UserTaskListResponse? user_task_list?;
-    # Reflects if this user still a member of the workspace.
-    boolean? is_active?;
-    # Reflects if this user is an admin of the workspace.
-    boolean? is_admin?;
-    # Reflects if this user is a guest of the workspace.
-    boolean? is_guest?;
-    # Contains keys `start_on` and `end_on` for the vacation dates for the user in this workspace. If `start_on` is null, the entire `vacation_dates` object will be null. If `end_on` is before today, the entire `vacation_dates` object will be null.
-    WorkspaceMembershipResponse_vacation_dates? vacation_dates?;
-    # The time at which this resource was created.
-    string? created_at?;
+    *WorkspaceMembershipResponseAllOf2;
 };
 
-public type Inline_response_200_38 record {
-    TaskTemplateResponse? data?;
-};
-
-public type Goal_gid_setMetric_body record {
-    GoalMetricRequest? data?;
-};
-
-public type Inline_response_200_39 record {
-    TaskCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+public type TaskGidDuplicateBody record {
+    TaskDuplicateRequest data?;
 };
 
 public type GoalResponse record {
     *GoalBase;
-    # Array of likes for users who have liked this goal.
-    Like[]? likes?;
-    # The number of users who have liked this goal.
-    int? num_likes?;
-    record {*TeamCompact;}? team?;
-    record {*WorkspaceCompact;}? workspace?;
-    # Array of users who are members of this goal.
-    UserCompact[]? followers?;
-    record {*TimePeriodCompact;}? time_period?;
-    record {
-        *GoalMetricBase;
-        # *Conditional*. Only relevant for `progress_source` of type `external`. This boolean indicates whether the requester has the ability to update the current value of this metric. This returns `true` if the external metric was created by the requester, `false` otherwise.
-        boolean? can_manage?;
-    }? metric?;
-    record {*UserCompact;}? owner?;
-    StatusUpdateCompact?? current_status_update?;
-    # The current status of this goal. When the goal is open, its status can be `green`, `yellow`, and `red` to reflect "On Track", "At Risk", and "Off Track", respectively. When the goal is closed, the value can be `missed`, `achieved`, `partial`, or `dropped`.
-    # *Note* you can only write to this property if `metric` is set.
-    string? status?;
+    *GoalResponseAllOf2;
 };
 
 public type ProjectStatusBase record {
     *ProjectStatusCompact;
-    # The text content of the status update.
-    string? text?;
-    # [Opt In](/docs/inputoutput-options). The text content of the status update with formatting as HTML.
-    string? html_text?;
-    # The color associated with the status update.
-    "green"|"yellow"|"red"|"blue"|"complete" color?;
-};
-
-public type Inline_response_200_36 record {
-    TagCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-# An *organization_export* request starts a job to export the complete data of the given Organization.
-public type OrganizationExportRequest record {
-    # Globally unique identifier for the workspace or organization.
-    string? organization?;
+    *ProjectStatusBaseAllOf2;
 };
 
 public type TaskCompact record {
     *AsanaResource;
-    # The name of the task.
-    string? name?;
-    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
-    # The resource_subtype `milestone` represent a single moment in time. This means tasks with this subtype cannot have a start_date.
-    "default_task"|"milestone"|"section"|"approval" resource_subtype?;
-    # [Opt In](/docs/inputoutput-options). A *user* object represents an account in Asana that can be given access to various workspaces, projects, and tasks.
-    TaskCompact_created_by? created_by?;
+    *TaskCompactAllOf2;
 };
 
-public type Inline_response_200_37 record {
-    TaskTemplateCompact[]? data?;
+# This object determines if a user is a member of a portfolio
+public type PortfolioMembershipCompactAllOf2 record {
+    PortfolioCompact portfolio?;
+    UserCompact user?;
 };
 
-public type Inline_response_200_34 record {
-    StoryResponse? data?;
+public type TimePeriodResponse TimePeriodBase;
+
+# Represents the Queries record for the operation: addTagForTask
+public type AddTagForTaskQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-# Information about the type of change that has occurred. This field is only present when the value of the property `action`, describing the action taken on the **resource**, is `changed`.
-public type EventResponse_change record {
-    # The name of the field that has changed in the resource.
-    string? 'field?;
-    # The type of action taken on the **field** which has been changed.  This can be one of `changed`, `added`, or `removed` depending on the nature of the change.
-    string? action?;
-    # *Conditional.* This property is only present when the value of the event's `change.action` is `changed` _and_ the `new_value` is an Asana resource. This will be only the `gid` and `resource_type` of the resource when the events come from webhooks; this will be the compact representation (and can have fields expanded with [opt_fields](/docs/inputoutput-options)) when using the [get events](/reference/getevents) endpoint.
-    anydata? new_value?;
-    # *Conditional.* This property is only present when the value of the event's `change.action` is `added` _and_ the `added_value` is an Asana resource. This will be only the `gid` and `resource_type` of the resource when the events come from webhooks; this will be the compact representation (and can have fields expanded with [opt_fields](/docs/inputoutput-options)) when using the [get events](/reference/getevents) endpoint.
-    anydata? added_value?;
-    # *Conditional.* This property is only present when the value of the event's `change.action` is `removed` _and_ the `removed_value` is an Asana resource. This will be only the `gid` and `resource_type` of the resource when the events come from webhooks; this will be the compact representation (and can have fields expanded with [opt_fields](/docs/inputoutput-options)) when using the [get events](/reference/getevents) endpoint.
-    anydata? removed_value?;
+# Represents the Queries record for the operation: getWebhooks
+public type GetWebhooksQueries record {
+    # The workspace to query for webhooks in
+    string workspace;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("active"|"created_at"|"filters"|"filters.action"|"filters.fields"|"filters.resource_subtype"|"last_failure_at"|"last_failure_content"|"last_success_at"|"offset"|"path"|"resource"|"resource.name"|"target"|"uri")[] optFields?;
+    # Only return webhooks for the given resource
+    string 'resource?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_35 record {
-    StoryCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+public type GoalRelationshipRequestAllOf2 record {
 };
 
-public type TimePeriodResponse TimePeriodBase?;
-
-public type Inline_response_200_32 record {
-    StatusUpdateResponse? data?;
+# Represents the Queries record for the operation: updateProject
+public type UpdateProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_33 record {
-    StatusUpdateCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+# Represents the Queries record for the operation: deleteProject
+public type DeleteProjectQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_30 record {
-    SectionResponse? data?;
+# Represents the Queries record for the operation: deleteProjectTemplate
+public type DeleteProjectTemplateQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_31 record {
-    SectionCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+public type ProjectResponseAllOf2 record {
+    # The current owner of the project, may be null
+    record {*UserCompact;} owner?;
+    # The time at which this project was completed, or null if the project is not completed
+    @jsondata:Name {value: "completed_at"}
+    string? completedAt?;
+    record {*WorkspaceCompact;} workspace?;
+    # Array of users following this project. Followers are a subset of members who have opted in to receive "tasks added" notifications for a project
+    UserCompact[] followers?;
+    # Array of Custom Fields
+    @jsondata:Name {value: "custom_fields"}
+    CustomFieldCompact[] customFields?;
+    @jsondata:Name {value: "created_from_template"}
+    record {*ProjectTemplateCompact;} createdFromTemplate?;
+    # The icon for a project
+    "list"|"board"|"timeline"|"calendar"|"rocket"|"people"|"graph"|"star"|"bug"|"light_bulb"|"globe"|"gear"|"notebook"|"computer"|"check"|"target"|"html"|"megaphone"|"chat_bubbles"|"briefcase"|"page_layout"|"mountain_flag"|"puzzle"|"presentation"|"line_and_symbols"|"speed_dial"|"ribbon"|"shoe"|"shopping_basket"|"map"|"ticket"|"coins"? icon?;
+    @jsondata:Name {value: "project_brief"}
+    record {*ProjectBriefCompact;} projectBrief?;
+    # True if the project is currently marked complete, false if not
+    boolean completed?;
+    record {*TeamCompact;} team?;
+    # A url that points directly to the object within Asana
+    @jsondata:Name {value: "permalink_url"}
+    string permalinkUrl?;
+    # The user that marked this project complete, or null if the project is not completed
+    @jsondata:Name {value: "completed_by"}
+    UserCompact? completedBy?;
 };
 
-public type ProjectRequest record {
-    *ProjectBase;
-    # An object where each key is the GID of a custom field and its corresponding value is either an enum GID, string, number, or object (depending on the custom field type). See the [custom fields guide](/docs/custom-fields-guide) for details on creating and updating custom field values.
-    record {|string?...;|}? custom_fields?;
-    # *Create-only*. Comma separated string of users. Followers are a subset of members who have opted in to receive "tasks added" notifications for a project.
-    string? followers?;
-    # The current owner of the project, may be null.
-    string? owner?;
-    # The team that this project is shared with.
-    string? team?;
-    # The `gid` of a workspace.
-    string? workspace?;
+public type OrganizationExportsBody record {
+    OrganizationExportRequest data?;
 };
 
-public type CustomFieldBase record {
-    *CustomFieldCompact;
-    # [Opt In](/docs/inputoutput-options). The description of the custom field.
-    string? description?;
-    # *Conditional*. Only relevant for custom fields of type `enum`. This array specifies the possible values which an `enum` custom field can adopt. To modify the enum options, refer to [working with enum options](/reference/createenumoptionforcustomfield).
-    EnumOption[]? enum_options?;
-    # Only relevant for custom fields of type ‘Number’. This field dictates the number of places after the decimal to round to, i.e. 0 is integer values, 1 rounds to the nearest tenth, and so on. Must be between 0 and 6, inclusive.
-    # For percentage format, this may be unintuitive, as a value of 0.25 has a precision of 0, while a value of 0.251 has a precision of 1. This is due to 0.25 being displayed as 25%.
-    # The identifier format will always have a precision of 0.
-    int? precision?;
-    # The format of this custom field.
-    "currency"|"identifier"|"percentage"|"custom"|"duration"|"none" format?;
-    # ISO 4217 currency code to format this custom field. This will be null if the `format` is not `currency`.
-    string? currency_code?;
-    # This is the string that appears next to the custom field value. This will be null if the `format` is not `custom`.
-    string? custom_label?;
-    # Only relevant for custom fields with `custom` format. This depicts where to place the custom label. This will be null if the `format` is not `custom`.
-    "prefix"|"suffix"? custom_label_position?;
-    # This flag describes whether this custom field is available to every container in the workspace. Before project-specific custom fields, this field was always true.
-    boolean? is_global_to_workspace?;
-    # *Conditional*. This flag describes whether a follower of a task with this field should receive inbox notifications from changes to this field.
-    boolean? has_notifications_enabled?;
-    # *Conditional*. A unique identifier to associate this field with the template source of truth.
-    "a_v_requirements"|"account_name"|"actionable"|"align_shipping_link"|"align_status"|"allotted_time"|"appointment"|"approval_stage"|"approved"|"article_series"|"board_committee"|"browser"|"campaign_audience"|"campaign_project_status"|"campaign_regions"|"channel_primary"|"client_topic_type"|"complete_by"|"contact"|"contact_email_address"|"content_channels"|"content_channels_needed"|"content_stage"|"content_type"|"contract"|"contract_status"|"cost"|"creation_stage"|"creative_channel"|"creative_needed"|"creative_needs"|"data_sensitivity"|"deal_size"|"delivery_appt"|"delivery_appt_date"|"department"|"department_responsible"|"design_request_needed"|"design_request_type"|"discussion_category"|"do_this_task"|"editorial_content_status"|"editorial_content_tag"|"editorial_content_type"|"effort"|"effort_level"|"est_completion_date"|"estimated_time"|"estimated_value"|"expected_cost"|"external_steps_needed"|"favorite_idea"|"feedback_type"|"financial"|"funding_amount"|"grant_application_process"|"hiring_candidate_status"|"idea_status"|"ids_link"|"ids_patient_link"|"implementation_stage"|"insurance"|"interview_area"|"interview_question_score"|"itero_scan_link"|"job_s_applied_to"|"lab"|"launch_status"|"lead_status"|"localization_language"|"localization_market_team"|"localization_status"|"meeting_minutes"|"meeting_needed"|"minutes"|"mrr"|"must_localize"|"name_of_foundation"|"need_to_follow_up"|"next_appointment"|"next_steps_sales"|"num_people"|"number_of_user_reports"|"office_location"|"onboarding_activity"|"owner"|"participants_needed"|"patient_date_of_birth"|"patient_email"|"patient_phone"|"patient_status"|"phone_number"|"planning_category"|"point_of_contact"|"position"|"post_format"|"prescription"|"priority"|"priority_level"|"product"|"product_stage"|"progress"|"project_size"|"project_status"|"proposed_budget"|"publish_status"|"reason_for_scan"|"referral"|"request_type"|"research_status"|"responsible_department"|"responsible_team"|"risk_assessment_status"|"room_name"|"sales_counterpart"|"sentiment"|"shipping_link"|"social_channels"|"stage"|"status"|"status_design"|"status_of_initiative"|"system_setup"|"task_progress"|"team"|"team_marketing"|"team_responsible"|"time_it_takes_to_complete_tasks"|"timeframe"|"treatment_type"|"type_work_requests_it"|"use_agency"|"user_name"|"vendor_category"|"vendor_type"|"word_count"? asana_created_field?;
+public type TaskstaskGidBody record {
+    TaskRequest data?;
+};
+
+public type TaskGidAddTagBody record {
+    TaskAddTagRequest data?;
+};
+
+public type WorkspaceMembershipResponseAllOf2 record {
+    # Reflects if this user is an admin of the workspace
+    @jsondata:Name {value: "is_admin"}
+    boolean isAdmin?;
+    # Reflects if this user still a member of the workspace
+    @jsondata:Name {value: "is_active"}
+    boolean isActive?;
+    # Reflects if this user is a guest of the workspace
+    @jsondata:Name {value: "is_guest"}
+    boolean isGuest?;
+    @jsondata:Name {value: "user_task_list"}
+    UserTaskListResponse userTaskList?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    @jsondata:Name {value: "vacation_dates"}
+    WorkspaceMembershipResponseVacationDates? vacationDates?;
+};
+
+public type MembershipsmembershipGidBody record {
+    MembershipRequest data?;
+};
+
+# Represents the Queries record for the operation: deleteCustomField
+public type DeleteCustomFieldQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type AttachmentBase AttachmentCompact;
 
-public type Inline_response_200_29 record {
-    RuleTriggerResponse? data?;
-};
-
-public type GoalRelationshipRequest record {
-    *GoalRelationshipBase;
-};
-
-public type Inline_response_200_27 record {
-    ProjectTemplateCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-public type Custom_field_gid_enum_options_body record {
-    EnumOptionRequest? data?;
-};
-
-public type Portfolio_gid_removeItem_body record {
-    PortfolioRemoveItemRequest? data?;
-};
-
-public type Inline_response_200_28 record {
-    # A response object returned from the task count endpoint.
-    TaskCountResponse? data?;
-};
-
-public type Inline_response_200_25 record {
-    ProjectStatusCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
 public type GoalRequestBase record {
     *GoalBase;
-    # *Conditional*. This property is only present when the `workspace` provided is an organization.
-    string? team?;
-    # The `gid` of a workspace.
-    string? workspace?;
-    # The `gid` of a time period.
-    string? time_period?;
-    # The `gid` of a user.
-    string? owner?;
+    *GoalRequestBaseAllOf2;
 };
 
-public type Inline_response_200_26 record {
-    ProjectTemplateResponse? data?;
+# Represents the Queries record for the operation: updateGoalMetric
+public type UpdateGoalMetricQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_23 record {
-    ProjectMembershipCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-public type JobResponse JobBase?;
+public type JobResponse JobBase;
 
 public type TaskBase record {
     *TaskCompact;
-    # *Conditional* Reflects the approval status of this task. This field is kept in sync with `completed`, meaning `pending` translates to false while `approved`, `rejected`, and `changes_requested` translate to true. If you set completed to true, this field will be set to `approved`.
-    "pending"|"approved"|"rejected"|"changes_requested" approval_status?;
-    # *Deprecated* Scheduling status of this task for the user it is assigned to. This field can only be set if the assignee is non-null. Setting this field to "inbox" or "upcoming" inserts it at the top of the section, while the other options will insert at the bottom.
-    "today"|"upcoming"|"later"|"new"|"inbox" assignee_status?;
-    # True if the task is currently marked complete, false if not.
-    boolean? completed?;
-    # The time at which this task was completed, or null if the task is incomplete.
-    string? completed_at?;
-    UserCompact?? completed_by?;
-    # The time at which this resource was created.
-    string? created_at?;
-    # [Opt In](/docs/inputoutput-options). Array of resources referencing tasks that this task depends on. The objects contain only the gid of the dependency.
-    AsanaResource[]? dependencies?;
-    # [Opt In](/docs/inputoutput-options). Array of resources referencing tasks that depend on this task. The objects contain only the ID of the dependent.
-    AsanaResource[]? dependents?;
-    # The UTC date and time on which this task is due, or null if the task has no due time. This takes an ISO 8601 date string in UTC and should not be used together with `due_on`.
-    string? due_at?;
-    # The localized date on which this task is due, or null if the task has no due date. This takes a date with `YYYY-MM-DD` format and should not be used together with `due_at`.
-    string? due_on?;
-    # *OAuth Required*. *Conditional*. This field is returned only if external values are set or included by using [Opt In] (/docs/inputoutput-options).
-    # The external field allows you to store app-specific metadata on tasks, including a gid that can be used to retrieve tasks and a data blob that can store app-specific character strings. Note that you will need to authenticate with Oauth to access or modify this data. Once an external gid is set, you can use the notation `external:custom_gid` to reference your object anywhere in the API where you may use the original object gid. See the page on Custom External Data for more details.
-    TaskBase_external? 'external?;
-    # [Opt In](/docs/inputoutput-options). The notes of the text with formatting as HTML.
-    string? html_notes?;
-    # *Deprecated - please use liked instead* True if the task is hearted by the authorized user, false if not.
-    boolean? hearted?;
-    # *Deprecated - please use likes instead* Array of likes for users who have hearted this task.
-    Like[]? hearts?;
-    # [Opt In](/docs/inputoutput-options). In some contexts tasks can be rendered as a visual separator; for instance, subtasks can appear similar to [sections](/reference/sections) without being true `section` objects. If a `task` object is rendered this way in any context it will have the property `is_rendered_as_separator` set to `true`.
-    boolean? is_rendered_as_separator?;
-    # True if the task is liked by the authorized user, false if not.
-    boolean? liked?;
-    # Array of likes for users who have liked this task.
-    Like[]? likes?;
-    # *Create-only*. Array of projects this task is associated with and the section it is in. At task creation time, this array can be used to add the task to specific sections. After task creation, these associations can be modified using the `addProject` and `removeProject` endpoints. Note that over time, more types of memberships may be added to this property.
-    TaskBase_memberships[]? memberships?;
+    # Free-form textual information associated with the task (i.e. its description)
+    string notes?;
+    # *Deprecated* Scheduling status of this task for the user it is assigned to. This field can only be set if the assignee is non-null. Setting this field to "inbox" or "upcoming" inserts it at the top of the section, while the other options will insert at the bottom
+    @jsondata:Name {value: "assignee_status"}
+    "today"|"upcoming"|"later"|"new"|"inbox" assigneeStatus?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # *Deprecated - please use liked instead* True if the task is hearted by the authorized user, false if not
+    boolean hearted?;
+    # Date and time on which work begins for the task, or null if the task has no start time. This takes an ISO 8601 date string in UTC and should not be used together with `start_on`.
+    # *Note: `due_at` must be present in the request when setting or unsetting the `start_at` parameter.*
+    @jsondata:Name {value: "start_at"}
+    string? startAt?;
+    # The localized date on which this task is due, or null if the task has no due date. This takes a date with `YYYY-MM-DD` format and should not be used together with `due_at`
+    @jsondata:Name {value: "due_on"}
+    string? dueOn?;
+    # True if the task is liked by the authorized user, false if not
+    boolean liked?;
+    # *Create-only*. Array of projects this task is associated with and the section it is in. At task creation time, this array can be used to add the task to specific sections. After task creation, these associations can be modified using the `addProject` and `removeProject` endpoints. Note that over time, more types of memberships may be added to this property
+    record {ProjectCompact project?; SectionCompact section?;}[] memberships?;
+    # [Opt In](/docs/inputoutput-options). The notes of the text with formatting as HTML
+    @jsondata:Name {value: "html_notes"}
+    string htmlNotes?;
+    # [Opt In](/docs/inputoutput-options). The number of subtasks on this task
+    @jsondata:Name {value: "num_subtasks"}
+    int numSubtasks?;
+    # *Deprecated - please use likes instead* Array of likes for users who have hearted this task
+    Like[] hearts?;
+    # The UTC date and time on which this task is due, or null if the task has no due time. This takes an ISO 8601 date string in UTC and should not be used together with `due_on`
+    @jsondata:Name {value: "due_at"}
+    string? dueAt?;
+    # [Opt In](/docs/inputoutput-options). In some contexts tasks can be rendered as a visual separator; for instance, subtasks can appear similar to [sections](/reference/sections) without being true `section` objects. If a `task` object is rendered this way in any context it will have the property `is_rendered_as_separator` set to `true`
+    @jsondata:Name {value: "is_rendered_as_separator"}
+    boolean isRenderedAsSeparator?;
+    # The number of users who have liked this task
+    @jsondata:Name {value: "num_likes"}
+    int numLikes?;
     # The time at which this task was last modified.
     # 
     # The following conditions will change `modified_at`:
@@ -1937,57 +2033,77 @@ public type TaskBase record {
     # - moving to a new container (project, portfolio, etc)
     # - comments being added to the task (but the stories they generate
     #   _will_ affect `modified_at`)
-    string? modified_at?;
-    # Name of the task. This is generally a short sentence fragment that fits on a line in the UI for maximum readability. However, it can be longer.
-    string? name?;
-    # Free-form textual information associated with the task (i.e. its description).
-    string? notes?;
-    # *Deprecated - please use likes instead* The number of users who have hearted this task.
-    int? num_hearts?;
-    # The number of users who have liked this task.
-    int? num_likes?;
-    # [Opt In](/docs/inputoutput-options). The number of subtasks on this task.
-    int? num_subtasks?;
-    # Date and time on which work begins for the task, or null if the task has no start time. This takes an ISO 8601 date string in UTC and should not be used together with `start_on`.
-    # *Note: `due_at` must be present in the request when setting or unsetting the `start_at` parameter.*
-    string? start_at?;
+    @jsondata:Name {value: "modified_at"}
+    string modifiedAt?;
+    # *Deprecated - please use likes instead* The number of users who have hearted this task
+    @jsondata:Name {value: "num_hearts"}
+    int numHearts?;
+    @jsondata:Name {value: "completed_by"}
+    UserCompact completedBy?;
+    # Array of likes for users who have liked this task
+    Like[] likes?;
     # The day on which work begins for the task , or null if the task has no start date. This takes a date with `YYYY-MM-DD` format and should not be used together with `start_at`.
     # *Note: `due_on` or `due_at` must be present in the request when setting or unsetting the `start_on` parameter.*
-    string? start_on?;
-    # This value represents the sum of all the Time Tracking entries in the Actual Time field on a given Task. It is represented as a nullable long value.
-    decimal? actual_time_minutes?;
+    @jsondata:Name {value: "start_on"}
+    string? startOn?;
+    # *Conditional* Reflects the approval status of this task. This field is kept in sync with `completed`, meaning `pending` translates to false while `approved`, `rejected`, and `changes_requested` translate to true. If you set completed to true, this field will be set to `approved`
+    @jsondata:Name {value: "approval_status"}
+    "pending"|"approved"|"rejected"|"changes_requested" approvalStatus?;
+    # True if the task is currently marked complete, false if not
+    boolean completed?;
+    # [Opt In](/docs/inputoutput-options). Array of resources referencing tasks that this task depends on. The objects contain only the gid of the dependency
+    AsanaResource[] dependencies?;
+    # The time at which this task was completed, or null if the task is incomplete
+    @jsondata:Name {value: "completed_at"}
+    string? completedAt?;
+    # *OAuth Required*. *Conditional*. This field is returned only if external values are set or included by using [Opt In] (/docs/inputoutput-options).
+    # The external field allows you to store app-specific metadata on tasks, including a gid that can be used to retrieve tasks and a data blob that can store app-specific character strings. Note that you will need to authenticate with Oauth to access or modify this data. Once an external gid is set, you can use the notation `external:custom_gid` to reference your object anywhere in the API where you may use the original object gid. See the page on Custom External Data for more details
+    record {string gid?; string data?;} 'external?;
+    # This value represents the sum of all the Time Tracking entries in the Actual Time field on a given Task. It is represented as a nullable long value
+    @jsondata:Name {value: "actual_time_minutes"}
+    decimal? actualTimeMinutes?;
+    # Name of the task. This is generally a short sentence fragment that fits on a line in the UI for maximum readability. However, it can be longer
+    string name?;
+    # [Opt In](/docs/inputoutput-options). Array of resources referencing tasks that depend on this task. The objects contain only the ID of the dependent
+    AsanaResource[] dependents?;
 };
 
-public type Inline_response_200_24 record {
-    ProjectStatusResponse? data?;
+# A story represents an activity associated with an object in the Asana system
+public type StoryCompactAllOf2 record {
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # *Create-only*. Human-readable text for the story or comment.
+    # This will not include the name of the creator.
+    # *Note: This is not guaranteed to be stable for a given type of story. For example, text for a reassignment may not always say “assigned to …” as the text for a story can both be edited and change based on the language settings of the user making the request.*
+    # Use the `resource_subtype` property to discover the action that created the story
+    string text?;
+    @jsondata:Name {value: "created_by"}
+    UserCompact createdBy?;
+    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning
+    @jsondata:Name {value: "resource_subtype"}
+    string resourceSubtype?;
 };
 
-public type Inline_response_200_21 record {
-    ProjectBriefResponse? data?;
-};
-
-# [Opt In](/docs/inputoutput-options). A *user* object represents an account in Asana that can be given access to various workspaces, projects, and tasks.
-public type TaskCompact_created_by record {
-    # Globally unique identifier of the resource.
-    string? gid?;
-    # The type of resource.
-    string? resource_type?;
-};
-
-public type Goal_gid_setMetricCurrentValue_body record {
-    GoalMetricCurrentValueRequest? data?;
-};
-
-public type Inline_response_200_22 record {
-    ProjectMembershipNormalResponse? data?;
-};
-
-public type Inline_response_200_20 record {
-    CustomFieldSettingResponse? data?;
-};
-
-public type Task_gid_duplicate_body record {
-    TaskDuplicateRequest? data?;
+# A story represents an activity associated with an object in the Asana system
+public type StoryBaseAllOf2 record {
+    # The name of the sticker in this story. `null` if there is no sticker
+    @jsondata:Name {value: "sticker_name"}
+    "green_checkmark"|"people_dancing"|"dancing_unicorn"|"heart"|"party_popper"|"people_waving_flags"|"splashing_narwhal"|"trophy"|"yeti_riding_unicorn"|"celebrating_people"|"determined_climbers"|"phoenix_spreading_love" stickerName?;
+    # [Opt In](/docs/inputoutput-options). HTML formatted text for a comment. This will not include the name of the creator
+    @jsondata:Name {value: "html_text"}
+    string htmlText?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # The plain text of the comment to add. Cannot be used with html_text
+    string text?;
+    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning
+    @jsondata:Name {value: "resource_subtype"}
+    string resourceSubtype?;
+    # *Conditional*. Whether the story should be pinned on the resource
+    @jsondata:Name {value: "is_pinned"}
+    boolean isPinned?;
 };
 
 # An *event* is an object representing a change to a resource that was
@@ -2028,455 +2144,510 @@ public type Task_gid_duplicate_body record {
 # * When a collaborator is added to the task, `Event.parent` will
 # be `null`, `Event.action` will be `changed`,
 # `Event.change.action` will be `added`, and `added_value` will be
-# an object with the user's `id` and `type`.
+# an object with the user's `id` and `type`
 public type EventResponse record {
-    UserCompact?? user?;
-    AsanaNamedResource?? 'resource?;
-    # *Deprecated: Refer to the resource_type of the resource.* The type of the resource that generated the event.
-    string? 'type?;
-    # The type of action taken on the **resource** that triggered the event.  This can be one of `changed`, `added`, `removed`, `deleted`, or `undeleted` depending on the nature of the event.
-    string? action?;
-    AsanaNamedResource?? parent?;
-    # The timestamp when the event occurred.
-    string? created_at?;
-    # Information about the type of change that has occurred. This field is only present when the value of the property `action`, describing the action taken on the **resource**, is `changed`.
-    EventResponse_change? change?;
+    # For added/removed events, the parent object that resource was added to or removed from. The parent will be `null` for other event types
+    AsanaNamedResource parent?;
+    # The resource which has triggered the event by being modified in some way
+    AsanaNamedResource 'resource?;
+    EventResponseChange change?;
+    # The type of action taken on the **resource** that triggered the event.  This can be one of `changed`, `added`, `removed`, `deleted`, or `undeleted` depending on the nature of the event
+    string action?;
+    # The timestamp when the event occurred
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # *Deprecated: Refer to the resource_type of the resource.* The type of the resource that generated the event
+    string 'type?;
+    # The user who triggered the event
+    UserCompact user?;
 };
 
 public type TeamCompact record {
     *AsanaResource;
-    # The name of the team.
-    string? name?;
+    *TeamCompactAllOf2;
 };
 
-public type ModifyDependenciesRequest record {
-    # An array of task gids that a task depends on.
-    string[]? dependencies?;
+public type PortfolioResponseAllOf2 record {
+    UserCompact owner?;
+    # The day on which work for this portfolio begins, or null if the portfolio has no start date. This takes a date with `YYYY-MM-DD` format. *Note: `due_on` must be present in the request when setting or unsetting the `start_on` parameter. Additionally, `start_on` and `due_on` cannot be the same date.*
+    @jsondata:Name {value: "start_on"}
+    string? startOn?;
+    # Array of custom field settings applied to the portfolio
+    @jsondata:Name {value: "custom_field_settings"}
+    CustomFieldSettingResponse[] customFieldSettings?;
+    record {*WorkspaceCompact;} workspace?;
+    # Array of Custom Fields
+    @jsondata:Name {value: "custom_fields"}
+    CustomFieldCompact[] customFields?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    @jsondata:Name {value: "created_by"}
+    UserCompact createdBy?;
+    # The localized day on which this portfolio is due. This takes a date with format YYYY-MM-DD
+    @jsondata:Name {value: "due_on"}
+    string? dueOn?;
+    # Array of project templates that are in the portfolio
+    @jsondata:Name {value: "project_templates"}
+    ProjectTemplateCompact[] projectTemplates?;
+    # True if the portfolio is public to its workspace members
+    boolean 'public?;
+    # The latest `status_update` posted to this portfolio
+    @jsondata:Name {value: "current_status_update"}
+    StatusUpdateCompact? currentStatusUpdate?;
+    UserCompact[] members?;
+    # A url that points directly to the object within Asana
+    @jsondata:Name {value: "permalink_url"}
+    string permalinkUrl?;
 };
 
 public type StoryCompact record {
     *AsanaResource;
-    # The time at which this resource was created.
-    string? created_at?;
-    UserCompact? created_by?;
-    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
-    string? resource_subtype?;
-    # *Create-only*. Human-readable text for the story or comment.
-    # This will not include the name of the creator.
-    # *Note: This is not guaranteed to be stable for a given type of story. For example, text for a reassignment may not always say “assigned to …” as the text for a story can both be edited and change based on the language settings of the user making the request.*
-    # Use the `resource_subtype` property to discover the action that created the story.
-    string? text?;
+    *StoryCompactAllOf2;
 };
 
-public type ProjectSectionInsertRequest record {
-    # The section to reorder.
-    string? section;
-    # Insert the given section immediately before the section specified by this parameter.
-    string? before_section?;
-    # Insert the given section immediately after the section specified by this parameter.
-    string? after_section?;
+public type PortfolioBaseAllOf2 record {
+    # Color of the portfolio
+    "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray" color?;
 };
 
-public type Project_gid_removeFollowers_body record {
-    RemoveFollowersRequest? data?;
+public type TaskGidAddDependentsBody record {
+    ModifyDependentsRequest data?;
 };
 
-public type Task_gid_addTag_body record {
-    TaskAddTagRequest? data?;
+# Represents the Queries record for the operation: insertSectionForProject
+public type InsertSectionForProjectQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-# A user identification object for specification with the addUser/removeUser endpoints.
-public type TeamRemoveUserRequest record {
-    # A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    string? user?;
+# Represents the Queries record for the operation: removeMembersForProject
+public type RemoveMembersForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_18 record {
-    PortfolioCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+# Represents the Queries record for the operation: deleteMembership
+public type DeleteMembershipQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_19 record {
-    ProjectCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+# Represents the Queries record for the operation: addFollowersForProject
+public type AddFollowersForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_16 record {
-    PortfolioMembershipCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-public type Inline_response_200_17 record {
-    PortfolioMembershipResponse? data?;
-};
-
-public type GoalRequest record {
-    *GoalRequestBase;
-    string[]? followers?;
-};
-
-public type Inline_response_200_14 record {
-    MembershipCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-public type Goal_gid_removeFollowers_body record {
-    TaskAddFollowersRequest? data?;
-};
-
-public type Inline_response_200_15 record {
-    ProjectMembershipCompactResponse? data?;
-};
-
-public type Batch_body record {
-    # A request object for use in a batch request.
-    BatchRequest? data?;
-};
-
-public type Inline_response_200_12 record {
-    GoalCompact[]? data?;
-};
-
-public type Inline_response_200_13 record {
-    JobResponse? data?;
-};
-
-public type GoalAddSubgoalRequest record {
-    # The goal gid to add as subgoal to a parent goal
-    string? subgoal;
-    # An id of a subgoal of this parent goal. The new subgoal will be added before the one specified here. `insert_before` and `insert_after` parameters cannot both be specified.
-    string? insert_before?;
-    # An id of a subgoal of this parent goal. The new subgoal will be added after the one specified here. `insert_before` and `insert_after` parameters cannot both be specified.
-    string? insert_after?;
-};
-
-public type Inline_response_200_10 record {
-    GoalResponse? data?;
-};
-
-public type Inline_response_200_11 record {
-    GoalCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-public type AllocationCompact record {
-    *AllocationBase;
-    UserCompact? assignee?;
-    ProjectCompact? parent?;
-    EffortCompact? effort?;
+# Represents the Queries record for the operation: getTimeTrackingEntry
+public type GetTimeTrackingEntryQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"created_by"|"created_by.name"|"duration_minutes"|"entered_on"|"task"|"task.created_by"|"task.name"|"task.resource_subtype")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type GoalRelationshipResponse record {
     *GoalRelationshipBase;
+    *GoalRelationshipResponseAllOf2;
 };
 
-public type Task_gid_addDependents_body record {
-    # A set of dependent tasks.
-    ModifyDependentsRequest? data?;
+public type ProjectGidAddFollowersBody record {
+    AddFollowersRequest data?;
 };
 
-public type Goals_goal_gid_body record {
-    GoalUpdateRequest? data?;
+public type WebhookswebhookGidBody record {
+    WebhookUpdateRequest data?;
 };
 
-public type Task_gid_removeTag_body record {
-    TaskRemoveTagRequest? data?;
+# Represents the Queries record for the operation: getWorkspaceMembershipsForUser
+public type GetWorkspaceMembershipsForUserQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"is_active"|"is_admin"|"is_guest"|"offset"|"path"|"uri"|"user"|"user.name"|"user_task_list"|"user_task_list.name"|"user_task_list.owner"|"user_task_list.workspace"|"vacation_dates"|"vacation_dates.end_on"|"vacation_dates.start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
 };
 
-public type CreateMembershipRequest record {
-    *MembershipRequest;
-    # The gid of the user or team.
-    string? member?;
-    # The gid of the `goal` or `project` to add the member to.
-    string? parent?;
-    # The role given to the member. Optional argument, will default to `commenter` for goals and the default project role for projects. Can be `editor` or `commenter` for goals. Can be `admin`,`editor` or `commenter` for projects.
-    string? role?;
+# Represents the Queries record for the operation: removeUserForWorkspace
+public type RemoveUserForWorkspaceQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type JobBase JobCompact?;
+public type JobBase JobCompact;
 
-public type TaskBase_memberships record {
-    ProjectCompact? project?;
-    SectionCompact? section?;
+public type CustomFieldRequestAllOf2 record {
+    # *Create-Only* The workspace to create a custom field in
+    string workspace;
+    # *Allow-listed*. Instructs the API that this Custom Field is app-owned. This parameter is allow-listed to specific apps at this point in time. For apps that are not allow-listed, providing this parameter will result in a `403 Forbidden`
+    @jsondata:Name {value: "owned_by_app"}
+    boolean ownedByApp?;
+    # *Conditional*. Only relevant for custom fields of type `people`. This array of user GIDs reflects the users to be written to a `people` custom field. Note that *write* operations will replace existing users (if any) in the custom field with the users specified in this array
+    @jsondata:Name {value: "people_value"}
+    string[] peopleValue?;
 };
 
-public type AllocationRequest record {
-    *AllocationBase;
-    # Globally unique identifier for the user who is assigned to the allocation.
-    string? assignee?;
-    # Globally unique identifier for the project the allocation is on.
-    string? parent?;
-    EffortCompact? effort?;
+# Represents the Queries record for the operation: removeItemForPortfolio
+public type RemoveItemForPortfolioQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Team_gid_addUser_body record {
-    # A user identification object for specification with the addUser/removeUser endpoints.
-    TeamAddUserRequest? data?;
+public type StoryRequest StoryBase;
+
+# Represents the Queries record for the operation: getMembership
+public type GetMembershipQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("access_level"|"member"|"member.name"|"parent"|"parent.name"|"resource_subtype")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type StoryRequest StoryBase?;
-
-public type ProjectStatusCompact record {
-    *AsanaResource;
-    # The title of the project status update.
-    string? title?;
+# Represents the Queries record for the operation: removeMembersForPortfolio
+public type RemoveMembersForPortfolioQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"owner"|"owner.name"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Project_gid_saveAsTemplate_body record {
-    ProjectSaveAsTemplateRequest? data?;
+# Represents the Queries record for the operation: addProjectForTask
+public type AddProjectForTaskQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type GoalAddSupportingWorkRequest record {
-    # The project/task/portfolio gid to add as supporting work for a goal
-    string? supporting_work;
-};
-
-public type Workspaces_workspace_gid_body record {
-    WorkspaceRequest? data?;
+# Represents the Queries record for the operation: getStoriesForTask
+public type GetStoriesForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("assignee"|"assignee.name"|"created_at"|"created_by"|"created_by.name"|"custom_field"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"dependency"|"dependency.created_by"|"dependency.name"|"dependency.resource_subtype"|"duplicate_of"|"duplicate_of.created_by"|"duplicate_of.name"|"duplicate_of.resource_subtype"|"duplicated_from"|"duplicated_from.created_by"|"duplicated_from.name"|"duplicated_from.resource_subtype"|"follower"|"follower.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"is_editable"|"is_edited"|"is_pinned"|"liked"|"likes"|"likes.user"|"likes.user.name"|"new_approval_status"|"new_date_value"|"new_dates"|"new_dates.due_at"|"new_dates.due_on"|"new_dates.start_on"|"new_enum_value"|"new_enum_value.color"|"new_enum_value.enabled"|"new_enum_value.name"|"new_multi_enum_values"|"new_multi_enum_values.color"|"new_multi_enum_values.enabled"|"new_multi_enum_values.name"|"new_name"|"new_number_value"|"new_people_value"|"new_people_value.name"|"new_resource_subtype"|"new_section"|"new_section.name"|"new_text_value"|"num_hearts"|"num_likes"|"offset"|"old_approval_status"|"old_date_value"|"old_dates"|"old_dates.due_at"|"old_dates.due_on"|"old_dates.start_on"|"old_enum_value"|"old_enum_value.color"|"old_enum_value.enabled"|"old_enum_value.name"|"old_multi_enum_values"|"old_multi_enum_values.color"|"old_multi_enum_values.enabled"|"old_multi_enum_values.name"|"old_name"|"old_number_value"|"old_people_value"|"old_people_value.name"|"old_resource_subtype"|"old_section"|"old_section.name"|"old_text_value"|"path"|"previews"|"previews.fallback"|"previews.footer"|"previews.header"|"previews.header_link"|"previews.html_text"|"previews.text"|"previews.title"|"previews.title_link"|"project"|"project.name"|"resource_subtype"|"source"|"sticker_name"|"story"|"story.created_at"|"story.created_by"|"story.created_by.name"|"story.resource_subtype"|"story.text"|"tag"|"tag.name"|"target"|"target.created_by"|"target.name"|"target.resource_subtype"|"task"|"task.created_by"|"task.name"|"task.resource_subtype"|"text"|"type"|"uri")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type PortfolioCompact record {
     *AsanaResource;
-    # The name of the portfolio.
-    string? name?;
+    *PortfolioCompactAllOf2;
+};
+
+# Represents the Queries record for the operation: addUserForTeam
+public type AddUserForTeamQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("is_admin"|"is_guest"|"is_limited_access"|"team"|"team.name"|"user"|"user.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type ProjectTemplateBase record {
     *ProjectTemplateCompact;
-    # Free-form textual information associated with the project template
-    string? description?;
-    # The description of the project template with formatting as HTML.
-    string? html_description?;
-    # True if the project template is public to its team.
-    boolean? 'public?;
-    # The current owner of the project template, may be null.
-    record {*UserCompact;}? owner?;
-    TeamCompact?? team?;
-    # Array of date variables in this project template. Calendar dates must be provided for these variables when instantiating a project.
-    DateVariableCompact[]? requested_dates?;
-    # Color of the project template.
-    "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray"? color?;
-    # Array of template roles in this project template. User Ids can be provided for these variables when instantiating a project to assign template tasks to the user.
-    TemplateRole[]? requested_roles?;
+    *ProjectTemplateBaseAllOf2;
 };
 
-public type WorkspaceMembershipRequest WorkspaceMembershipBase?;
-
-public type Inline_response_201 record {
-    CustomFieldResponse? data?;
+# A *project template* is an object that allows new projects to be created with a predefined setup, which may include tasks, sections, Rules, etc. It simplifies the process of running a workflow that involves a similar set of work every time
+public type ProjectTemplateCompactAllOf2 record {
+    # Name of the project template
+    string name?;
 };
 
-public type Inline_response_200 record {
-    AttachmentResponse? data?;
-};
-
-public type TagRequest record {
-    *TagBase;
-    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string[]? followers?;
-    # Gid of an object.
-    string? workspace?;
-};
-
-# An object to represent a user's like.
-public type Like record {
-    # Globally unique identifier of the object, as a string.
-    string? gid?;
-    UserCompact? user?;
+# Represents the Queries record for the operation: getProjectStatus
+public type GetProjectStatusQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("author"|"author.name"|"color"|"created_at"|"created_by"|"created_by.name"|"html_text"|"modified_at"|"text"|"title")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type UpdateTimeTrackingEntryRequest record {
-    # *Optional*. Time in minutes tracked by the entry
-    int? duration_minutes?;
     # *Optional*. The day that this entry is logged on. Defaults to today if no day specified
-    string? entered_on?;
+    @jsondata:Name {value: "entered_on"}
+    string enteredOn?;
+    # *Optional*. Time in minutes tracked by the entry
+    @jsondata:Name {value: "duration_minutes"}
+    int durationMinutes?;
+};
+
+public type GoalMembershipCompactAllOf2 record {
+    # *Deprecated: new integrations should prefer the `role` field.* Describes if the member is editor in goal
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "is_editor"}
+    @deprecated
+    boolean isEditor?;
+    # *Deprecated: new integrations should prefer the `role` field.* Describes if the member is comment only in goal
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "is_commenter"}
+    @deprecated
+    boolean isCommenter?;
+};
+
+# A dictionary of options to auto-shift dates. `task_dates` must be included to use this option. Requires either `start_on` or `due_on`, but not both
+public type ProjectDuplicateRequestScheduleDates record {
+    # Sets the first start date in the duplicated project to the given date. The rest of the start dates will be offset by the same amount as the start dates in the original project
+    @jsondata:Name {value: "start_on"}
+    string startOn?;
+    # Determines if the auto-shifted dates should skip weekends
+    @jsondata:Name {value: "should_skip_weekends"}
+    boolean shouldSkipWeekends;
+    # Sets the last due date in the duplicated project to the given date. The rest of the due dates will be offset by the same amount as the due dates in the original project
+    @jsondata:Name {value: "due_on"}
+    string dueOn?;
+};
+
+# Represents the Queries record for the operation: getEvents
+public type GetEventsQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("action"|"change"|"change.action"|"change.added_value"|"change.field"|"change.new_value"|"change.removed_value"|"created_at"|"parent"|"parent.name"|"resource"|"resource.name"|"type"|"user"|"user.name")[] optFields?;
+    # A resource ID to subscribe to. The resource can be a task, project, or goal
+    string 'resource;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # A sync token received from the last request, or none on first sync. Events will be returned from the point in time that the sync token was generated.
+    # *Note: On your first request, omit the sync token. The response will be the same as for an expired sync token, and will include a new valid sync token.If the sync token is too old (which may happen from time to time) the API will return a `412 Precondition Failed` error, and include a fresh sync token in the response.*
+    string sync?;
 };
 
 public type GoalRelationshipBase record {
     *GoalRelationshipCompact;
-    record {*GoalCompact;}? supported_goal?;
+    *GoalRelationshipBaseAllOf2;
 };
 
-public type AttachmentResponse record {
-    *AttachmentBase;
-    # The time at which this resource was created.
-    string? created_at?;
-    # The URL containing the content of the attachment.
-    # *Note:* May be null if the attachment is hosted by [Box](https://www.box.com/) and will be null if the attachment is a Video Message hosted by [Vimeo](https://vimeo.com/). If present, this URL may only be valid for two minutes from the time of retrieval. You should avoid persisting this URL somewhere and just refresh it on demand to ensure you do not keep stale URLs.
-    string? download_url?;
-    # 
-    string? permanent_url?;
-    # The service hosting the attachment. Valid values are `asana`, `dropbox`, `gdrive`, `box`, and `vimeo`.
-    string? host?;
-    record {
-        *TaskCompact;
-        # The resource subtype of the parent resource that the filter applies to.
-        "default_task"|"milestone"|"section"|"approval" resource_subtype?;
-    }? parent?;
-    # The size of the attachment in bytes. Only present when the `resource_subtype` is `asana`.
-    int? size?;
-    # The URL where the attachment can be viewed, which may be friendlier to users in a browser than just directing them to a raw file. May be null if no view URL exists for the service.
-    string? view_url?;
-    # Whether the attachment is connected to the app making the request for the purposes of showing an app components widget. Only present when the `resource_subtype` is `external` or `gdrive`.
-    boolean? connected_to_app?;
+# Represents the Queries record for the operation: getTimePeriod
+public type GetTimePeriodQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("display_name"|"end_on"|"parent"|"parent.display_name"|"parent.end_on"|"parent.period"|"parent.start_on"|"period"|"start_on")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type PortfoliosBody record {
+    PortfolioRequest data?;
 };
 
 public type TagCreateTagForWorkspaceRequest record {
     *TagBase;
-    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string[]? followers?;
+    *TagCreateTagForWorkspaceRequestAllOf2;
 };
-
-public type WorkspaceRequest WorkspaceBase?;
 
 public type AddMembersRequest record {
-    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string? members;
+    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user
+    string members;
 };
 
-public type Project_gid_addCustomFieldSetting_body record {
-    AddCustomFieldSettingRequest? data?;
+# *Deprecated: new integrations should prefer the `status_update` resource.*
+# A *project status* is an update on the progress of a particular project, and is sent out to all project followers when created. These updates include both text describing the update and a color code intended to represent the overall state of the project: "green" for projects that are on track, "yellow" for projects at risk, and "red" for projects that are behind
+public type ProjectStatusCompactAllOf2 record {
+    # The title of the project status update
+    string title?;
 };
 
-public type Section_gid_addTask_body record {
-    SectionTaskInsertRequest? data?;
+# Represents the Queries record for the operation: deleteGoal
+public type DeleteGoalQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Project_gid_addFollowers_body record {
-    AddFollowersRequest? data?;
+# A *status update* is an update on the progress of a particular project, portfolio, or goal, and is sent out to all of its parent's followers when created. These updates include both text describing the update and a `status_type` intended to represent the overall state of the project
+public type StatusUpdateCompactAllOf2 record {
+    # The title of the status update
+    string title?;
+    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
+    # The `resource_subtype`s for `status` objects represent the type of their parent
+    @jsondata:Name {value: "resource_subtype"}
+    "project_status_update"|"portfolio_status_update"|"goal_status_update" resourceSubtype?;
+};
+
+public type TeamsBody record {
+    TeamRequest data?;
+};
+
+public type UserResponseAllOf2 record {
+    # Workspaces and organizations this user may access.
+    # Note\: The API will only return workspaces and organizations that also contain the authenticated user
+    WorkspaceCompact[] workspaces?;
+};
+
+# Represents the Queries record for the operation: projectSaveAsTemplate
+public type ProjectSaveAsTemplateQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: addDependentsForTask
+public type AddDependentsForTaskQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type ProjectMembershipNormalResponse record {
     *ProjectMembershipBase;
-    UserCompact? user?;
-    ProjectCompact? project?;
-    # The base type of this resource.
-    string? resource_type?;
-    # Whether the member has full access or comment-only access to the project.
-    "full_write"|"comment_only" write_access?;
+    # The base type of this resource
+    @jsondata:Name {value: "resource_type"}
+    string resourceType?;
+    ProjectCompact project?;
+    UserCompact user?;
+    # Whether the member has full access or comment-only access to the project
+    @jsondata:Name {value: "write_access"}
+    "full_write"|"comment_only" writeAccess?;
 };
 
-public type EnumOptionBase EnumOption;
-
-public type Memberships_membership_gid_body record {
-    MembershipRequest? data?;
+public type GoalGidSetMetricCurrentValueBody record {
+    GoalMetricCurrentValueRequest data?;
 };
 
-public type TemplateRole record {
-    *AsanaResource;
-    # Name of the template role.
-    string? name?;
+# Represents the Queries record for the operation: createOrganizationExport
+public type CreateOrganizationExportQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"download_url"|"organization"|"organization.name"|"state")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type WebhookCompact record {
-    *AsanaResource;
-    # If true, the webhook will send events - if false it is considered inactive and will not generate events.
-    boolean? active?;
-    AsanaNamedResource? 'resource?;
-    # The URL to receive the HTTP POST.
-    string? target?;
+# Represents the Queries record for the operation: getDependentsForTask
+public type GetDependentsForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
 };
 
-public type Status_updates_body record {
-    StatusUpdateRequest? data?;
+# Represents the Queries record for the operation: getTimePeriods
+public type GetTimePeriodsQueries record {
+    # ISO 8601 date string
+    @http:Query {name: "start_on"}
+    string startOn?;
+    # Globally unique identifier for the workspace
+    string workspace;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("display_name"|"end_on"|"offset"|"parent"|"parent.display_name"|"parent.end_on"|"parent.period"|"parent.start_on"|"path"|"period"|"start_on"|"uri")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # ISO 8601 date string
+    @http:Query {name: "end_on"}
+    string endOn?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
 };
 
-public type Teams_body record {
-    TeamRequest? data?;
+# Represents the Queries record for the operation: getOrganizationExport
+public type GetOrganizationExportQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"download_url"|"organization"|"organization.name"|"state")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type AddFollowersRequest record {
-    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string? followers;
+    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user
+    string followers;
 };
 
-public type TagBase record {
-    *TagCompact;
-    # Color of the tag.
-    "dark-pink"|"dark-green"|"dark-blue"|"dark-red"|"dark-teal"|"dark-brown"|"dark-orange"|"dark-purple"|"dark-warm-gray"|"light-pink"|"light-green"|"light-blue"|"light-red"|"light-teal"|"light-brown"|"light-orange"|"light-purple"|"light-warm-gray"? color?;
-    # Free-form textual information associated with the tag (i.e. its description).
-    string? notes?;
+public type SectionsInsertBody record {
+    ProjectSectionInsertRequest data?;
 };
 
-public type Enum_options_insert_body record {
-    EnumOptionInsertRequest? data?;
+public type TagRequestAllOf2 record {
+    # Gid of an object
+    string workspace?;
+    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user
+    string[] followers?;
 };
 
-public type GoalRemoveSupportingRelationshipRequest record {
-    # The gid of the supporting resource to remove from the parent goal. Must be the gid of a goal, project, task, or portfolio.
-    string? supporting_resource;
-};
-
-# An empty object. Some endpoints do not return an object on success. The success is conveyed through a 2-- status code and returning an empty object.
+# An empty object. Some endpoints do not return an object on success. The success is conveyed through a 2-- status code and returning an empty object
 public type EmptyResponse record {
 };
 
-public type RemoveCustomFieldSettingRequest record {
-    # The custom field to remove from this portfolio.
-    string? custom_field;
-};
-
-public type ProjectUpdateRequest record {
-    *ProjectBase;
-    # An object where each key is the GID of a custom field and its corresponding value is either an enum GID, string, number, or object (depending on the custom field type). See the [custom fields guide](/docs/custom-fields-guide) for details on creating and updating custom field values.
-    record {|string?...;|}? custom_fields?;
-    # *Create-only*. Comma separated string of users. Followers are a subset of members who have opted in to receive "tasks added" notifications for a project.
-    string? followers?;
-    # The current owner of the project, may be null.
-    string? owner?;
-    # The team that this project is shared with.
-    string? team?;
-};
-
-public type TaskTemplateRecipe record {
-    *TaskTemplateRecipeCompact;
-    # Description of the task that will be created from this template.
-    string? description?;
-    # HTML description of the task that will be created from this template.
-    string? html_description?;
-    # Array of projects that the task created from this template will be added to
-    ProjectCompact[]? memberships?;
-    # The number of days after the task has been instantiated on which that the task will start
-    int? relative_start_on?;
-    # The number of days after the task has been instantiated on which that the task will be due
-    int? relative_due_on?;
-    # The time of day that the task will be due
-    string? due_time?;
-    # Array of task templates that the task created from this template will depend on
-    TaskTemplateRecipeCompact[]? dependencies?;
-    # Array of task templates that will depend on the task created from this template
-    TaskTemplateRecipeCompact[]? dependents?;
-    # Array of users that will be added as followers to the task created from this template
-    UserCompact[]? followers?;
-    # Array of attachments that will be added to the task created from this template
-    AttachmentCompact[]? attachments?;
-    # Array of subtasks that will be added to the task created from this template
-    TaskTemplateRecipeCompact[]? subtasks?;
-    # Array of custom fields that will be added to the task created from this template
-    CustomFieldCompact[]? custom_fields?;
-};
-
-public type WorkspaceMembershipCompact record {
-    *AsanaResource;
-    UserCompact? user?;
-    WorkspaceCompact? workspace?;
-};
-
-public type GoalUpdateRequest record {
-    *GoalRequestBase;
-    # The current status of this goal. When the goal is open, its status can be `green`, `yellow`, and `red` to reflect "On Track", "At Risk", and "Off Track", respectively. When the goal is closed, the value can be `missed`, `achieved`, `partial`, or `dropped`.
-    # *Note* you can only write to this property if `metric` is set.
-    string? status?;
-};
-
 public type TaskDuplicateRequest record {
-    # The name of the new task.
-    string? name?;
     # A comma-separated list of fields that will be duplicated to the new task.
     # ##### Fields
     # - assignee
@@ -2489,25 +2660,2782 @@ public type TaskDuplicateRequest record {
     # - projects
     # - subtasks
     # - tags
-    string? include?;
+    string include?;
+    # The name of the new task
+    string name?;
 };
 
 public type DateVariableRequest record {
-    # Globally unique identifier of the date field in the project template. A value of `1` refers to the project start date, while `2` refers to the project due date.
-    string? gid?;
-    # The date with which the date variable should be replaced when instantiating a project. This takes a date with `YYYY-MM-DD` format.
+    # Globally unique identifier of the date field in the project template. A value of `1` refers to the project start date, while `2` refers to the project due date
+    string gid?;
+    # The date with which the date variable should be replaced when instantiating a project. This takes a date with `YYYY-MM-DD` format
     string? value?;
 };
 
-public type Goals_body record {
-    GoalRequest? data?;
+# Represents the Queries record for the operation: createStoryForTask
+public type CreateStoryForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("assignee"|"assignee.name"|"created_at"|"created_by"|"created_by.name"|"custom_field"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"dependency"|"dependency.created_by"|"dependency.name"|"dependency.resource_subtype"|"duplicate_of"|"duplicate_of.created_by"|"duplicate_of.name"|"duplicate_of.resource_subtype"|"duplicated_from"|"duplicated_from.created_by"|"duplicated_from.name"|"duplicated_from.resource_subtype"|"follower"|"follower.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"is_editable"|"is_edited"|"is_pinned"|"liked"|"likes"|"likes.user"|"likes.user.name"|"new_approval_status"|"new_date_value"|"new_dates"|"new_dates.due_at"|"new_dates.due_on"|"new_dates.start_on"|"new_enum_value"|"new_enum_value.color"|"new_enum_value.enabled"|"new_enum_value.name"|"new_multi_enum_values"|"new_multi_enum_values.color"|"new_multi_enum_values.enabled"|"new_multi_enum_values.name"|"new_name"|"new_number_value"|"new_people_value"|"new_people_value.name"|"new_resource_subtype"|"new_section"|"new_section.name"|"new_text_value"|"num_hearts"|"num_likes"|"old_approval_status"|"old_date_value"|"old_dates"|"old_dates.due_at"|"old_dates.due_on"|"old_dates.start_on"|"old_enum_value"|"old_enum_value.color"|"old_enum_value.enabled"|"old_enum_value.name"|"old_multi_enum_values"|"old_multi_enum_values.color"|"old_multi_enum_values.enabled"|"old_multi_enum_values.name"|"old_name"|"old_number_value"|"old_people_value"|"old_people_value.name"|"old_resource_subtype"|"old_section"|"old_section.name"|"old_text_value"|"previews"|"previews.fallback"|"previews.footer"|"previews.header"|"previews.header_link"|"previews.html_text"|"previews.text"|"previews.title"|"previews.title_link"|"project"|"project.name"|"resource_subtype"|"source"|"sticker_name"|"story"|"story.created_at"|"story.created_by"|"story.created_by.name"|"story.resource_subtype"|"story.text"|"tag"|"tag.name"|"target"|"target.created_by"|"target.name"|"target.resource_subtype"|"task"|"task.created_by"|"task.name"|"task.resource_subtype"|"text"|"type")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type AttachmentResponseAllOf2 record {
+    # 
+    @jsondata:Name {value: "permanent_url"}
+    string? permanentUrl?;
+    record {*TaskCompact; "default_task"|"milestone"|"section"|"approval"? resource_subtype?;} parent?;
+    # The size of the attachment in bytes. Only present when the `resource_subtype` is `asana`
+    int size?;
+    # Whether the attachment is connected to the app making the request for the purposes of showing an app components widget. Only present when the `resource_subtype` is `external` or `gdrive`
+    @jsondata:Name {value: "connected_to_app"}
+    boolean connectedToApp?;
+    # The URL containing the content of the attachment.
+    # *Note:* May be null if the attachment is hosted by [Box](https://www.box.com/) and will be null if the attachment is a Video Message hosted by [Vimeo](https://vimeo.com/). If present, this URL may only be valid for two minutes from the time of retrieval. You should avoid persisting this URL somewhere and just refresh it on demand to ensure you do not keep stale URLs
+    @jsondata:Name {value: "download_url"}
+    string? downloadUrl?;
+    # The service hosting the attachment. Valid values are `asana`, `dropbox`, `gdrive`, `box`, and `vimeo`
+    string host?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # The URL where the attachment can be viewed, which may be friendlier to users in a browser than just directing them to a raw file. May be null if no view URL exists for the service
+    @jsondata:Name {value: "view_url"}
+    string? viewUrl?;
+};
+
+# A *task template* is an object that allows new tasks to be created with a predefined setup
+public type TaskTemplateCompactAllOf2 record {
+    # Name of the task template
+    string name?;
+};
+
+public type InlineResponse201 record {
+    CustomFieldResponse data?;
+};
+
+# Represents the Queries record for the operation: updateGoal
+public type UpdateGoalQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse200 record {
+    AttachmentResponse data?;
+};
+
+# A generic Asana Resource, containing a globally unique identifier
+public type AsanaResource record {
+    # Globally unique identifier of the resource, as a string
+    string gid?;
+    # The base type of this resource
+    @jsondata:Name {value: "resource_type"}
+    string resourceType?;
+};
+
+public type TaskGidStoriesBody record {
+    StoryRequest data?;
+};
+
+# Represents the Queries record for the operation: createMembership
+public type CreateMembershipQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: deletePortfolio
+public type DeletePortfolioQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type UserTaskListResponse UserTaskListBase;
+
+public type ProjectRequestAllOf2 record {
+    # The current owner of the project, may be null
+    string? owner?;
+    # The `gid` of a workspace
+    string workspace?;
+    # *Create-only*. Comma separated string of users. Followers are a subset of members who have opted in to receive "tasks added" notifications for a project
+    string followers?;
+    # An object where each key is the GID of a custom field and its corresponding value is either an enum GID, string, number, or object (depending on the custom field type). See the [custom fields guide](/docs/custom-fields-guide) for details on creating and updating custom field values
+    @jsondata:Name {value: "custom_fields"}
+    record {|string...;|} customFields?;
+    # The team that this project is shared with
+    string team?;
+};
+
+public type TeamMembershipResponse TeamMembershipBase;
+
+public type GoalRequestBaseAllOf2 record {
+    # The `gid` of a user
+    string? owner?;
+    # The `gid` of a workspace
+    string workspace?;
+    # *Conditional*. This property is only present when the `workspace` provided is an organization
+    string? team?;
+    # The `gid` of a time period
+    @jsondata:Name {value: "time_period"}
+    string? timePeriod?;
+};
+
+public type WorkspaceMembershipBase WorkspaceMembershipCompact;
+
+# Represents the Queries record for the operation: getPortfolioMembershipsForPortfolio
+public type GetPortfolioMembershipsForPortfolioQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("offset"|"path"|"portfolio"|"portfolio.name"|"uri"|"user"|"user.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+    # A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    string user?;
+};
+
+# Represents the Queries record for the operation: createSubtaskForTask
+public type CreateSubtaskForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type TimePeriodBase record {
+    *TimePeriodCompact;
+    *TimePeriodBaseAllOf2;
+};
+
+public type CustomFieldGidEnumOptionsBody record {
+    EnumOptionRequest data?;
+};
+
+public type TaskGidSubtasksBody record {
+    TaskRequest data?;
+};
+
+# Event specific details. The schema will vary depending on the `event_type`
+public type AuditLogEventDetails record {
+};
+
+# This object describes a team or a user's membership to a project including their level of access (Admin, Editor, Commenter, or Viewer)
+public type ProjectMembershipCompactAllOf2 record {
+    # Whether the member has admin, editor, commenter, or viewer access to the project
+    @jsondata:Name {value: "access_level"}
+    "admin"|"editor"|"commenter"|"viewer" accessLevel?;
+    ProjectCompact parent?;
+    MemberCompact member?;
+};
+
+public type ProjectStatusResponseAllOf2 record {
+    UserCompact author?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # The time at which this project status was last modified.
+    # *Note: This does not currently reflect any changes in associations such as comments that may have been added or removed from the project status.*
+    @jsondata:Name {value: "modified_at"}
+    string modifiedAt?;
+    @jsondata:Name {value: "created_by"}
+    UserCompact createdBy?;
+};
+
+# Represents the Queries record for the operation: getAttachmentsForObject
+public type GetAttachmentsForObjectQueries record {
+    # Globally unique identifier for object to fetch statuses from. Must be a GID for a `project`, `project_brief`, or `task`
+    string parent;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("connected_to_app"|"created_at"|"download_url"|"host"|"name"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permanent_url"|"resource_subtype"|"size"|"uri"|"view_url")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type PortfolioRequestAllOf2 record {
+    # Gid of an object
+    string workspace?;
+    # True if the portfolio is public to its workspace members
+    boolean 'public?;
+    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user
+    string[] members?;
+};
+
+# *Conditional*
+public type StoryResponseDates record {
+    # The day on which work for this goal begins, or null if the goal has no start date. This takes a date with `YYYY-MM-DD` format, and cannot be set unless there is an accompanying due date
+    @jsondata:Name {value: "start_on"}
+    string? startOn?;
+    # The UTC date and time on which this task is due, or null if the task has no due time. This takes an ISO 8601 date string in UTC and should not be used together with `due_on`
+    @jsondata:Name {value: "due_at"}
+    string? dueAt?;
+    # The localized day on which this goal is due. This takes a date with format `YYYY-MM-DD`
+    @jsondata:Name {value: "due_on"}
+    string dueOn?;
+};
+
+public type TaskGidRemoveDependenciesBody record {
+    ModifyDependenciesRequest data?;
+};
+
+public type EnumOptionInsertRequest record {
+    # An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option
+    @jsondata:Name {value: "after_enum_option"}
+    string afterEnumOption?;
+    # The gid of the enum option to relocate
+    @jsondata:Name {value: "enum_option"}
+    string enumOption;
+    # An existing enum option within this custom field before which the new enum option should be inserted. Cannot be provided together with after_enum_option
+    @jsondata:Name {value: "before_enum_option"}
+    string beforeEnumOption?;
+};
+
+public type GoalRequestAllOf2 record {
+    string[] followers?;
+};
+
+public type WorkspaceGidProjectsBody record {
+    ProjectRequest data?;
+};
+
+public type PortfolioMembershipResponse PortfolioMembershipBase;
+
+# A set of filters to specify a whitelist for what types of events will be delivered
+public type WebhookRequestFilters record {
+    *WebhookFilter;
+    *FiltersAllOf2;
+};
+
+# The entity that triggered the event. Will typically be a user
+public type AuditLogEventActor record {
+    # Globally unique identifier of the actor, if it is a user
+    string gid?;
+    # The type of actor.
+    # Can be one of `user`, `asana`, `asana_support`, `anonymous`, or `external_administrator`
+    @jsondata:Name {value: "actor_type"}
+    "user"|"asana"|"asana_support"|"anonymous"|"external_administrator" actorType?;
+    # The name of the actor, if it is a user
+    string name?;
+    # The email of the actor, if it is a user
+    string email?;
+};
+
+public type GoalMembershipCompact record {
+    *GoalMembershipBase;
+    *GoalMembershipCompactAllOf2;
+};
+
+# A response object returned from a batch request
+public type BatchResponse record {
+    # A map of HTTP headers specific to this result. This is primarily used for returning a `Location` header to accompany a `201 Created` result.  The parent HTTP response will contain all common headers
+    record {} headers?;
+    # The HTTP status code that the invoked endpoint returned
+    @jsondata:Name {value: "status_code"}
+    int statusCode?;
+    # The JSON body that the invoked endpoint returned
+    record {} body?;
+};
+
+public type SectionTaskInsertRequest record {
+    # An existing task within this section before which the added task should be inserted. Cannot be provided together with insert_after
+    @jsondata:Name {value: "insert_before"}
+    string insertBefore?;
+    # The task to add to this section
+    string task;
+    # An existing task within this section after which the added task should be inserted. Cannot be provided together with insert_before
+    @jsondata:Name {value: "insert_after"}
+    string insertAfter?;
+};
+
+public type MembershipsBody record {
+    CreateMembershipRequest data?;
+};
+
+public type ProjectMembershipBase ProjectMembershipCompact;
+
+public type CustomFieldSettingBase CustomFieldSettingCompact;
+
+# Represents the Queries record for the operation: updateWebhook
+public type UpdateWebhookQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("active"|"created_at"|"filters"|"filters.action"|"filters.fields"|"filters.resource_subtype"|"last_failure_at"|"last_failure_content"|"last_success_at"|"resource"|"resource.name"|"target")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type ProjectGidSectionsBody record {
+    SectionRequest data?;
+};
+
+public type TaskAddTagRequest record {
+    # The tag's gid to add to the task
+    string tag;
+};
+
+# Provides a set of configurations for controlling the behaviours when communicating with a remote HTTP endpoint.
+@display {label: "Connection Config"}
+public type ConnectionConfig record {|
+    # Configurations related to client authentication
+    http:BearerTokenConfig|OAuth2RefreshTokenGrantConfig auth;
+    # The HTTP version understood by the client
+    http:HttpVersion httpVersion = http:HTTP_2_0;
+    # Configurations related to HTTP/1.x protocol
+    http:ClientHttp1Settings http1Settings = {};
+    # Configurations related to HTTP/2 protocol
+    http:ClientHttp2Settings http2Settings = {};
+    # The maximum time to wait (in seconds) for a response before closing the connection
+    decimal timeout = 30;
+    # The choice of setting `forwarded`/`x-forwarded` header
+    string forwarded = "disable";
+    # Configurations associated with Redirection
+    http:FollowRedirects followRedirects?;
+    # Configurations associated with request pooling
+    http:PoolConfiguration poolConfig?;
+    # HTTP caching related configurations
+    http:CacheConfig cache = {};
+    # Specifies the way of handling compression (`accept-encoding`) header
+    http:Compression compression = http:COMPRESSION_AUTO;
+    # Configurations associated with the behaviour of the Circuit Breaker
+    http:CircuitBreakerConfig circuitBreaker?;
+    # Configurations associated with retrying
+    http:RetryConfig retryConfig?;
+    # Configurations associated with cookies
+    http:CookieConfig cookieConfig?;
+    # Configurations associated with inbound response size limits
+    http:ResponseLimitConfigs responseLimits = {};
+    # SSL/TLS-related options
+    http:ClientSecureSocket secureSocket?;
+    # Proxy server related options
+    http:ProxyConfig proxy?;
+    # Provides settings related to client socket configuration
+    http:ClientSocketConfig socketConfig = {};
+    # Enables the inbound payload validation functionality which provided by the constraint package. Enabled by default
+    boolean validation = true;
+    # Enables relaxed data binding on the client side. When enabled, `nil` values are treated as optional, 
+    # and absent fields are handled as `nilable` types. Enabled by default.
+    boolean laxDataBinding = true;
+|};
+
+# Represents the Queries record for the operation: getWorkspace
+public type GetWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("email_domains"|"is_organization"|"name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type RuleTriggerResponse record {
+    # Message providing more detail about the result
+    string message?;
+};
+
+public type TemplateRoleAllOf2 record {
+    # Name of the template role
+    string name?;
+};
+
+public type TaskAddProjectRequest record {
+    # A task in the project to insert the task before, or `null` to insert at the end of the list
+    @jsondata:Name {value: "insert_before"}
+    string? insertBefore?;
+    # The project to add the task to
+    string project;
+    # A section in the project to insert the task into. The task will be inserted at the bottom of the section
+    string? section?;
+    # A task in the project to insert the task after, or `null` to insert at the beginning of the list
+    @jsondata:Name {value: "insert_after"}
+    string? insertAfter?;
+};
+
+public type MemberCompact record {
+    *AsanaResource;
+    # The name of the member
+    string name?;
+    # The type of the member (team or user)
+    @jsondata:Name {value: "resource_type"}
+    string resourceType?;
+};
+
+public type GoalCompactAllOf2 record {
+    record {*UserCompact;} owner?;
+    # The name of the goal
+    string name?;
+};
+
+public type TagsBody record {
+    TagRequest data?;
+};
+
+public type TeamGidAddUserBody record {
+    TeamAddUserRequest data?;
+};
+
+# Represents the Queries record for the operation: addSupportingRelationship
+public type AddSupportingRelationshipQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("contribution_weight"|"resource_subtype"|"supported_goal"|"supported_goal.name"|"supported_goal.owner"|"supported_goal.owner.name"|"supporting_resource"|"supporting_resource.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type ProjectBase record {
+    *ProjectCompact;
+    *ProjectBaseAllOf2;
+};
+
+public type RuleTriggerGidRunBody record {
+    RuleTriggerRequest data?;
+};
+
+# Represents the Queries record for the operation: removeDependentsForTask
+public type RemoveDependentsForTaskQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: updateMembership
+public type UpdateMembershipQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type CustomFieldResponse record {
+    *CustomFieldBase;
+    # This field tells the type of the custom field
+    @jsondata:Name {value: "representation_type"}
+    "text"|"enum"|"multi_enum"|"number"|"date"|"people"|"formula"|"custom_id" representationType?;
+    # *Conditional*. This flag describes whether a custom field is read only
+    @jsondata:Name {value: "is_value_read_only"}
+    boolean isValueReadOnly?;
+    # *Conditional*. Only relevant for custom fields of type `people`. This array of [compact user](/reference/users) objects reflects the values of a `people` custom field
+    @jsondata:Name {value: "people_value"}
+    UserCompact[] peopleValue?;
+    # *Conditional*. This flag describes whether a custom field is a formula custom field
+    @jsondata:Name {value: "is_formula_field"}
+    boolean isFormulaField?;
+    # This field is the unique custom ID string for the custom field
+    @jsondata:Name {value: "id_prefix"}
+    string? idPrefix?;
+    @jsondata:Name {value: "created_by"}
+    UserCompact createdBy?;
+};
+
+public type TeamRequestAllOf2 record {
+    # Controls who can edit team visibility and trash teams
+    @jsondata:Name {value: "edit_team_visibility_or_trash_team_access_level"}
+    "all_team_members"|"only_team_admins" editTeamVisibilityOrTrashTeamAccessLevel?;
+    # Controls who can accept or deny join team requests for a Membership by Request team
+    @jsondata:Name {value: "join_request_management_access_level"}
+    "all_team_members"|"only_team_admins" joinRequestManagementAccessLevel?;
+    # The visibility of the team to users in the same organization
+    "secret"|"request_to_join"|"public" visibility?;
+    # Controls who can remove team members
+    @jsondata:Name {value: "team_member_removal_access_level"}
+    "all_team_members"|"only_team_admins" teamMemberRemovalAccessLevel?;
+    # Controls who can accept or deny member invites for a given team
+    @jsondata:Name {value: "member_invite_management_access_level"}
+    "all_team_members"|"only_team_admins" memberInviteManagementAccessLevel?;
+    # The organization/workspace the team belongs to. This must be the same organization you are in and cannot be changed once set
+    string organization?;
+    # Controls who can edit team name and description
+    @jsondata:Name {value: "edit_team_name_or_description_access_level"}
+    "all_team_members"|"only_team_admins" editTeamNameOrDescriptionAccessLevel?;
+    # The description of the team
+    string description?;
+    # Controls who can accept or deny guest invites for a given team
+    @jsondata:Name {value: "guest_invite_management_access_level"}
+    "all_team_members"|"only_team_admins" guestInviteManagementAccessLevel?;
+    # The description of the team with formatting as HTML
+    @jsondata:Name {value: "html_description"}
+    string htmlDescription?;
+};
+
+# Represents the Queries record for the operation: getProjectMembershipsForProject
+public type GetProjectMembershipsForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("access_level"|"member"|"member.name"|"offset"|"parent"|"parent.name"|"path"|"uri")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+    # A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    string user?;
+};
+
+public type JobCompact record {
+    *AsanaResource;
+    *JobCompactAllOf2;
+};
+
+# A *project* represents a prioritized list of tasks in Asana or a board with columns of tasks represented as cards. It exists in a single workspace or organization and is accessible to a subset of users in that workspace or organization, depending on its permissions
+public type ProjectCompactAllOf2 record {
+    # Name of the project. This is generally a short sentence fragment that fits on a line in the UI for maximum readability. However, it can be longer
+    string name?;
+};
+
+# Represents the Queries record for the operation: getTeamMembership
+public type GetTeamMembershipQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("is_admin"|"is_guest"|"is_limited_access"|"team"|"team.name"|"user"|"user.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getSection
+public type GetSectionQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"name"|"project"|"project.name"|"projects"|"projects.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type PortfolioRequest record {
+    *PortfolioBase;
+    *PortfolioRequestAllOf2;
+};
+
+public type ProjectGidProjectBriefsBody record {
+    ProjectBriefRequest data?;
+};
+
+public type TaskTemplateBase TaskTemplateCompact;
+
+# A user identification object for specification with the addUser/removeUser endpoints
+public type WorkspaceAddUserRequest record {
+    # A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    string user?;
+};
+
+# A *Project Brief* allows you to explain the what and why of the project to your team
+public type ProjectBriefCompactAllOf2 record {
+};
+
+public type TimeTrackingEntryBaseAllOf2 record {
+    TaskCompact task?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+};
+
+# Represents the Queries record for the operation: getAuditLogEvents
+public type GetAuditLogEventsQueries record {
+    # Filter to events created before this time (exclusive)
+    @http:Query {name: "end_at"}
+    string endAt?;
+    # Filter to events of this type.
+    # Refer to the [supported audit log events](/docs/audit-log-events#supported-audit-log-events) for a full list of values
+    @http:Query {name: "event_type"}
+    string eventType?;
+    # Filter to events with an actor of this type.
+    # This only needs to be included if querying for actor types without an ID. If `actor_gid` is included, this should be excluded
+    @http:Query {name: "actor_type"}
+    "user"|"asana"|"asana_support"|"anonymous"|"external_administrator" actorType?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+    # Filter to events triggered by the actor with this ID
+    @http:Query {name: "actor_gid"}
+    string actorGid?;
+    # Filter to events with this resource ID
+    @http:Query {name: "resource_gid"}
+    string resourceGid?;
+    # Filter to events created after this time (inclusive)
+    @http:Query {name: "start_at"}
+    string startAt?;
+};
+
+# A WebhookFilter can be passed on creation of a webhook in order to filter the types of actions that trigger delivery of an [event](/reference/events)
+public type WebhookFilter record {
+    # The type of the resource which created the event when modified; for example, to filter to changes on regular tasks this field should be set to `task`
+    @jsondata:Name {value: "resource_type"}
+    string resourceType?;
+    # The type of change on the **resource** to pass through the filter. For more information refer to `Event.action` in the [event](/reference/events) schema. This can be one of `changed`, `added`, `removed`, `deleted`, and `undeleted` depending on the nature of what has occurred on the resource
+    string action?;
+    # *Conditional.* A whitelist of fields for events which will pass the filter when the resource is changed. These can be any combination of the fields on the resources themselves. This field is only valid for `action` of type `changed`
+    string[] fields?;
+    # The resource subtype of the resource that the filter applies to. This should be set to the same value as is returned on the `resource_subtype` field on the resources themselves
+    @jsondata:Name {value: "resource_subtype"}
+    string resourceSubtype?;
+};
+
+# Represents the Queries record for the operation: getUsersForWorkspace
+public type GetUsersForWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("email"|"name"|"photo"|"photo.image_1024x1024"|"photo.image_128x128"|"photo.image_21x21"|"photo.image_27x27"|"photo.image_36x36"|"photo.image_60x60"|"workspaces"|"workspaces.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type TeamMembershipBase TeamMembershipCompact;
+
+public type UserBaseResponse record {
+    *UserBase;
+    *UserBaseResponseAllOf2;
+};
+
+public type GoalRelationshipResponseAllOf2 record {
+};
+
+# Represents the Queries record for the operation: typeaheadForWorkspace
+public type TypeaheadForWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("name")[] optFields?;
+    # The string that will be used to search for relevant objects. If an empty string is passed in, the API will return results
+    string query?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # The type of values the typeahead should return. You can choose from one of the following: `custom_field`, `goal`, `project`, `project_template`, `portfolio`, `tag`, `task`, `team`, and `user`. Note that unlike in the names of endpoints, the types listed here are in singular form (e.g. `task`). Using multiple types is not yet supported
+    "custom_field"|"goal"|"project"|"project_template"|"portfolio"|"tag"|"task"|"team"|"user" resource_type = "user";
+    # The number of results to return. The default is 20 if this parameter is omitted, with a minimum of 1 and a maximum of 100. If there are fewer results found than requested, all will be returned
+    int count?;
+    # *Deprecated: new integrations should prefer the resource_type field.*
+    "custom_field"|"portfolio"|"project"|"tag"|"task"|"user" 'type = "user";
+};
+
+# Represents the Queries record for the operation: updateTag
+public type UpdateTagQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"permalink_url"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type MembershipResponse GoalMembershipResponse|ProjectMembershipCompactResponse;
+
+public type PortfolioRemoveItemRequest record {
+    # The item to remove from the portfolio
+    string item;
+};
+
+public type ProjectTemplateResponse ProjectTemplateBase;
+
+# Represents the Queries record for the operation: instantiateTask
+public type InstantiateTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: removeTagForTask
+public type RemoveTagForTaskQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type TagCreateTagForWorkspaceRequestAllOf2 record {
+    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user
+    string[] followers?;
+};
+
+public type TimeTrackingEntryCompact record {
+    *AsanaResource;
+    *TimeTrackingEntryCompactAllOf2;
+};
+
+# Represents the Queries record for the operation: getTags
+public type GetTagsQueries record {
+    # The workspace to filter tags on
+    string workspace?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"offset"|"path"|"permalink_url"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type TaskTemplateGidInstantiateTaskBody record {
+    TaskTemplateInstantiateTaskRequest data?;
+};
+
+public type TaskTemplateResponse record {
+    *TaskTemplateBase;
+    # The configuration for the task that will be created from this template
+    TaskTemplateRecipe template?;
+    # Name of the task template
+    string name?;
+    # The project that this task template belongs to
+    ProjectCompact? project?;
+    # The time at which this task template was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # The user who created this task template
+    @jsondata:Name {value: "created_by"}
+    UserCompact createdBy?;
+};
+
+# Represents the Queries record for the operation: getFavoritesForUser
+public type GetFavoritesForUserQueries record {
+    # The workspace in which to get favorites
+    string workspace;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("name"|"offset"|"path"|"uri")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+    # The resource type of favorites to be returned
+    "portfolio"|"project"|"tag"|"task"|"user"|"project_template" resource_type = "project";
+};
+
+public type GoalsgoalGidBody record {
+    GoalUpdateRequest data?;
+};
+
+# Represents the Queries record for the operation: updateStory
+public type UpdateStoryQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("assignee"|"assignee.name"|"created_at"|"created_by"|"created_by.name"|"custom_field"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"dependency"|"dependency.created_by"|"dependency.name"|"dependency.resource_subtype"|"duplicate_of"|"duplicate_of.created_by"|"duplicate_of.name"|"duplicate_of.resource_subtype"|"duplicated_from"|"duplicated_from.created_by"|"duplicated_from.name"|"duplicated_from.resource_subtype"|"follower"|"follower.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"is_editable"|"is_edited"|"is_pinned"|"liked"|"likes"|"likes.user"|"likes.user.name"|"new_approval_status"|"new_date_value"|"new_dates"|"new_dates.due_at"|"new_dates.due_on"|"new_dates.start_on"|"new_enum_value"|"new_enum_value.color"|"new_enum_value.enabled"|"new_enum_value.name"|"new_multi_enum_values"|"new_multi_enum_values.color"|"new_multi_enum_values.enabled"|"new_multi_enum_values.name"|"new_name"|"new_number_value"|"new_people_value"|"new_people_value.name"|"new_resource_subtype"|"new_section"|"new_section.name"|"new_text_value"|"num_hearts"|"num_likes"|"old_approval_status"|"old_date_value"|"old_dates"|"old_dates.due_at"|"old_dates.due_on"|"old_dates.start_on"|"old_enum_value"|"old_enum_value.color"|"old_enum_value.enabled"|"old_enum_value.name"|"old_multi_enum_values"|"old_multi_enum_values.color"|"old_multi_enum_values.enabled"|"old_multi_enum_values.name"|"old_name"|"old_number_value"|"old_people_value"|"old_people_value.name"|"old_resource_subtype"|"old_section"|"old_section.name"|"old_text_value"|"previews"|"previews.fallback"|"previews.footer"|"previews.header"|"previews.header_link"|"previews.html_text"|"previews.text"|"previews.title"|"previews.title_link"|"project"|"project.name"|"resource_subtype"|"source"|"sticker_name"|"story"|"story.created_at"|"story.created_by"|"story.created_by.name"|"story.resource_subtype"|"story.text"|"tag"|"tag.name"|"target"|"target.created_by"|"target.name"|"target.resource_subtype"|"task"|"task.created_by"|"task.name"|"task.resource_subtype"|"text"|"type")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type GoalBase record {
+    *AsanaResource;
+    *GoalBaseAllOf2;
+};
+
+public type WorkspaceResponseAllOf2 record {
+    # Whether the workspace is an *organization*
+    @jsondata:Name {value: "is_organization"}
+    boolean isOrganization?;
+    # The email domains that are associated with this workspace
+    @jsondata:Name {value: "email_domains"}
+    string[] emailDomains?;
+};
+
+public type MembershipCompact GoalMembershipCompact|ProjectMembershipCompactResponse;
+
+public type ProjectBriefBase record {
+    *ProjectBriefCompact;
+    *ProjectBriefBaseAllOf2;
+};
+
+# A *portfolio* gives a high-level overview of the status of multiple initiatives in Asana. Portfolios provide a dashboard overview of the state of multiple projects, including a progress report and the most recent [project status](/reference/project-statuses) update.
+# Portfolios have some restrictions on size. Each portfolio has a max of 500 items and, like projects, a max of 20 custom fields
+public type PortfolioCompactAllOf2 record {
+    # The name of the portfolio
+    string name?;
+};
+
+# Represents the Queries record for the operation: deleteStatus
+public type DeleteStatusQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getPortfolios
+public type GetPortfoliosQueries record {
+    # The user who owns the portfolio. Currently, API users can only get a list of portfolios that they themselves own, unless the request is made from a Service Account. In the case of a Service Account, if this parameter is specified, then all portfolios owned by this parameter are returned. Otherwise, all portfolios across the workspace are returned
+    string owner?;
+    # The workspace or organization to filter portfolios on
+    string workspace;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"offset"|"owner"|"owner.name"|"path"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type GoalMetricCurrentValueRequest record {
+    *AsanaResource;
+    *GoalMetricCurrentValueRequestAllOf2;
+};
+
+public type EnumOptionRequestAllOf2 record {
+    # An existing enum option within this custom field before which the new enum option should be inserted. Cannot be provided together with after_enum_option
+    @jsondata:Name {value: "insert_before"}
+    string insertBefore?;
+    # An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option
+    @jsondata:Name {value: "insert_after"}
+    string insertAfter?;
+};
+
+public type TaskTemplateRecipeCompact TaskTemplateRecipeCompactAllOf1;
+
+# Represents the Queries record for the operation: getProjectTemplates
+public type GetProjectTemplatesQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"description"|"html_description"|"name"|"offset"|"owner"|"path"|"public"|"requested_dates"|"requested_dates.description"|"requested_dates.name"|"requested_roles"|"requested_roles.name"|"team"|"team.name"|"uri")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type SectionBase SectionCompact;
+
+public type UserTaskListCompact record {
+    *AsanaResource;
+    *UserTaskListCompactAllOf2;
+};
+
+# A user identification object for specification with the addUser/removeUser endpoints
+public type WorkspaceRemoveUserRequest record {
+    # A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    string user?;
+};
+
+# Represents the Queries record for the operation: getGoal
+public type GetGoalQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: insertEnumOptionForCustomField
+public type InsertEnumOptionForCustomFieldQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"enabled"|"name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type TaskTemplateCompact record {
+    *AsanaResource;
+    *TaskTemplateCompactAllOf2;
+};
+
+# Represents the Queries record for the operation: getCustomFieldSettingsForPortfolio
+public type GetCustomFieldSettingsForPortfolioQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("custom_field"|"custom_field.asana_created_field"|"custom_field.created_by"|"custom_field.created_by.name"|"custom_field.currency_code"|"custom_field.custom_label"|"custom_field.custom_label_position"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.description"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.format"|"custom_field.has_notifications_enabled"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.is_global_to_workspace"|"custom_field.is_value_read_only"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.people_value"|"custom_field.people_value.name"|"custom_field.precision"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"is_important"|"offset"|"parent"|"parent.name"|"path"|"project"|"project.name"|"uri")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+public type PortfolioBase record {
+    *PortfolioCompact;
+    *PortfolioBaseAllOf2;
+};
+
+# Represents the Queries record for the operation: getTeamsForUser
+public type GetTeamsForUserQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("description"|"edit_team_name_or_description_access_level"|"edit_team_visibility_or_trash_team_access_level"|"guest_invite_management_access_level"|"html_description"|"join_request_management_access_level"|"member_invite_management_access_level"|"name"|"offset"|"organization"|"organization.name"|"path"|"permalink_url"|"team_member_removal_access_level"|"uri"|"visibility")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # The workspace or organization to filter teams on
+    string organization;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+# Represents the Queries record for the operation: deleteAttachment
+public type DeleteAttachmentQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type AsanaNamedResourceAllOf2 record {
+    # The name of the object
+    string name?;
+};
+
+public type TaskSetParentRequest record {
+    # The new parent of the task, or `null` for no parent
+    string parent;
+    # A subtask of the parent to insert the task before, or `null` to insert at the end of the list
+    @jsondata:Name {value: "insert_before"}
+    string insertBefore?;
+    # A subtask of the parent to insert the task after, or `null` to insert at the beginning of the list
+    @jsondata:Name {value: "insert_after"}
+    string insertAfter?;
+};
+
+public type ProjectTemplateGidInstantiateProjectBody record {
+    ProjectTemplateInstantiateProjectRequest data?;
+};
+
+# Represents the Queries record for the operation: createProject
+public type CreateProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type EnumOption record {
+    *AsanaResource;
+    *EnumOptionAllOf2;
+};
+
+# Represents the Queries record for the operation: deleteTag
+public type DeleteTagQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: updateGoalRelationship
+public type UpdateGoalRelationshipQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("contribution_weight"|"resource_subtype"|"supported_goal"|"supported_goal.name"|"supported_goal.owner"|"supported_goal.owner.name"|"supporting_resource"|"supporting_resource.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type UserCompact record {
+    *AsanaResource;
+    *UserCompactAllOf2;
+};
+
+public type TaskGidRemoveProjectBody record {
+    TaskRemoveProjectRequest data?;
+};
+
+# Represents the Queries record for the operation: removeCustomFieldSettingForProject
+public type RemoveCustomFieldSettingForProjectQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type EnumOptionRequest record {
+    *EnumOptionBase;
+    *EnumOptionRequestAllOf2;
+};
+
+public type ProjectBriefCompact record {
+    *AsanaResource;
+    *ProjectBriefCompactAllOf2;
+};
+
+# Represents the Queries record for the operation: createTimeTrackingEntry
+public type CreateTimeTrackingEntryQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"created_by"|"created_by.name"|"duration_minutes"|"entered_on"|"task"|"task.created_by"|"task.name"|"task.resource_subtype")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type ProjectResponse record {
+    *ProjectBase;
+    *ProjectResponseAllOf2;
+};
+
+public type TimePeriodBaseAllOf2 record {
+    TimePeriodCompact parent?;
+};
+
+public type TeamBase TeamCompact;
+
+public type UserBase UserCompact;
+
+public type ProjectBriefRequest record {
+    *ProjectBriefBase;
+    *ProjectBriefRequestAllOf2;
+};
+
+# Represents the Queries record for the operation: getSectionsForProject
+public type GetSectionsForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"name"|"offset"|"path"|"project"|"project.name"|"projects"|"projects.name"|"uri")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: duplicateTask
+public type DuplicateTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type GoalMetricCurrentValueRequestAllOf2 record {
+    # *Conditional*. This number is the current value of a goal metric of type number
+    @jsondata:Name {value: "current_number_value"}
+    decimal currentNumberValue?;
+};
+
+# The context from which this event originated
+public type AuditLogEventContext record {
+    # The name of the OAuth App that initiated the event.
+    # Only present if the `api_authentication_method` is `oauth`
+    @jsondata:Name {value: "oauth_app_name"}
+    string oauthAppName?;
+    # The type of context.
+    # Can be one of `web`, `desktop`, `mobile`, `asana_support`, `asana`, `email`, or `api`
+    @jsondata:Name {value: "context_type"}
+    "web"|"desktop"|"mobile"|"asana_support"|"asana"|"email"|"api" contextType?;
+    # The IP address of the client that initiated the event, if applicable
+    @jsondata:Name {value: "client_ip_address"}
+    string clientIpAddress?;
+    # The user agent of the client that initiated the event, if applicable
+    @jsondata:Name {value: "user_agent"}
+    string userAgent?;
+    # The authentication method used in the context of an API request.
+    # Only present if the `context_type` is `api`. Can be one of `cookie`, `oauth`, `personal_access_token`, or `service_account`
+    @jsondata:Name {value: "api_authentication_method"}
+    "cookie"|"oauth"|"personal_access_token"|"service_account" apiAuthenticationMethod?;
+};
+
+public type GoalGidRemoveFollowersBody record {
+    TaskAddFollowersRequest data?;
+};
+
+public type OrganizationExportResponse OrganizationExportBase;
+
+# Represents the Queries record for the operation: getTeamMemberships
+public type GetTeamMembershipsQueries record {
+    # Globally unique identifier for the workspace. This parameter must be used with the user parameter
+    string workspace?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("is_admin"|"is_guest"|"is_limited_access"|"offset"|"path"|"team"|"team.name"|"uri"|"user"|"user.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+    # Globally unique identifier for the team
+    string team?;
+    # A string identifying a user. This can either be the string "me", an email, or the gid of a user. This parameter must be used with the workspace parameter
+    string user?;
+};
+
+# Represents the Queries record for the operation: getProjectTemplatesForTeam
+public type GetProjectTemplatesForTeamQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"description"|"html_description"|"name"|"offset"|"owner"|"path"|"public"|"requested_dates"|"requested_dates.description"|"requested_dates.name"|"requested_roles"|"requested_roles.name"|"team"|"team.name"|"uri")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getUsers
+public type GetUsersQueries record {
+    # The workspace or organization ID to filter users on
+    string workspace?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("email"|"name"|"offset"|"path"|"photo"|"photo.image_1024x1024"|"photo.image_128x128"|"photo.image_21x21"|"photo.image_27x27"|"photo.image_36x36"|"photo.image_60x60"|"uri"|"workspaces"|"workspaces.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+    # The team ID to filter users on
+    string team?;
+};
+
+public type PortfolioGidAddCustomFieldSettingBody record {
+    AddCustomFieldSettingRequest data?;
+};
+
+public type ProjectSaveAsTemplateRequest record {
+    # Sets the workspace of the new project template. Only specify workspace if the project exists in a workspace
+    string workspace?;
+    # Sets the project template to public to its team
+    boolean 'public;
+    # The name of the new project template
+    string name;
+    # Sets the team of the new project template. If the project exists in an organization, specify team and not workspace
+    string team?;
+};
+
+# Represents the Queries record for the operation: getSubtasksForTask
+public type GetSubtasksForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type GoalRelationshipBaseAllOf2 record {
+    @jsondata:Name {value: "supported_goal"}
+    record {*GoalCompact;} supportedGoal?;
+};
+
+# Represents the Queries record for the operation: addTaskForSection
+public type AddTaskForSectionQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# A *user* object represents an account in Asana that can be given access to various workspaces, projects, and tasks
+public type UserCompactAllOf2 record {
+    # *Read-only except when same user as requester*. The user’s name
+    string name?;
+};
+
+public type TimePeriodCompact record {
+    *AsanaResource;
+    *TimePeriodCompactAllOf2;
+};
+
+public type BatchBody record {
+    BatchRequest data?;
+};
+
+public type ProjectGidRemoveMembersBody record {
+    RemoveMembersRequest data?;
+};
+
+# A set of dependent tasks
+public type ModifyDependentsRequest record {
+    # An array of task gids that are dependents of the given task
+    string[] dependents?;
+};
+
+# Represents the Queries record for the operation: getWorkspaces
+public type GetWorkspacesQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("email_domains"|"is_organization"|"name"|"offset"|"path"|"uri")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+public type CustomFieldscustomFieldGidBody record {
+    CustomFieldRequest data?;
+};
+
+public type TaskResponseAllOf2 record {
+    record {*TaskCompact;} parent?;
+    record {*WorkspaceCompact;} workspace?;
+    # Array of users following this task
+    UserCompact[] followers?;
+    # *Create-only.* Array of projects this task is associated with. At task creation time, this array can be used to add the task to many projects at once. After task creation, these associations can be modified using the addProject and removeProject endpoints
+    ProjectCompact[] projects?;
+    # Array of custom field values applied to the task. These represent the custom field values recorded on this project for a particular custom field. For example, these custom field values will contain an `enum_value` property for custom fields of type `enum`, a `text_value` property for custom fields of type `text`, and so on. Please note that the `gid` returned on each custom field value *is identical* to the `gid` of the custom field, which allows referencing the custom field metadata through the `/custom_fields/custom_field-gid` endpoint
+    @jsondata:Name {value: "custom_fields"}
+    CustomFieldResponse[] customFields?;
+    UserCompact assignee?;
+    # A url that points directly to the object within Asana
+    @jsondata:Name {value: "permalink_url"}
+    string permalinkUrl?;
+    @jsondata:Name {value: "assignee_section"}
+    record {*SectionCompact;} assigneeSection?;
+    # Array of tags associated with this task. In order to change tags on an existing task use `addTag` and `removeTag`
+    TagCompact[] tags?;
+};
+
+# Represents the Queries record for the operation: removeFollowerForTask
+public type RemoveFollowerForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type PortfoliosportfolioGidBody record {
+    PortfolioRequest data?;
+};
+
+public type StatusUpdateBase record {
+    *StatusUpdateCompact;
+    *StatusUpdateBaseAllOf2;
+};
+
+# Represents the Queries record for the operation: getTaskCountsForProject
+public type GetTaskCountsForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("num_completed_milestones"|"num_completed_tasks"|"num_incomplete_milestones"|"num_incomplete_tasks"|"num_milestones"|"num_tasks")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: removeUserForTeam
+public type RemoveUserForTeamQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getGoalRelationship
+public type GetGoalRelationshipQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("contribution_weight"|"resource_subtype"|"supported_goal"|"supported_goal.name"|"supported_goal.owner"|"supported_goal.owner.name"|"supporting_resource"|"supporting_resource.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getAttachment
+public type GetAttachmentQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("connected_to_app"|"created_at"|"download_url"|"host"|"name"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permanent_url"|"resource_subtype"|"size"|"view_url")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type StatusUpdateRequestAllOf2 record {
+    string parent;
+};
+
+public type TaskTemplateRecipeCompactAllOf1 record {
+    # The subtype of the task that will be created from this template
+    @jsondata:Name {value: "task_resource_subtype"}
+    "default_task"|"milestone_task"|"approval_task" taskResourceSubtype?;
+    # Name of the task that will be created from this template
+    string name?;
+};
+
+public type WorkspaceGidRemoveUserBody record {
+    WorkspaceRemoveUserRequest data?;
+};
+
+# Represents the Queries record for the operation: removeProjectForTask
+public type RemoveProjectForTaskQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type UserResponse record {
+    *UserBaseResponse;
+    *UserResponseAllOf2;
+};
+
+# An object representing a single event within an Asana domain.
+# 
+# Every audit log event is comprised of an `event_type`, `actor`, `resource`, and `context`. Some events will include additional metadata about the event under `details`. See our [currently supported list of events](/docs/audit-log-events#supported-audit-log-events) for more details
+public type AuditLogEvent record {
+    AuditLogEventActor actor?;
+    # Globally unique identifier of the `AuditLogEvent`, as a string
+    string gid?;
+    # The type of the event
+    @jsondata:Name {value: "event_type"}
+    string eventType?;
+    AuditLogEventResource 'resource?;
+    AuditLogEventContext context?;
+    # The time the event was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    AuditLogEventDetails details?;
+    # The category that this `event_type` belongs to
+    @jsondata:Name {value: "event_category"}
+    string eventCategory?;
+};
+
+# A user identification object for specification with the addUser/removeUser endpoints
+public type TeamAddUserRequest record {
+    # A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    string user?;
+};
+
+# A response object returned from the task count endpoint
+public type TaskCountResponse record {
+    # The number of tasks in a project
+    @jsondata:Name {value: "num_tasks"}
+    int numTasks?;
+    # The number of incomplete tasks in a project
+    @jsondata:Name {value: "num_incomplete_tasks"}
+    int numIncompleteTasks?;
+    # The number of incomplete milestones in a project
+    @jsondata:Name {value: "num_incomplete_milestones"}
+    int numIncompleteMilestones?;
+    # The number of milestones in a project
+    @jsondata:Name {value: "num_milestones"}
+    int numMilestones?;
+    # The number of completed tasks in a project
+    @jsondata:Name {value: "num_completed_tasks"}
+    int numCompletedTasks?;
+    # The number of completed milestones in a project
+    @jsondata:Name {value: "num_completed_milestones"}
+    int numCompletedMilestones?;
+};
+
+public type GoalRelationshipsgoalRelationshipGidBody record {
+    GoalRelationshipRequest data?;
+};
+
+public type TaskTemplateInstantiateTaskRequest record {
+    # The name of the new task. If not provided, the name of the task template will be used
+    string name?;
+};
+
+# Represents the Queries record for the operation: getCustomFieldSettingsForProject
+public type GetCustomFieldSettingsForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("custom_field"|"custom_field.asana_created_field"|"custom_field.created_by"|"custom_field.created_by.name"|"custom_field.currency_code"|"custom_field.custom_label"|"custom_field.custom_label_position"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.description"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.format"|"custom_field.has_notifications_enabled"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.is_global_to_workspace"|"custom_field.is_value_read_only"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.people_value"|"custom_field.people_value.name"|"custom_field.precision"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"is_important"|"offset"|"parent"|"parent.name"|"path"|"project"|"project.name"|"uri")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+public type GoalMembershipBase record {
+    *AsanaResource;
+    # Describes if member is commenter or editor in goal. This is preferred over role
+    @jsondata:Name {value: "access_level"}
+    "commenter"|"editor" accessLevel?;
+    record {*GoalCompact;} parent?;
+    # *Deprecated: Describes if the member is a commenter or editor in goal.*
+    "commenter"|"editor" role?;
+    record {*GoalCompact;} goal?;
+    # The base type of this resource
+    @jsondata:Name {value: "resource_type"}
+    string resourceType?;
+    MemberCompact member?;
+    # The type of membership
+    @jsondata:Name {value: "resource_subtype"}
+    string resourceSubtype?;
+};
+
+# Represents the Queries record for the operation: getWorkspaceMembership
+public type GetWorkspaceMembershipQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"is_active"|"is_admin"|"is_guest"|"user"|"user.name"|"user_task_list"|"user_task_list.name"|"user_task_list.owner"|"user_task_list.workspace"|"vacation_dates"|"vacation_dates.end_on"|"vacation_dates.start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type StatusUpdateCompact record {
+    *AsanaResource;
+    *StatusUpdateCompactAllOf2;
+};
+
+public type GoalsBody record {
+    GoalRequest data?;
+};
+
+# Represents the Queries record for the operation: createProjectBrief
+public type CreateProjectBriefQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("html_text"|"permalink_url"|"project"|"project.name"|"text"|"title")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: removeFollowersForProject
+public type RemoveFollowersForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: updatePortfolio
+public type UpdatePortfolioQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"owner"|"owner.name"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse20019 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    ProjectCompact[] data?;
+};
+
+public type CustomFieldSettingResponse record {
+    *CustomFieldSettingBase;
+    *CustomFieldSettingResponseAllOf2;
+};
+
+# Represents the Queries record for the operation: updateSection
+public type UpdateSectionQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"name"|"project"|"project.name"|"projects"|"projects.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type PortfolioGidRemoveItemBody record {
+    PortfolioRemoveItemRequest data?;
+};
+
+public type GoalMembershipResponse record {
+    *GoalMembershipBase;
+    *GoalMembershipResponseAllOf2;
+};
+
+# Represents the Queries record for the operation: createTag
+public type CreateTagQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"permalink_url"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type ProjectTemplateCompact record {
+    *AsanaResource;
+    *ProjectTemplateCompactAllOf2;
+};
+
+# Represents the Queries record for the operation: getTeamsForWorkspace
+public type GetTeamsForWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("description"|"edit_team_name_or_description_access_level"|"edit_team_visibility_or_trash_team_access_level"|"guest_invite_management_access_level"|"html_description"|"join_request_management_access_level"|"member_invite_management_access_level"|"name"|"offset"|"organization"|"organization.name"|"path"|"permalink_url"|"team_member_removal_access_level"|"uri"|"visibility")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+# Represents the Queries record for the operation: updateTask
+public type UpdateTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type RequestedRoleRequest record {
+    # Globally unique identifier of the template role in the project template
+    string gid?;
+    # The user id that should be assigned to the template role
+    string value?;
+};
+
+public type InlineResponse20021 record {
+    ProjectBriefResponse data?;
+};
+
+# An *organization_export* object represents a request to export the complete data of an Organization in JSON format
+public type OrganizationExportCompactAllOf2 record {
+    WorkspaceCompact organization?;
+    # Download this URL to retreive the full export of the organization
+    # in JSON format. It will be compressed in a gzip (.gz) container.
+    # 
+    # *Note: May be null if the export is still in progress or
+    # failed.  If present, this URL may only be valid for 1 hour from
+    # the time of retrieval. You should avoid persisting this URL
+    # somewhere and rather refresh on demand to ensure you do not keep
+    # stale URLs.*
+    @jsondata:Name {value: "download_url"}
+    string? downloadUrl?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # The current state of the export
+    "pending"|"started"|"finished"|"error" state?;
+};
+
+public type InlineResponse20020 record {
+    CustomFieldSettingResponse data?;
+};
+
+# Represents the Queries record for the operation: getUserTaskListForUser
+public type GetUserTaskListForUserQueries record {
+    # The workspace in which to get the user task list
+    string workspace;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("name"|"owner"|"workspace")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse20023 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    ProjectMembershipCompact[] data?;
+};
+
+# Represents the Queries record for the operation: addMembersForProject
+public type AddMembersForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse20022 record {
+    ProjectMembershipNormalResponse data?;
+};
+
+# Contains keys `start_on` and `end_on` for the vacation dates for the user in this workspace. If `start_on` is null, the entire `vacation_dates` object will be null. If `end_on` is before today, the entire `vacation_dates` object will be null
+public type WorkspaceMembershipResponseVacationDates record {
+    # The day on which the user's vacation in this workspace starts. This is a date with `YYYY-MM-DD` format
+    @jsondata:Name {value: "start_on"}
+    string startOn?;
+    # The day on which the user's vacation in this workspace ends, or null if there is no end date. This is a date with `YYYY-MM-DD` format
+    @jsondata:Name {value: "end_on"}
+    string? endOn?;
+};
+
+public type InlineResponse20025 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    ProjectStatusCompact[] data?;
+};
+
+public type AttachmentRequest record {
+    # *Optional*. Only relevant for external attachments with a parent task. A boolean indicating whether the current app should be connected with the attachment for the purposes of showing an app components widget. Requires the app to have been added to a project the parent task is in
+    @jsondata:Name {value: "connect_to_app"}
+    boolean connectToApp?;
+    # Required identifier of the parent task, project, or project_brief, as a string
+    string parent;
+    # Required for `asana` attachments
+    record {byte[] fileContent; string fileName;} file?;
+    # The name of the external resource being attached. Required for attachments of type `external`
+    string name?;
+    # The type of the attachment. Must be one of the given values. If not specified, a file attachment of type `asana` will be assumed. Note that if the value of `resource_subtype` is `external`, a `parent`, `name`, and `url` must also be provided
+    @jsondata:Name {value: "resource_subtype"}
+    "asana"|"dropbox"|"gdrive"|"onedrive"|"box"|"vimeo"|"external" resourceSubtype?;
+    # The URL of the external resource being attached. Required for attachments of type `external`
+    string url?;
+};
+
+public type InlineResponse20024 record {
+    ProjectStatusResponse data?;
+};
+
+public type InlineResponse20027 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    ProjectTemplateCompact[] data?;
+};
+
+public type InlineResponse20026 record {
+    ProjectTemplateResponse data?;
+};
+
+public type TaskResponse record {
+    *TaskBase;
+    *TaskResponseAllOf2;
+};
+
+public type InlineResponse20029 record {
+    RuleTriggerResponse data?;
+};
+
+public type InlineResponse20028 record {
+    TaskCountResponse data?;
+};
+
+# Represents the Queries record for the operation: removeCustomFieldSettingForPortfolio
+public type RemoveCustomFieldSettingForPortfolioQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type CreateMembershipRequestAllOf2 record {
+    # The gid of the `goal` or `project` to add the member to
+    string parent?;
+    # The role given to the member. Optional argument, will default to `commenter` for goals and the default project role for projects. Can be `editor` or `commenter` for goals. Can be `admin`,`editor` or `commenter` for projects
+    string role?;
+    # The gid of the user or team
+    string member?;
+};
+
+# Represents the Queries record for the operation: updateTeam
+public type UpdateTeamQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("description"|"edit_team_name_or_description_access_level"|"edit_team_visibility_or_trash_team_access_level"|"guest_invite_management_access_level"|"html_description"|"join_request_management_access_level"|"member_invite_management_access_level"|"name"|"organization"|"organization.name"|"permalink_url"|"team_member_removal_access_level"|"visibility")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type SectionResponseAllOf2 record {
+    # *Deprecated - please use project instead*
+    ProjectCompact[] projects?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    ProjectCompact project?;
+};
+
+# An *organization_export* request starts a job to export the complete data of the given Organization
+public type OrganizationExportRequest record {
+    # Globally unique identifier for the workspace or organization
+    string organization?;
+};
+
+# [Opt In](/docs/inputoutput-options). A *user* object represents an account in Asana that can be given access to various workspaces, projects, and tasks
+public type TaskCompactCreatedBy record {
+    # Globally unique identifier of the resource
+    string gid?;
+    # The type of resource
+    @jsondata:Name {value: "resource_type"}
+    string resourceType?;
+};
+
+# This object determines if a user is a member of a workspace
+public type WorkspaceMembershipCompactAllOf2 record {
+    WorkspaceCompact workspace?;
+    UserCompact user?;
+};
+
+public type TeamResponseAllOf2 record {
+    # Controls who can edit team visibility and trash teams
+    @jsondata:Name {value: "edit_team_visibility_or_trash_team_access_level"}
+    "all_team_members"|"only_team_admins" editTeamVisibilityOrTrashTeamAccessLevel?;
+    # Controls who can accept or deny join team requests for a Membership by Request team
+    @jsondata:Name {value: "join_request_management_access_level"}
+    "all_team_members"|"only_team_admins" joinRequestManagementAccessLevel?;
+    # The visibility of the team to users in the same organization
+    "secret"|"request_to_join"|"public" visibility?;
+    # Controls who can remove team members
+    @jsondata:Name {value: "team_member_removal_access_level"}
+    "all_team_members"|"only_team_admins" teamMemberRemovalAccessLevel?;
+    # Controls who can accept or deny member invites for a given team
+    @jsondata:Name {value: "member_invite_management_access_level"}
+    "all_team_members"|"only_team_admins" memberInviteManagementAccessLevel?;
+    record {*WorkspaceCompact;} organization?;
+    # Controls who can edit team name and description
+    @jsondata:Name {value: "edit_team_name_or_description_access_level"}
+    "all_team_members"|"only_team_admins" editTeamNameOrDescriptionAccessLevel?;
+    # [Opt In](/docs/inputoutput-options). The description of the team
+    string description?;
+    # Controls who can accept or deny guest invites for a given team
+    @jsondata:Name {value: "guest_invite_management_access_level"}
+    "all_team_members"|"only_team_admins" guestInviteManagementAccessLevel?;
+    # A url that points directly to the object within Asana
+    @jsondata:Name {value: "permalink_url"}
+    string permalinkUrl?;
+    # [Opt In](/docs/inputoutput-options). The description of the team with formatting as HTML
+    @jsondata:Name {value: "html_description"}
+    string htmlDescription?;
+};
+
+# Represents the Queries record for the operation: getUser
+public type GetUserQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("email"|"name"|"photo"|"photo.image_1024x1024"|"photo.image_128x128"|"photo.image_21x21"|"photo.image_27x27"|"photo.image_36x36"|"photo.image_60x60"|"workspaces"|"workspaces.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: createTagForWorkspace
+public type CreateTagForWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"permalink_url"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Information about the type of change that has occurred. This field is only present when the value of the property `action`, describing the action taken on the **resource**, is `changed`
+public type EventResponseChange record {
+    # *Conditional.* This property is only present when the value of the event's `change.action` is `added` _and_ the `added_value` is an Asana resource. This will be only the `gid` and `resource_type` of the resource when the events come from webhooks; this will be the compact representation (and can have fields expanded with [opt_fields](/docs/inputoutput-options)) when using the [get events](/reference/getevents) endpoint
+    @jsondata:Name {value: "added_value"}
+    anydata addedValue?;
+    # *Conditional.* This property is only present when the value of the event's `change.action` is `removed` _and_ the `removed_value` is an Asana resource. This will be only the `gid` and `resource_type` of the resource when the events come from webhooks; this will be the compact representation (and can have fields expanded with [opt_fields](/docs/inputoutput-options)) when using the [get events](/reference/getevents) endpoint
+    @jsondata:Name {value: "removed_value"}
+    anydata removedValue?;
+    # The name of the field that has changed in the resource
+    string 'field?;
+    # The type of action taken on the **field** which has been changed.  This can be one of `changed`, `added`, or `removed` depending on the nature of the change
+    string action?;
+    # *Conditional.* This property is only present when the value of the event's `change.action` is `changed` _and_ the `new_value` is an Asana resource. This will be only the `gid` and `resource_type` of the resource when the events come from webhooks; this will be the compact representation (and can have fields expanded with [opt_fields](/docs/inputoutput-options)) when using the [get events](/reference/getevents) endpoint
+    @jsondata:Name {value: "new_value"}
+    anydata newValue?;
+};
+
+# Represents the Queries record for the operation: getWebhook
+public type GetWebhookQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("active"|"created_at"|"filters"|"filters.action"|"filters.fields"|"filters.resource_subtype"|"last_failure_at"|"last_failure_content"|"last_success_at"|"resource"|"resource.name"|"target")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse20030 record {
+    SectionResponse data?;
+};
+
+# Represents the Queries record for the operation: duplicateProject
+public type DuplicateProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse20032 record {
+    StatusUpdateResponse data?;
+};
+
+public type ProjectRequest record {
+    *ProjectBase;
+    *ProjectRequestAllOf2;
+};
+
+public type InlineResponse20031 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    SectionCompact[] data?;
+};
+
+public type InlineResponse20034 record {
+    StoryResponse data?;
+};
+
+public type InlineResponse20033 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    StatusUpdateCompact[] data?;
+};
+
+public type InlineResponse20036 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TagCompact[] data?;
+};
+
+public type InlineResponse20035 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    StoryCompact[] data?;
+};
+
+public type CustomFieldBase record {
+    *CustomFieldCompact;
+    # *Conditional*. This flag describes whether a follower of a task with this field should receive inbox notifications from changes to this field
+    @jsondata:Name {value: "has_notifications_enabled"}
+    boolean hasNotificationsEnabled?;
+    # This flag describes whether this custom field is available to every container in the workspace. Before project-specific custom fields, this field was always true
+    @jsondata:Name {value: "is_global_to_workspace"}
+    boolean isGlobalToWorkspace?;
+    # *Conditional*. Only relevant for custom fields of type `enum`. This array specifies the possible values which an `enum` custom field can adopt. To modify the enum options, refer to [working with enum options](/reference/createenumoptionforcustomfield)
+    @jsondata:Name {value: "enum_options"}
+    EnumOption[] enumOptions?;
+    # Only relevant for custom fields with `custom` format. This depicts where to place the custom label. This will be null if the `format` is not `custom`
+    @jsondata:Name {value: "custom_label_position"}
+    "prefix"|"suffix"? customLabelPosition?;
+    # Only relevant for custom fields of type ‘Number’. This field dictates the number of places after the decimal to round to, i.e. 0 is integer values, 1 rounds to the nearest tenth, and so on. Must be between 0 and 6, inclusive.
+    # For percentage format, this may be unintuitive, as a value of 0.25 has a precision of 0, while a value of 0.251 has a precision of 1. This is due to 0.25 being displayed as 25%.
+    # The identifier format will always have a precision of 0
+    int precision?;
+    # The format of this custom field
+    "currency"|"identifier"|"percentage"|"custom"|"duration"|"none" format?;
+    # This is the string that appears next to the custom field value. This will be null if the `format` is not `custom`
+    @jsondata:Name {value: "custom_label"}
+    string? customLabel?;
+    # [Opt In](/docs/inputoutput-options). The description of the custom field
+    string description?;
+    # *Conditional*. A unique identifier to associate this field with the template source of truth
+    @jsondata:Name {value: "asana_created_field"}
+    "a_v_requirements"|"account_name"|"actionable"|"align_shipping_link"|"align_status"|"allotted_time"|"appointment"|"approval_stage"|"approved"|"article_series"|"board_committee"|"browser"|"campaign_audience"|"campaign_project_status"|"campaign_regions"|"channel_primary"|"client_topic_type"|"complete_by"|"contact"|"contact_email_address"|"content_channels"|"content_channels_needed"|"content_stage"|"content_type"|"contract"|"contract_status"|"cost"|"creation_stage"|"creative_channel"|"creative_needed"|"creative_needs"|"data_sensitivity"|"deal_size"|"delivery_appt"|"delivery_appt_date"|"department"|"department_responsible"|"design_request_needed"|"design_request_type"|"discussion_category"|"do_this_task"|"editorial_content_status"|"editorial_content_tag"|"editorial_content_type"|"effort"|"effort_level"|"est_completion_date"|"estimated_time"|"estimated_value"|"expected_cost"|"external_steps_needed"|"favorite_idea"|"feedback_type"|"financial"|"funding_amount"|"grant_application_process"|"hiring_candidate_status"|"idea_status"|"ids_link"|"ids_patient_link"|"implementation_stage"|"insurance"|"interview_area"|"interview_question_score"|"itero_scan_link"|"job_s_applied_to"|"lab"|"launch_status"|"lead_status"|"localization_language"|"localization_market_team"|"localization_status"|"meeting_minutes"|"meeting_needed"|"minutes"|"mrr"|"must_localize"|"name_of_foundation"|"need_to_follow_up"|"next_appointment"|"next_steps_sales"|"num_people"|"number_of_user_reports"|"office_location"|"onboarding_activity"|"owner"|"participants_needed"|"patient_date_of_birth"|"patient_email"|"patient_phone"|"patient_status"|"phone_number"|"planning_category"|"point_of_contact"|"position"|"post_format"|"prescription"|"priority"|"priority_level"|"product"|"product_stage"|"progress"|"project_size"|"project_status"|"proposed_budget"|"publish_status"|"reason_for_scan"|"referral"|"request_type"|"research_status"|"responsible_department"|"responsible_team"|"risk_assessment_status"|"room_name"|"sales_counterpart"|"sentiment"|"shipping_link"|"social_channels"|"stage"|"status"|"status_design"|"status_of_initiative"|"system_setup"|"task_progress"|"team"|"team_marketing"|"team_responsible"|"time_it_takes_to_complete_tasks"|"timeframe"|"treatment_type"|"type_work_requests_it"|"use_agency"|"user_name"|"vendor_category"|"vendor_type"|"word_count"? asanaCreatedField?;
+    # ISO 4217 currency code to format this custom field. This will be null if the `format` is not `currency`
+    @jsondata:Name {value: "currency_code"}
+    string? currencyCode?;
+};
+
+public type StoryResponseAllOf2 record {
+    @jsondata:Name {value: "old_date_value"}
+    StoryResponseDates oldDateValue?;
+    @jsondata:Name {value: "old_enum_value"}
+    EnumOption oldEnumValue?;
+    # *Conditional*. The old value of a multi-enum custom field story
+    @jsondata:Name {value: "old_multi_enum_values"}
+    EnumOption[] oldMultiEnumValues?;
+    @jsondata:Name {value: "old_dates"}
+    StoryResponseDates oldDates?;
+    # *Conditional*
+    @jsondata:Name {value: "new_resource_subtype"}
+    string newResourceSubtype?;
+    ProjectCompact project?;
+    # *Deprecated - please use likes instead*
+    # *Conditional*. True if the story is hearted by the authorized user, false if not
+    boolean hearted?;
+    @jsondata:Name {value: "new_section"}
+    SectionCompact newSection?;
+    # The component of the Asana product the user used to trigger the story
+    "web"|"email"|"mobile"|"api"|"unknown" 'source?;
+    "comment"|"system" 'type?;
+    # *Conditional*. True if the story is liked by the authorized user, false if not
+    boolean liked?;
+    # *Conditional*. The new value of a people custom field story
+    @jsondata:Name {value: "new_people_value"}
+    UserCompact[] newPeopleValue?;
+    @jsondata:Name {value: "old_section"}
+    SectionCompact oldSection?;
+    # *Conditional*
+    @jsondata:Name {value: "old_text_value"}
+    string oldTextValue?;
+    # *Conditional*
+    @jsondata:Name {value: "new_number_value"}
+    int newNumberValue?;
+    # *Conditional*
+    @jsondata:Name {value: "old_resource_subtype"}
+    string oldResourceSubtype?;
+    @jsondata:Name {value: "duplicated_from"}
+    TaskCompact duplicatedFrom?;
+    # *Deprecated - please use likes instead*
+    # 
+    # *Conditional*. Array of likes for users who have hearted this story
+    Like[] hearts?;
+    # *Conditional*
+    @jsondata:Name {value: "old_number_value"}
+    int? oldNumberValue?;
+    # *Conditional*. The number of users who have liked this story
+    @jsondata:Name {value: "num_likes"}
+    int numLikes?;
+    TagCompact tag?;
+    # *Deprecated - please use likes instead*
+    # 
+    # *Conditional*. The number of users who have hearted this story
+    @jsondata:Name {value: "num_hearts"}
+    int numHearts?;
+    # *Conditional*. The new value of a multi-enum custom field story
+    @jsondata:Name {value: "new_multi_enum_values"}
+    EnumOption[] newMultiEnumValues?;
+    # *Conditional*. Array of likes for users who have liked this story
+    Like[] likes?;
+    # *Conditional*
+    @jsondata:Name {value: "new_name"}
+    string? newName?;
+    @jsondata:Name {value: "custom_field"}
+    CustomFieldCompact customField?;
+    UserCompact follower?;
+    TaskCompact dependency?;
+    # *Conditional*. The old value of approval status
+    @jsondata:Name {value: "old_approval_status"}
+    string oldApprovalStatus?;
+    @jsondata:Name {value: "new_dates"}
+    StoryResponseDates newDates?;
+    # *Conditional*. Whether the text of the story can be edited after creation
+    @jsondata:Name {value: "is_editable"}
+    boolean isEditable?;
+    # *Conditional*. Whether the text of the story has been edited after creation
+    @jsondata:Name {value: "is_edited"}
+    boolean isEdited?;
+    # *Conditional* The new value of a date custom field story
+    @jsondata:Name {value: "new_date_value"}
+    StoryResponseDates newDateValue?;
+    # *Conditional*. The new value of approval status
+    @jsondata:Name {value: "new_approval_status"}
+    string newApprovalStatus?;
+    @jsondata:Name {value: "duplicate_of"}
+    TaskCompact duplicateOf?;
+    @jsondata:Name {value: "created_by"}
+    UserCompact createdBy?;
+    record {*TaskCompact;} target?;
+    TaskCompact task?;
+    # *Conditional*. The old value of a people custom field story
+    @jsondata:Name {value: "old_people_value"}
+    UserCompact[] oldPeopleValue?;
+    # *Conditional*'
+    @jsondata:Name {value: "old_name"}
+    string oldName?;
+    # *Conditional*. A collection of previews to be displayed in the story.
+    # 
+    # *Note: This property only exists for comment stories.*
+    Preview[] previews?;
+    @jsondata:Name {value: "new_enum_value"}
+    EnumOption newEnumValue?;
+    UserCompact assignee?;
+    # *Conditional*
+    @jsondata:Name {value: "new_text_value"}
+    string newTextValue?;
+    StoryCompact story?;
+};
+
+public type InlineResponse20038 record {
+    TaskTemplateResponse data?;
+};
+
+public type InlineResponse20037 record {
+    TaskTemplateCompact[] data?;
+};
+
+public type UserBaseResponseAllOf2 record {
+    UserBaseResponsePhoto? photo?;
+    # The user's email address
+    string email?;
+};
+
+# Represents the Queries record for the operation: getTagsForWorkspace
+public type GetTagsForWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"offset"|"path"|"permalink_url"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse20039 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TaskCompact[] data?;
+};
+
+public type TaskGidSetParentBody record {
+    TaskSetParentRequest data?;
+};
+
+# Represents the Queries record for the operation: removeDependenciesForTask
+public type RemoveDependenciesForTaskQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: deleteSection
+public type DeleteSectionQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getGoalRelationships
+public type GetGoalRelationshipsQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("contribution_weight"|"offset"|"path"|"resource_subtype"|"supported_goal"|"supported_goal.name"|"supported_goal.owner"|"supported_goal.owner.name"|"supporting_resource"|"supporting_resource.name"|"uri")[] optFields?;
+    # Globally unique identifier for the supported goal in the goal relationship
+    @http:Query {name: "supported_goal"}
+    string supportedGoal;
+    # If provided, filter to goal relationships with a given resource_subtype
+    @http:Query {name: "resource_subtype"}
+    string resourceSubtype?;
+};
+
+public type GoalRelationshipRequest record {
+    *GoalRelationshipBase;
+    *GoalRelationshipRequestAllOf2;
+};
+
+# The *task* is the basic object around which many operations in Asana are centered
+public type TaskCompactAllOf2 record {
+    # The name of the task
+    string name?;
+    # The subtype of this resource. Different subtypes retain many of the same fields and behavior, but may render differently in Asana or represent resources with different semantic meaning.
+    # The resource_subtype `milestone` represent a single moment in time. This means tasks with this subtype cannot have a start_date
+    @jsondata:Name {value: "resource_subtype"}
+    "default_task"|"milestone"|"section"|"approval" resourceSubtype?;
+    @jsondata:Name {value: "created_by"}
+    TaskCompactCreatedBy createdBy?;
+};
+
+public type ProjectStatusBaseAllOf2 record {
+    # The color associated with the status update
+    "green"|"yellow"|"red"|"blue"|"complete" color?;
+    # [Opt In](/docs/inputoutput-options). The text content of the status update with formatting as HTML
+    @jsondata:Name {value: "html_text"}
+    string htmlText?;
+    # The text content of the status update
+    string text?;
+};
+
+# Represents the Queries record for the operation: deleteStory
+public type DeleteStoryQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: deleteTaskTemplate
+public type DeleteTaskTemplateQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type ProjectGidAddMembersBody record {
+    AddMembersRequest data?;
+};
+
+# Represents the Queries record for the operation: getProjectBrief
+public type GetProjectBriefQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("html_text"|"permalink_url"|"project"|"project.name"|"text"|"title")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse20041 record {
+    TeamMembershipResponse data?;
+};
+
+public type InlineResponse20040 record {
+    TaskCompact[] data?;
+};
+
+public type InlineResponse20043 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TeamCompact[] data?;
+};
+
+# Represents the Queries record for the operation: getCustomField
+public type GetCustomFieldQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("asana_created_field"|"created_by"|"created_by.name"|"currency_code"|"custom_label"|"custom_label_position"|"date_value"|"date_value.date"|"date_value.date_time"|"description"|"display_value"|"enabled"|"enum_options"|"enum_options.color"|"enum_options.enabled"|"enum_options.name"|"enum_value"|"enum_value.color"|"enum_value.enabled"|"enum_value.name"|"format"|"has_notifications_enabled"|"id_prefix"|"is_formula_field"|"is_global_to_workspace"|"is_value_read_only"|"multi_enum_values"|"multi_enum_values.color"|"multi_enum_values.enabled"|"multi_enum_values.name"|"name"|"number_value"|"people_value"|"people_value.name"|"precision"|"representation_type"|"resource_subtype"|"text_value"|"type")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type ModifyDependenciesRequest record {
+    # An array of task gids that a task depends on
+    string[] dependencies?;
+};
+
+public type InlineResponse20042 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TeamMembershipCompact[] data?;
+};
+
+public type InlineResponse20045 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TimePeriodCompact[] data?;
+};
+
+public type ProjectSectionInsertRequest record {
+    # Insert the given section immediately after the section specified by this parameter
+    @jsondata:Name {value: "after_section"}
+    string afterSection?;
+    # Insert the given section immediately before the section specified by this parameter
+    @jsondata:Name {value: "before_section"}
+    string beforeSection?;
+    # The section to reorder
+    string section;
+};
+
+public type InlineResponse20044 record {
+    TimePeriodResponse data?;
+};
+
+# A generic list of objects, such as those returned by the typeahead search endpoint
+public type InlineResponse20047 record {
+    AsanaNamedResource[] data?;
+};
+
+# A user identification object for specification with the addUser/removeUser endpoints
+public type TeamRemoveUserRequest record {
+    # A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    string user?;
+};
+
+public type InlineResponse20046 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TimeTrackingEntryCompact[] data?;
+};
+
+public type InlineResponse20049 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    UserCompact[] data?;
+};
+
+public type InlineResponse20048 record {
+    UserTaskListResponse data?;
+};
+
+# Represents the Queries record for the operation: getStatus
+public type GetStatusQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("author"|"author.name"|"created_at"|"created_by"|"created_by.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"liked"|"likes"|"likes.user"|"likes.user.name"|"modified_at"|"num_hearts"|"num_likes"|"parent"|"parent.name"|"resource_subtype"|"status_type"|"text"|"title")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type TeamGidProjectsBody record {
+    ProjectRequest data?;
+};
+
+public type StatusUpdateBaseAllOf2 record {
+    # The type associated with the status update. This represents the current state of the object this object is on
+    @jsondata:Name {value: "status_type"}
+    "on_track"|"at_risk"|"off_track"|"on_hold"|"complete"|"achieved"|"partial"|"missed"|"dropped" statusType;
+    # [Opt In](/docs/inputoutput-options). The text content of the status update with formatting as HTML
+    @jsondata:Name {value: "html_text"}
+    string htmlText?;
+    # The text content of the status update
+    string text;
+};
+
+public type WebhookResponseAllOf2 record {
+    # The timestamp when the webhook last successfully sent an event to the target
+    @jsondata:Name {value: "last_success_at"}
+    string lastSuccessAt?;
+    # The contents of the last error response sent to the webhook when attempting to deliver events to the target
+    @jsondata:Name {value: "last_failure_content"}
+    string lastFailureContent?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # Whitelist of filters to apply to events from this webhook. If a webhook event passes any of the filters the event will be delivered; otherwise no event will be sent to the receiving server
+    WebhookResponseFilters[] filters?;
+    # The timestamp when the webhook last received an error when sending an event to the target
+    @jsondata:Name {value: "last_failure_at"}
+    string lastFailureAt?;
+};
+
+public type GoalRequest record {
+    *GoalRequestBase;
+    *GoalRequestAllOf2;
+};
+
+# Represents the Queries record for the operation: deleteTask
+public type DeleteTaskQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getStatusesForObject
+public type GetStatusesForObjectQueries record {
+    # Globally unique identifier for object to fetch statuses from. Must be a GID for a project, portfolio, or goal
+    string parent;
+    # Only return statuses that have been created since the given time
+    @http:Query {name: "created_since"}
+    string createdSince?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("author"|"author.name"|"created_at"|"created_by"|"created_by.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"liked"|"likes"|"likes.user"|"likes.user.name"|"modified_at"|"num_hearts"|"num_likes"|"offset"|"parent"|"parent.name"|"path"|"resource_subtype"|"status_type"|"text"|"title"|"uri")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+public type InlineResponse20050 record {
+    UserResponse data?;
+};
+
+public type CreateMembershipRequest record {
+    *MembershipRequest;
+    *CreateMembershipRequestAllOf2;
+};
+
+public type InlineResponse20052 record {
+    UserCompact[] data?;
+};
+
+public type InlineResponse20051 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    AsanaNamedResource[] data?;
+};
+
+public type InlineResponse20054 record {
+    WorkspaceMembershipResponse data?;
+};
+
+public type InlineResponse20053 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    WebhookResponse[] data?;
+};
+
+public type InlineResponse20056 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    WorkspaceCompact[] data?;
+};
+
+public type InlineResponse20055 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    WorkspaceMembershipCompact[] data?;
+};
+
+# Represents the Queries record for the operation: deleteProjectBrief
+public type DeleteProjectBriefQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse20058 record {
+    UserBaseResponse data?;
+};
+
+public type InlineResponse20057 record {
+    WorkspaceResponse data?;
+};
+
+public type ProjectStatusCompact record {
+    *AsanaResource;
+    *ProjectStatusCompactAllOf2;
+};
+
+public type TaskGidRemoveDependentsBody record {
+    ModifyDependentsRequest data?;
+};
+
+# An *attachment* object represents any file attached to a task in Asana, whether it’s an uploaded file or one associated via a third-party service such as Dropbox or Google Drive
+public type AttachmentCompactAllOf2 record {
+    # The name of the file
+    string name?;
+    # The service hosting the attachment. Valid values are `asana`, `dropbox`, `gdrive`, `onedrive`, `box`, `vimeo`, and `external`
+    @jsondata:Name {value: "resource_subtype"}
+    string resourceSubtype?;
+};
+
+# Represents the Queries record for the operation: getPortfolioMembership
+public type GetPortfolioMembershipQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("portfolio"|"portfolio.name"|"user"|"user.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: createProjectStatusForProject
+public type CreateProjectStatusForProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("author"|"author.name"|"color"|"created_at"|"created_by"|"created_by.name"|"html_text"|"modified_at"|"text"|"title")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getParentGoalsForGoal
+public type GetParentGoalsForGoalQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type ProjectBriefResponseAllOf2 record {
+    record {*ProjectCompact;} project?;
+    # [Opt In](/docs/inputoutput-options). The plain text of the project brief
+    string text?;
+    # A url that points directly to the object within Asana
+    @jsondata:Name {value: "permalink_url"}
+    string permalinkUrl?;
+};
+
+public type TagRequest record {
+    *TagBase;
+    *TagRequestAllOf2;
+};
+
+# An object to represent a user's like
+public type Like record {
+    # Globally unique identifier of the object, as a string
+    string gid?;
+    UserCompact user?;
+};
+
+public type ProjectsBody record {
+    ProjectRequest data?;
+};
+
+public type PortfolioGidAddMembersBody record {
+    AddMembersRequest data?;
+};
+
+# Represents the Queries record for the operation: deleteProjectStatus
+public type DeleteProjectStatusQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getTaskTemplate
+public type GetTaskTemplateQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"created_by"|"name"|"project"|"template")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type AttachmentResponse record {
+    *AttachmentBase;
+    *AttachmentResponseAllOf2;
+};
+
+# Represents the Queries record for the operation: getGoals
+public type GetGoalsQueries record {
+    # Globally unique identifier for the workspace
+    string workspace?;
+    # Globally unique identifier for supporting task
+    string task?;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"offset"|"owner"|"owner.name"|"path"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"uri"|"workspace"|"workspace.name")[] optFields?;
+    # Globally unique identifier for supporting portfolio
+    string portfolio?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Globally unique identifier for supporting project
+    string project?;
+    # Globally unique identifier for the team
+    string team?;
+    # Globally unique identifiers for the time periods
+    @http:Query {name: "time_periods"}
+    string[] timePeriods?;
+    # Filter to goals with is_workspace_level set to query value. Must be used with the workspace parameter
+    @http:Query {name: "is_workspace_level"}
+    boolean isWorkspaceLevel?;
+};
+
+# Represents the Queries record for the operation: createWebhook
+public type CreateWebhookQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("active"|"created_at"|"filters"|"filters.action"|"filters.fields"|"filters.resource_subtype"|"last_failure_at"|"last_failure_content"|"last_success_at"|"resource"|"resource.name"|"target")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type WorkspaceRequest WorkspaceBase;
+
+public type InlineResponse2019 record {
+    TimeTrackingEntryBase data?;
+};
+
+public type WorkspacesworkspaceGidBody record {
+    WorkspaceRequest data?;
+};
+
+# Webhook objects represent the state of an active subscription for a server to be updated with information from Asana. This schema represents the subscription itself, not the objects that are sent to the server. For information on those please refer to the [event](/reference/events) schema
+public type WebhookCompactAllOf2 record {
+    AsanaNamedResource 'resource?;
+    # If true, the webhook will send events - if false it is considered inactive and will not generate events
+    boolean active?;
+    # The URL to receive the HTTP POST
+    string target?;
+};
+
+public type StoriesstoryGidBody record {
+    StoryRequest data?;
+};
+
+# Represents the Queries record for the operation: setParentForTask
+public type SetParentForTaskQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type TaskGidAddFollowersBody record {
+    TaskAddFollowersRequest data?;
+};
+
+# Represents the Queries record for the operation: createEnumOptionForCustomField
+public type CreateEnumOptionForCustomFieldQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("color"|"enabled"|"name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type EnumOptionBase EnumOption;
+
+public type TemplateRole record {
+    *AsanaResource;
+    *TemplateRoleAllOf2;
+};
+
+public type SectionGidAddTaskBody record {
+    SectionTaskInsertRequest data?;
+};
+
+public type WebhookCompact record {
+    *AsanaResource;
+    *WebhookCompactAllOf2;
+};
+
+public type CustomFieldSettingResponseAllOf2 record {
+    # `is_important` is used in the Asana web application to determine if this custom field is displayed in the list/grid view of a project or portfolio
+    @jsondata:Name {value: "is_important"}
+    boolean isImportant?;
+    record {*ProjectCompact;} parent?;
+    @jsondata:Name {value: "custom_field"}
+    record {*CustomFieldResponse;} customField?;
+    record {*ProjectCompact;} project?;
+};
+
+public type TagBase record {
+    *TagCompact;
+    *TagBaseAllOf2;
+};
+
+public type TagResponseAllOf2 record {
+    WorkspaceCompact workspace?;
+    # Array of users following this tag
+    UserCompact[] followers?;
+    # The time at which this resource was created
+    @jsondata:Name {value: "created_at"}
+    string createdAt?;
+    # A url that points directly to the object within Asana
+    @jsondata:Name {value: "permalink_url"}
+    string permalinkUrl?;
+};
+
+public type TeamGidRemoveUserBody record {
+    TeamRemoveUserRequest data?;
+};
+
+# Represents the Queries record for the operation: updateTimeTrackingEntry
+public type UpdateTimeTrackingEntryQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("created_at"|"created_by"|"created_by.name"|"duration_minutes"|"entered_on"|"task"|"task.created_by"|"task.name"|"task.resource_subtype")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+public type InlineResponse20110 record {
+    WebhookResponse data?;
+};
+
+public type EnumOptionsInsertBody record {
+    EnumOptionInsertRequest data?;
+};
+
+public type WebhooksBody record {
+    WebhookRequest data?;
+};
+
+public type GoalRemoveSupportingRelationshipRequest record {
+    # The gid of the supporting resource to remove from the parent goal. Must be the gid of a goal, project, task, or portfolio
+    @jsondata:Name {value: "supporting_resource"}
+    string supportingResource;
+};
+
+public type RemoveCustomFieldSettingRequest record {
+    # The custom field to remove from this portfolio
+    @jsondata:Name {value: "custom_field"}
+    string customField;
+};
+
+public type ProjectUpdateRequest record {
+    *ProjectBase;
+    *ProjectUpdateRequestAllOf2;
+};
+
+public type TaskTemplateRecipe record {
+    *TaskTemplateRecipeCompact;
+    *TaskTemplateRecipeAllOf2;
+};
+
+public type WorkspaceMembershipCompact record {
+    *AsanaResource;
+    *WorkspaceMembershipCompactAllOf2;
+};
+
+public type GoalUpdateRequest record {
+    *GoalRequestBase;
+    *GoalUpdateRequestAllOf2;
+};
+
+# Represents the Queries record for the operation: createGoalMetric
+public type CreateGoalMetricQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# Represents the Queries record for the operation: getUsersForTeam
+public type GetUsersForTeamQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("email"|"name"|"photo"|"photo.image_1024x1024"|"photo.image_128x128"|"photo.image_21x21"|"photo.image_27x27"|"photo.image_36x36"|"photo.image_60x60"|"workspaces"|"workspaces.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
+
+# A user task list represents the tasks assigned to a particular user. It provides API access to a user’s [My Tasks](https://asana.com/guide/help/fundamentals/my-tasks) view in Asana
+public type UserTaskListCompactAllOf2 record {
+    # The owner of the user task list, i.e. the person whose My Tasks is represented by this resource
+    UserCompact owner?;
+    # The workspace in which the user task list is located
+    WorkspaceCompact workspace?;
+    # The name of the user task list
+    string name?;
 };
 
 public type ProjectDuplicateRequest record {
-    # The name of the new project.
-    string? name;
-    # Sets the team of the new project. If team is not defined, the new project will be in the same team as the the original project.
-    string? team?;
     # A comma-separated list of elements that will be duplicated to the new project. Tasks are always included.
     # ##### Fields
     # - allocations
@@ -2523,255 +5451,281 @@ public type ProjectDuplicateRequest record {
     # - task_projects
     # - task_subtasks
     # - task_tags
-    string? include?;
-    # A dictionary of options to auto-shift dates. `task_dates` must be included to use this option. Requires either `start_on` or `due_on`, but not both.
-    ProjectDuplicateRequest_schedule_dates? schedule_dates?;
+    string include?;
+    @jsondata:Name {value: "schedule_dates"}
+    ProjectDuplicateRequestScheduleDates scheduleDates?;
+    # The name of the new project
+    string name;
+    # Sets the team of the new project. If team is not defined, the new project will be in the same team as the the original project
+    string team?;
 };
 
 public type TagCompact record {
     *AsanaResource;
-    # Name of the tag. This is generally a short sentence fragment that fits on a line in the UI for maximum readability. However, it can be longer.
-    string? name?;
+    *TagCompactAllOf2;
 };
 
-# A generic Asana Resource, containing a globally unique identifier.
-public type AsanaResource record {
-    # Globally unique identifier of the resource, as a string.
-    string? gid?;
-    # The base type of this resource.
-    string? resource_type?;
+# Represents the Queries record for the operation: getTeamMembershipsForTeam
+public type GetTeamMembershipsForTeamQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("is_admin"|"is_guest"|"is_limited_access"|"offset"|"path"|"team"|"team.name"|"uri"|"user"|"user.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
 };
 
-public type Custom_fields_body record {
-    CustomFieldRequest? data?;
+# Represents the Queries record for the operation: getUserTaskList
+public type GetUserTaskListQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("name"|"owner"|"workspace")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Task_gid_addFollowers_body record {
-    TaskAddFollowersRequest? data?;
+# Represents the Queries record for the operation: getProject
+public type GetProjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type UserTaskListResponse UserTaskListBase?;
+# Represents the Queries record for the operation: createBatchRequest
+public type CreateBatchRequestQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("body"|"headers"|"status_code")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+};
 
 public type CreateTimeTrackingEntryRequest record {
-    # Time in minutes tracked by the entry. Must be greater than 0
-    int? duration_minutes?;
     # *Optional*. The day that this entry is logged on. Defaults to today if not specified
-    string? entered_on?;
+    @jsondata:Name {value: "entered_on"}
+    string enteredOn?;
+    # Time in minutes tracked by the entry. Must be greater than 0
+    @jsondata:Name {value: "duration_minutes"}
+    int durationMinutes?;
 };
 
-public type Goal_gid_addFollowers_body record {
-    TaskAddFollowersRequest? data?;
+# A *workspace* is the highest-level organizational unit in Asana. All projects and tasks have an associated workspace
+public type WorkspaceCompactAllOf2 record {
+    # The name of the workspace
+    string name?;
 };
 
-public type Webhooks_webhook_gid_body record {
-    WebhookUpdateRequest? data?;
-};
-
-public type Project_gid_addMembers_body record {
-    AddMembersRequest? data?;
-};
-
-public type Workspace_gid_removeUser_body record {
-    # A user identification object for specification with the addUser/removeUser endpoints.
-    WorkspaceRemoveUserRequest? data?;
+# Represents the Queries record for the operation: createStatusForObject
+public type CreateStatusForObjectQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("author"|"author.name"|"created_at"|"created_by"|"created_by.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"liked"|"likes"|"likes.user"|"likes.user.name"|"modified_at"|"num_hearts"|"num_likes"|"parent"|"parent.name"|"resource_subtype"|"status_type"|"text"|"title")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
 };
 
 public type OrganizationExportCompact record {
     *AsanaResource;
-    # The time at which this resource was created.
-    string? created_at?;
-    # Download this URL to retreive the full export of the organization
-    # in JSON format. It will be compressed in a gzip (.gz) container.
-    # 
-    # *Note: May be null if the export is still in progress or
-    # failed.  If present, this URL may only be valid for 1 hour from
-    # the time of retrieval. You should avoid persisting this URL
-    # somewhere and rather refresh on demand to ensure you do not keep
-    # stale URLs.*
-    string? download_url?;
-    # The current state of the export.
-    "pending"|"started"|"finished"|"error" state?;
-    WorkspaceCompact? organization?;
+    *OrganizationExportCompactAllOf2;
 };
 
-public type TeamMembershipResponse TeamMembershipBase?;
-
-public type Tasks_body record {
-    TaskRequest? data?;
+public type ProjectGidDuplicateBody record {
+    ProjectDuplicateRequest data?;
 };
 
-public type WorkspaceMembershipBase WorkspaceMembershipCompact;
-
-public type Sections_section_gid_body record {
-    SectionRequest? data?;
+public type TaskGidAddProjectBody record {
+    TaskAddProjectRequest data?;
 };
 
-public type Workspace_gid_tags_body record {
-    TagCreateTagForWorkspaceRequest? data?;
+public type WorkspaceGidAddUserBody record {
+    WorkspaceAddUserRequest data?;
 };
 
-# The primary object that was affected by this event.
+# The primary object that was affected by this event
 public type AuditLogEventResource record {
-    # The type of resource.
-    string? resource_type?;
-    # The subtype of resource. Most resources will not have a subtype.
-    string? resource_subtype?;
-    # Globally unique identifier of the resource.
-    string? gid?;
-    # The name of the resource.
+    # Globally unique identifier of the resource
+    string gid?;
+    # The type of resource
+    @jsondata:Name {value: "resource_type"}
+    string resourceType?;
+    # The name of the resource
     string? name?;
-    # The email of the resource, if applicable.
-    string? email?;
-};
-
-public type Inline_response_200_58 record {
-    UserBaseResponse? data?;
-};
-
-public type Inline_response_200_56 record {
-    WorkspaceCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-public type Error record {
-    # Message providing more detail about the error that occurred, if available.
-    string? message?;
-    # Additional information directing developers to resources on how to address and fix the problem, if available.
-    string? help?;
-    # *500 errors only*. A unique error phrase which can be used when contacting developer support to help identify the exact occurrence of the problem in Asana’s logs.
-    string? phrase?;
+    # The subtype of resource. Most resources will not have a subtype
+    @jsondata:Name {value: "resource_subtype"}
+    string resourceSubtype?;
+    # The email of the resource, if applicable
+    string email?;
 };
 
 # A collection of rich text that will be displayed as a preview to another app.
 # 
-# This is read-only except for a small group of whitelisted apps.
+# This is read-only except for a small group of whitelisted apps
 public type Preview record {
-    # Some fallback text to display if unable to display the full preview.
-    string? fallback?;
-    # Text to display in the footer.
-    string? footer?;
-    # Text to display in the header.
-    string? header?;
-    # Where the header will link to.
-    string? header_link?;
-    # HTML formatted text for the body of the preview.
-    string? html_text?;
-    # Text for the body of the preview.
-    string? text?;
-    # Text to display as the title.
-    string? title?;
-    # Where to title will link to.
-    string? title_link?;
+    # Text to display in the footer
+    string footer?;
+    # HTML formatted text for the body of the preview
+    @jsondata:Name {value: "html_text"}
+    string htmlText?;
+    # Text to display in the header
+    string header?;
+    # Where to title will link to
+    @jsondata:Name {value: "title_link"}
+    string titleLink?;
+    # Text for the body of the preview
+    string text?;
+    # Text to display as the title
+    string title?;
+    # Some fallback text to display if unable to display the full preview
+    string fallback?;
+    # Where the header will link to
+    @jsondata:Name {value: "header_link"}
+    string headerLink?;
 };
 
-public type Inline_response_200_57 record {
-    WorkspaceResponse? data?;
+# A set of filters to specify a whitelist for what types of events will be delivered
+public type WebhookResponseFilters record {
+    *WebhookFilter;
+    *FiltersAllOf21;
 };
 
-public type Inline_response_412 record {
-    Inline_response_412_errors[]? errors?;
-    # A sync token to be used with the next call to the /events endpoint.
-    string? sync?;
+public type PortfolioMembershipBase PortfolioMembershipCompact;
+
+public type PortfolioGidRemoveCustomFieldSettingBody record {
+    RemoveCustomFieldSettingRequest data?;
 };
 
-public type Inline_response_200_54 record {
-    WorkspaceMembershipResponse? data?;
+# Represents the Queries record for the operation: addItemForPortfolio
+public type AddItemForPortfolioQueries record {
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
-public type Inline_response_200_55 record {
-    WorkspaceMembershipCompact[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
+public type InlineResponse20010 record {
+    GoalResponse data?;
 };
 
-public type TimePeriodBase record {
-    *TimePeriodCompact;
-    TimePeriodCompact?? parent?;
-};
-
-public type Team_gid_removeUser_body record {
-    # A user identification object for specification with the addUser/removeUser endpoints.
-    TeamRemoveUserRequest? data?;
-};
-
-public type Inline_response_200_52 record {
-    UserCompact[]? data?;
-};
-
-public type PortfolioMembershipBase PortfolioMembershipCompact?;
-
-public type Inline_response_200_53 record {
-    WebhookResponse[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-public type Inline_response_200_50 record {
-    UserResponse? data?;
-};
-
-public type Inline_response_200_51 record {
-    AsanaNamedResource[]? data?;
-    # *Conditional*. This property is only present when a limit query parameter is provided in the request. When making a paginated request, the API will return a number of results as specified by the limit parameter. If more results exist, then the response will contain a next_page attribute, which will include an offset, a relative path attribute, and a full uri attribute. If there are no more pages available, next_page will be null and no offset will be provided. Note that an offset token will expire after some time, as data may have changed.
-    NextPage? next_page?;
-};
-
-public type Time_tracking_entries_time_tracking_entry_gid_body record {
-    UpdateTimeTrackingEntryRequest? data?;
-};
-
-public type Organization_exports_body record {
-    # An *organization_export* request starts a job to export the complete data of the given Organization.
-    OrganizationExportRequest? data?;
-};
-
-# Event specific details. The schema will vary depending on the `event_type`.
-public type AuditLogEventDetails record {
-};
-
-public type Task_gid_subtasks_body record {
-    TaskRequest? data?;
-};
-
-# *Conditional*
-public type StoryResponseDates record {
-    # The day on which work for this goal begins, or null if the goal has no start date. This takes a date with `YYYY-MM-DD` format, and cannot be set unless there is an accompanying due date.
-    string? start_on?;
-    # The UTC date and time on which this task is due, or null if the task has no due time. This takes an ISO 8601 date string in UTC and should not be used together with `due_on`.
-    string? due_at?;
-    # The localized day on which this goal is due. This takes a date with format `YYYY-MM-DD`.
-    string? due_on?;
+# Represents the Queries record for the operation: addUserForWorkspace
+public type AddUserForWorkspaceQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("email"|"name"|"photo"|"photo.image_1024x1024"|"photo.image_128x128"|"photo.image_21x21"|"photo.image_27x27"|"photo.image_36x36"|"photo.image_60x60")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type WorkspaceCompact record {
     *AsanaResource;
-    # The name of the workspace.
-    string? name?;
+    *WorkspaceCompactAllOf2;
 };
 
-public type EnumOptionInsertRequest record {
-    # The gid of the enum option to relocate.
-    string? enum_option;
-    # An existing enum option within this custom field before which the new enum option should be inserted. Cannot be provided together with after_enum_option.
-    string? before_enum_option?;
-    # An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
-    string? after_enum_option?;
+public type InlineResponse20012 record {
+    GoalCompact[] data?;
+};
+
+public type InlineResponse20011 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    GoalCompact[] data?;
+};
+
+public type InlineResponse20014 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    MembershipCompact[] data?;
+};
+
+# Represents the Queries record for the operation: createProjectForTeam
+public type CreateProjectForTeamQueries record {
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[] optFields?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
 };
 
 public type TaskRemoveFollowersRequest record {
-    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user.
-    string[]? followers;
+    # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user
+    string[] followers;
 };
 
-# Contains keys `start_on` and `end_on` for the vacation dates for the user in this workspace. If `start_on` is null, the entire `vacation_dates` object will be null. If `end_on` is before today, the entire `vacation_dates` object will be null.
-public type WorkspaceMembershipResponse_vacation_dates record {
-    # The day on which the user's vacation in this workspace starts. This is a date with `YYYY-MM-DD` format.
-    string? start_on?;
-    # The day on which the user's vacation in this workspace ends, or null if there is no end date. This is a date with `YYYY-MM-DD` format.
-    string? end_on?;
+public type InlineResponse20013 record {
+    JobResponse data?;
 };
 
-public type Project_gid_project_statuses_body record {
-    ProjectStatusRequest? data?;
+# Represents the Queries record for the operation: getTeamMembershipsForUser
+public type GetTeamMembershipsForUserQueries record {
+    # Globally unique identifier for the workspace
+    string workspace;
+    # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
+    @http:Query {name: "opt_fields"}
+    ("is_admin"|"is_guest"|"is_limited_access"|"offset"|"path"|"team"|"team.name"|"uri"|"user"|"user.name")[] optFields?;
+    # Offset token.
+    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
+    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+    string offset?;
+    # Provides “pretty” output.
+    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
+    @http:Query {name: "opt_pretty"}
+    boolean optPretty?;
+    # Results per page.
+    # The number of objects to return per page. The value must be between 1 and 100
+    @constraint:Int {minValue: 1, maxValue: 100}
+    int 'limit?;
+};
+
+public type InlineResponse20016 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    PortfolioMembershipCompact[] data?;
+};
+
+public type InlineResponse20015 record {
+    ProjectMembershipCompactResponse data?;
+};
+
+# Custom Fields Settings objects represent the many-to-many join of the Custom Field and Project as well as stores information that is relevant to that particular pairing
+public type CustomFieldSettingCompactAllOf2 record {
+};
+
+public type InlineResponse20018 record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    PortfolioCompact[] data?;
+};
+
+public type InlineResponse20017 record {
+    PortfolioMembershipResponse data?;
 };
