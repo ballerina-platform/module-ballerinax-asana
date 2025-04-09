@@ -21,12 +21,22 @@ import ballerina/constraint;
 import ballerina/data.jsondata;
 import ballerina/http;
 
+public type ProjectCreatedResponse record {
+    ProjectResponse data?;
+};
+
 public type GoalRelationshipCompact record {
     *AsanaResource;
     *GoalRelationshipCompactAllOf2;
 };
 
 public type ProjectStatusRequest ProjectStatusBase;
+
+public type WorkspaceMembershipCompactResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    WorkspaceMembershipCompact[] data?;
+};
 
 public type TeamRequest record {
     *TeamBase;
@@ -271,6 +281,10 @@ public type AddCustomFieldSettingRequest record {
     string insertAfter?;
 };
 
+public type MembershipCreatedResponse record {
+    MembershipResponse data?;
+};
+
 public type TimePeriodCompactAllOf2 record {
     # The localized start date of the time period in `YYYY-MM-DD` format
     @jsondata:Name {value: "start_on"}
@@ -325,6 +339,10 @@ public type AddCustomFieldSettingForProjectQueries record {
     boolean optPretty?;
 };
 
+public type GoalCompacts record {
+    GoalCompact[] data?;
+};
+
 public type PortfolioGidRemoveMembersBody record {
     RemoveMembersRequest data?;
 };
@@ -375,19 +393,9 @@ public type UpdateProjectBriefQueries record {
     boolean optPretty?;
 };
 
-public type InlineResponse2009 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    GoalRelationshipCompact[] data?;
-};
-
 public type WorkspaceResponse record {
     *WorkspaceBase;
     *WorkspaceResponseAllOf2;
-};
-
-public type InlineResponse2008 record {
-    GoalRelationshipResponse data?;
 };
 
 public type GoalGidSetMetricBody record {
@@ -397,6 +405,12 @@ public type GoalGidSetMetricBody record {
 public type SectionResponse record {
     *SectionBase;
     *SectionResponseAllOf2;
+};
+
+public type TaskCompactsResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TaskCompact[] data?;
 };
 
 public type WorkspaceGidTagsBody record {
@@ -411,6 +425,18 @@ public type TaskRemoveProjectRequest record {
 public type AttachmentCompact record {
     *AsanaResource;
     *AttachmentCompactAllOf2;
+};
+
+public type CustomFieldsResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    CustomFieldResponse[] data?;
+};
+
+public type GoalRelationshipCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    GoalRelationshipCompact[] data?;
 };
 
 public type ProjectCompact record {
@@ -451,8 +477,18 @@ public type GetTasksForProjectQueries record {
     int 'limit?;
 };
 
+public type WorkspaceOkResponse record {
+    WorkspaceResponse data?;
+};
+
 public type ProjectGidProjectStatusesBody record {
     ProjectStatusRequest data?;
+};
+
+public type WebhookOkResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    WebhookResponse[] data?;
 };
 
 public type GoalResponseAllOf2 record {
@@ -477,22 +513,10 @@ public type GoalResponseAllOf2 record {
     string? status?;
 };
 
-public type InlineResponse2012 record {
-    MembershipResponse data?;
-};
-
 # A set of filters to specify a whitelist for what types of events will be delivered
 public type WebhookUpdateRequestFilters record {
     *WebhookFilter;
     *FiltersAllOf22;
-};
-
-public type InlineResponse2011 record {
-    EnumOption data?;
-};
-
-public type InlineResponse2014 record {
-    PortfolioResponse data?;
 };
 
 public type ProjectGidRemoveFollowersBody record {
@@ -502,19 +526,11 @@ public type ProjectGidRemoveFollowersBody record {
 public type FiltersAllOf22 record {
 };
 
-public type InlineResponse2013 record {
-    OrganizationExportResponse data?;
-};
-
 public type FiltersAllOf21 record {
 };
 
 public type ProjectGidAddCustomFieldSettingBody record {
     AddCustomFieldSettingRequest data?;
-};
-
-public type InlineResponse2016 record {
-    TagResponse data?;
 };
 
 public type ProjectTemplateBaseAllOf2 record {
@@ -538,14 +554,6 @@ public type ProjectTemplateBaseAllOf2 record {
     TemplateRole[] requestedRoles?;
 };
 
-public type InlineResponse2015 record {
-    ProjectResponse data?;
-};
-
-public type InlineResponse2018 record {
-    TeamResponse data?;
-};
-
 # Represents the Queries record for the operation: createPortfolio
 public type CreatePortfolioQueries record {
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
@@ -555,10 +563,6 @@ public type CreatePortfolioQueries record {
     # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
     @http:Query {name: "opt_pretty"}
     boolean optPretty?;
-};
-
-public type InlineResponse2017 record {
-    TaskResponse data?;
 };
 
 # Represents the Queries record for the operation: createAttachmentForObject
@@ -622,6 +626,10 @@ public type TeamMembershipCompactAllOf2 record {
     UserCompact user?;
 };
 
+public type StatusUpdateOkResponse record {
+    StatusUpdateResponse data?;
+};
+
 # Represents the Queries record for the operation: getTaskTemplates
 public type GetTaskTemplatesQueries record {
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
@@ -668,28 +676,6 @@ public type TeamCompactAllOf2 record {
     string name?;
 };
 
-public type InlineResponse2001 record {
-    EmptyResponse data?;
-};
-
-public type InlineResponse2003 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    AuditLogEvent[] data?;
-};
-
-public type InlineResponse2002 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    AttachmentCompact[] data?;
-};
-
-public type InlineResponse2005 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    CustomFieldSettingResponse[] data?;
-};
-
 # A *goal relationship* is an object representing the relationship between a goal and another goal, a project, a task, or a portfolio
 public type GoalRelationshipCompactAllOf2 record {
     @jsondata:Name {value: "supporting_resource"}
@@ -702,28 +688,8 @@ public type GoalRelationshipCompactAllOf2 record {
     "subgoal"|"supporting_work" resourceSubtype?;
 };
 
-public type InlineResponse2004 record {
-    BatchResponse[] data?;
-};
-
 public type CustomFieldsBody record {
     CustomFieldRequest data?;
-};
-
-# The full record for all events that have occurred since the sync token was created
-public type InlineResponse2007 record {
-    EventResponse[] data?;
-    # Indicates whether there are more events to pull
-    @jsondata:Name {value: "has_more"}
-    boolean hasMore?;
-    # A sync token to be used with the next call to the /events endpoint
-    string sync?;
-};
-
-public type InlineResponse2006 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    CustomFieldResponse[] data?;
 };
 
 public type OrganizationExportBase OrganizationExportCompact;
@@ -769,6 +735,16 @@ public type GetItemsForPortfolioQueries record {
 
 public type ProjectsprojectGidBody record {
     ProjectUpdateRequest data?;
+};
+
+# The full record for all events that have occurred since the sync token was created
+public type EventsResponse record {
+    EventResponse[] data?;
+    # Indicates whether there are more events to pull
+    @jsondata:Name {value: "has_more"}
+    boolean hasMore?;
+    # A sync token to be used with the next call to the /events endpoint
+    string sync?;
 };
 
 # Represents the Queries record for the operation: addFollowersForTask
@@ -1154,6 +1130,10 @@ public type UpdateCustomFieldQueries record {
     boolean optPretty?;
 };
 
+public type PortfolioCreatedResponse record {
+    PortfolioResponse data?;
+};
+
 public type GoalUpdateRequestAllOf2 record {
     # The current status of this goal. When the goal is open, its status can be `green`, `yellow`, and `red` to reflect "On Track", "At Risk", and "Off Track", respectively. When the goal is closed, the value can be `missed`, `achieved`, `partial`, or `dropped`.
     # *Note* you can only write to this property if `metric` is set
@@ -1180,6 +1160,10 @@ public type ProjectGidRemoveCustomFieldSettingBody record {
 
 public type ProjectGidSaveAsTemplateBody record {
     ProjectSaveAsTemplateRequest data?;
+};
+
+public type TaskCompacts record {
+    TaskCompact[] data?;
 };
 
 public type EnumOptionsenumOptionGidBody record {
@@ -1267,6 +1251,12 @@ public type GetPortfolioQueries record {
 };
 
 public type GoalMetricRequest GoalMetricBase;
+
+public type PortfolioCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    PortfolioCompact[] data?;
+};
 
 public type StatusUpdateResponse record {
     *StatusUpdateBase;
@@ -1429,6 +1419,12 @@ public type StatusUpdateRequest record {
     *StatusUpdateRequestAllOf2;
 };
 
+public type StoryCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    StoryCompact[] data?;
+};
+
 # Represents the Queries record for the operation: getStory
 public type GetStoryQueries record {
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
@@ -1543,116 +1539,170 @@ public type TaskRemoveTagRequest record {
 # Represents the Queries record for the operation: searchTasksForWorkspace
 public type SearchTasksForWorkspaceQueries record {
     # Comma-separated list of project IDs
-    string projects\.any?;
+    @http:Query {name: "projects.any"}
+    string projectsAny?;
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
     @http:Query {name: "opt_fields"}
     ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[] optFields?;
     # Comma-separated list of user identifiers
-    string assigned_by\.any?;
+    @http:Query {name: "assigned_by.any"}
+    string assignedByAny?;
     # Filter to tasks with attachments
-    boolean has_attachment?;
+    @http:Query {name: "has_attachment"}
+    boolean hasAttachment?;
     # Comma-separated list of tag IDs
-    string tags\.not?;
+    @http:Query {name: "tags.not"}
+    string tagsNot?;
     # Comma-separated list of user identifiers
-    string created_by\.any?;
+    @http:Query {name: "created_by.any"}
+    string createdByAny?;
     # Comma-separated list of user identifiers
-    string commented_on_by\.not?;
+    @http:Query {name: "commented_on_by.not"}
+    string commentedOnByNot?;
     # ISO 8601 datetime string
-    string completed_at\.before?;
+    @http:Query {name: "completed_at.before"}
+    string completedAtBefore?;
     # Comma-separated list of section or column IDs
-    string sections\.any?;
+    @http:Query {name: "sections.any"}
+    string sectionsAny?;
     # Comma-separated list of user identifiers
-    string assignee\.not?;
+    @http:Query {name: "assignee.not"}
+    string assigneeNot?;
     # ISO 8601 datetime string
-    string created_at\.before?;
+    @http:Query {name: "created_at.before"}
+    string createdAtBefore?;
     # Performs full-text search on both task name and description
     string text?;
     # ISO 8601 date string
-    string start_on\.after?;
+    @http:Query {name: "start_on.after"}
+    string startOnAfter?;
     # ISO 8601 date string or `null`
-    string? start_on?;
+    @http:Query {name: "start_on"}
+    string? startOn?;
     # Comma-separated list of project IDs
-    string projects\.not?;
+    @http:Query {name: "projects.not"}
+    string projectsNot?;
     # ISO 8601 date string
-    string due_on\.after?;
+    @http:Query {name: "due_on.after"}
+    string dueOnAfter?;
     # ISO 8601 datetime string
-    string due_at\.before?;
+    @http:Query {name: "due_at.before"}
+    string dueAtBefore?;
     # ISO 8601 date string
-    string start_on\.before?;
+    @http:Query {name: "start_on.before"}
+    string startOnBefore?;
     # Comma-separated list of user identifiers
-    string followers\.not?;
+    @http:Query {name: "followers.not"}
+    string followersNot?;
     # Filter to completed tasks
     boolean completed?;
     # Filter to subtasks
-    boolean is_subtask?;
+    @http:Query {name: "is_subtask"}
+    boolean isSubtask?;
     # ISO 8601 date string
-    string created_on\.after?;
+    @http:Query {name: "created_on.after"}
+    string createdOnAfter?;
     # ISO 8601 datetime string
-    string completed_at\.after?;
+    @http:Query {name: "completed_at.after"}
+    string completedAtAfter?;
     # Comma-separated list of team IDs
-    string teams\.any?;
+    @http:Query {name: "teams.any"}
+    string teamsAny?;
     # ISO 8601 date string or `null`
-    string? created_on?;
+    @http:Query {name: "created_on"}
+    string? createdOn?;
     # ISO 8601 date string
-    string modified_on\.before?;
+    @http:Query {name: "modified_on.before"}
+    string modifiedOnBefore?;
     # Filter to incomplete tasks with dependents
-    boolean is_blocking?;
+    @http:Query {name: "is_blocking"}
+    boolean isBlocking?;
     # Comma-separated list of user identifiers
-    string assigned_by\.not?;
+    @http:Query {name: "assigned_by.not"}
+    string assignedByNot?;
     # Comma-separated list of tag IDs
-    string tags\.all?;
+    @http:Query {name: "tags.all"}
+    string tagsAll?;
     # ISO 8601 datetime string
-    string due_at\.after?;
+    @http:Query {name: "due_at.after"}
+    string dueAtAfter?;
     # ISO 8601 date string
-    string due_on\.before?;
+    @http:Query {name: "due_on.before"}
+    string dueOnBefore?;
     # ISO 8601 date string
-    string created_on\.before?;
+    @http:Query {name: "created_on.before"}
+    string createdOnBefore?;
     # ISO 8601 date string or `null`
-    string? completed_on?;
+    @http:Query {name: "completed_on"}
+    string? completedOn?;
     # One of `due_date`, `created_at`, `completed_at`, `likes`, or `modified_at`, defaults to `modified_at`
-    "due_date"|"created_at"|"completed_at"|"likes"|"modified_at" sort_by = "modified_at";
+    @http:Query {name: "sort_by"}
+    "due_date"|"created_at"|"completed_at"|"likes"|"modified_at" sortBy = "modified_at";
     # ISO 8601 date string or `null`
-    string? due_on?;
+    @http:Query {name: "due_on"}
+    string? dueOn?;
     # Comma-separated list of section or column IDs
-    string sections\.not?;
+    @http:Query {name: "sections.not"}
+    string sectionsNot?;
     # ISO 8601 date string
-    string completed_on\.after?;
+    @http:Query {name: "completed_on.after"}
+    string completedOnAfter?;
     # Default `false`
-    boolean sort_ascending = false;
+    @http:Query {name: "sort_ascending"}
+    boolean sortAscending = false;
     # Provides “pretty” output.
     # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
     @http:Query {name: "opt_pretty"}
     boolean optPretty?;
     # Comma-separated list of project IDs
-    string projects\.all?;
+    @http:Query {name: "projects.all"}
+    string projectsAll?;
     # ISO 8601 date string
-    string completed_on\.before?;
+    @http:Query {name: "completed_on.before"}
+    string completedOnBefore?;
     # ISO 8601 datetime string
-    string modified_at\.after?;
+    @http:Query {name: "modified_at.after"}
+    string modifiedAtAfter?;
     # Comma-separated list of section or column IDs
-    string sections\.all?;
+    @http:Query {name: "sections.all"}
+    string sectionsAll?;
     # Comma-separated list of user identifiers
-    string liked_by\.not?;
+    @http:Query {name: "liked_by.not"}
+    string likedByNot?;
     # ISO 8601 date string or `null`
-    string? modified_on?;
+    @http:Query {name: "modified_on"}
+    string? modifiedOn?;
     # Comma-separated list of tag IDs
-    string tags\.any?;
+    @http:Query {name: "tags.any"}
+    string tagsAny?;
     # ISO 8601 datetime string
-    string created_at\.after?;
+    @http:Query {name: "created_at.after"}
+    string createdAtAfter?;
     # Comma-separated list of portfolio IDs
-    string portfolios\.any?;
+    @http:Query {name: "portfolios.any"}
+    string portfoliosAny?;
     # Filters results by the task's resource_subtype
-    "default_task"|"milestone" resource_subtype = "milestone";
+    @http:Query {name: "resource_subtype"}
+    "default_task"|"milestone" resourceSubtype = "milestone";
     # Comma-separated list of user identifiers
-    string assignee\.any?;
+    @http:Query {name: "assignee.any"}
+    string assigneeAny?;
     # Comma-separated list of user identifiers
-    string created_by\.not?;
+    @http:Query {name: "created_by.not"}
+    string createdByNot?;
     # ISO 8601 datetime string
-    string modified_at\.before?;
+    @http:Query {name: "modified_at.before"}
+    string modifiedAtBefore?;
     # Filter to tasks with incomplete dependencies
-    boolean is_blocked?;
+    @http:Query {name: "is_blocked"}
+    boolean isBlocked?;
     # ISO 8601 date string
-    string modified_on\.after?;
+    @http:Query {name: "modified_on.after"}
+    string modifiedOnAfter?;
+};
+
+public type OrganizationExportCreatedResponse record {
+    OrganizationExportResponse data?;
 };
 
 public type DateVariableCompact record {
@@ -1867,6 +1917,10 @@ public type WorkspaceMembershipResponse record {
     *WorkspaceMembershipResponseAllOf2;
 };
 
+public type GoalOkResponse record {
+    GoalResponse data?;
+};
+
 public type TaskGidDuplicateBody record {
     TaskDuplicateRequest data?;
 };
@@ -1928,6 +1982,11 @@ public type GetWebhooksQueries record {
 public type GoalRelationshipRequestAllOf2 record {
 };
 
+# A generic list of objects, such as those returned by the typeahead search endpoint
+public type AsanaNamedResources record {
+    AsanaNamedResource[] data?;
+};
+
 # Represents the Queries record for the operation: updateProject
 public type UpdateProjectQueries record {
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
@@ -1982,6 +2041,12 @@ public type ProjectResponseAllOf2 record {
     # The user that marked this project complete, or null if the project is not completed
     @jsondata:Name {value: "completed_by"}
     UserCompact? completedBy?;
+};
+
+public type TeamMembershipCompactsResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TeamMembershipCompact[] data?;
 };
 
 public type OrganizationExportsBody record {
@@ -2146,6 +2211,12 @@ public type TaskBase record {
     AsanaResource[] dependents?;
 };
 
+public type TimePeriodCompactsResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TimePeriodCompact[] data?;
+};
+
 # A story represents an activity associated with an object in the Asana system
 public type StoryCompactAllOf2 record {
     # The time at which this resource was created
@@ -2182,6 +2253,10 @@ public type StoryBaseAllOf2 record {
     # *Conditional*. Whether the story should be pinned on the resource
     @jsondata:Name {value: "is_pinned"}
     boolean isPinned?;
+};
+
+public type TaskTemplateCompacts record {
+    TaskTemplateCompact[] data?;
 };
 
 # An *event* is an object representing a change to a resource that was
@@ -2293,6 +2368,10 @@ public type TaskGidAddDependentsBody record {
     ModifyDependentsRequest data?;
 };
 
+public type ProjectMembershipNormalOkResponse record {
+    ProjectMembershipNormalResponse data?;
+};
+
 # Represents the Queries record for the operation: insertSectionForProject
 public type InsertSectionForProjectQueries record {
     # Provides “pretty” output.
@@ -2310,6 +2389,12 @@ public type RemoveMembersForProjectQueries record {
     # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
     @http:Query {name: "opt_pretty"}
     boolean optPretty?;
+};
+
+public type SectionCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    SectionCompact[] data?;
 };
 
 # Represents the Queries record for the operation: deleteMembership
@@ -2340,6 +2425,10 @@ public type GetTimeTrackingEntryQueries record {
     # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
     @http:Query {name: "opt_pretty"}
     boolean optPretty?;
+};
+
+public type TaskCreatedResponse record {
+    TaskResponse data?;
 };
 
 public type GoalRelationshipResponse record {
@@ -2383,6 +2472,10 @@ public type RemoveUserForWorkspaceQueries record {
 };
 
 public type JobBase JobCompact;
+
+public type BatchesResponse record {
+    BatchResponse[] data?;
+};
 
 public type CustomFieldRequestAllOf2 record {
     # *Create-Only* The workspace to create a custom field in
@@ -2475,10 +2568,22 @@ public type ProjectTemplateBase record {
     *ProjectTemplateBaseAllOf2;
 };
 
+public type CustomFieldCreatedResponse record {
+    CustomFieldResponse data?;
+};
+
 # A *project template* is an object that allows new projects to be created with a predefined setup, which may include tasks, sections, Rules, etc. It simplifies the process of running a workflow that involves a similar set of work every time
 public type ProjectTemplateCompactAllOf2 record {
     # Name of the project template
     string name?;
+};
+
+public type UserTaskListOkResponse record {
+    UserTaskListResponse data?;
+};
+
+public type StoryOkResponse record {
+    StoryResponse data?;
 };
 
 # Represents the Queries record for the operation: getProjectStatus
@@ -2733,6 +2838,10 @@ public type TagRequestAllOf2 record {
 public type EmptyResponse record {
 };
 
+public type ProjectTemplateOkResponse record {
+    ProjectTemplateResponse data?;
+};
+
 public type TaskDuplicateRequest record {
     # A comma-separated list of fields that will be duplicated to the new task.
     # ##### Fields
@@ -2799,10 +2908,6 @@ public type TaskTemplateCompactAllOf2 record {
     string name?;
 };
 
-public type InlineResponse201 record {
-    CustomFieldResponse data?;
-};
-
 # Represents the Queries record for the operation: updateGoal
 public type UpdateGoalQueries record {
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
@@ -2814,8 +2919,14 @@ public type UpdateGoalQueries record {
     boolean optPretty?;
 };
 
-public type InlineResponse200 record {
-    AttachmentResponse data?;
+public type TagCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TagCompact[] data?;
+};
+
+public type UserOkResponse record {
+    UserResponse data?;
 };
 
 # A generic Asana Resource, containing a globally unique identifier
@@ -2837,6 +2948,12 @@ public type CreateMembershipQueries record {
     # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
     @http:Query {name: "opt_pretty"}
     boolean optPretty?;
+};
+
+public type AttachmentCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    AttachmentCompact[] data?;
 };
 
 # Represents the Queries record for the operation: deletePortfolio
@@ -2861,6 +2978,10 @@ public type ProjectRequestAllOf2 record {
     record {|string...;|} customFields?;
     # The team that this project is shared with
     string team?;
+};
+
+public type AttachmentOkResponse record {
+    AttachmentResponse data?;
 };
 
 public type TeamMembershipResponse TeamMembershipBase;
@@ -2997,6 +3118,12 @@ public type TaskGidRemoveDependenciesBody record {
     ModifyDependenciesRequest data?;
 };
 
+public type TeamCompactsResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TeamCompact[] data?;
+};
+
 public type EnumOptionInsertRequest record {
     # An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option
     @jsondata:Name {value: "after_enum_option"}
@@ -3011,6 +3138,10 @@ public type EnumOptionInsertRequest record {
 
 public type GoalRequestAllOf2 record {
     string[] followers?;
+};
+
+public type TaskCountOkResponse record {
+    TaskCountResponse data?;
 };
 
 public type WorkspaceGidProjectsBody record {
@@ -3039,9 +3170,17 @@ public type AuditLogEventActor record {
     string email?;
 };
 
+public type GoalRelationshipOkResponse record {
+    GoalRelationshipResponse data?;
+};
+
 public type GoalMembershipCompact record {
     *GoalMembershipBase;
     *GoalMembershipCompactAllOf2;
+};
+
+public type TeamCreatedResponse record {
+    TeamResponse data?;
 };
 
 # A response object returned from a batch request
@@ -3149,6 +3288,10 @@ public type GetWorkspaceQueries record {
     boolean optPretty?;
 };
 
+public type EnumOptions record {
+    EnumOption data?;
+};
+
 public type RuleTriggerResponse record {
     # Message providing more detail about the result
     string message?;
@@ -3204,6 +3347,10 @@ public type AddSupportingRelationshipQueries record {
     # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
     @http:Query {name: "opt_pretty"}
     boolean optPretty?;
+};
+
+public type SectionOkResponse record {
+    SectionResponse data?;
 };
 
 public type ProjectBase record {
@@ -3345,6 +3492,10 @@ public type ProjectGidProjectBriefsBody record {
     ProjectBriefRequest data?;
 };
 
+public type ProjectMembershipCompactOkResponse record {
+    ProjectMembershipCompactResponse data?;
+};
+
 public type TaskTemplateBase TaskTemplateCompact;
 
 # A user identification object for specification with the addUser/removeUser endpoints
@@ -3410,6 +3561,10 @@ public type WebhookFilter record {
     string resourceSubtype?;
 };
 
+public type TaskTemplateOkResponse record {
+    TaskTemplateResponse data?;
+};
+
 # Represents the Queries record for the operation: getUsersForWorkspace
 public type GetUsersForWorkspaceQueries record {
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
@@ -3447,11 +3602,16 @@ public type TypeaheadForWorkspaceQueries record {
     @http:Query {name: "opt_pretty"}
     boolean optPretty?;
     # The type of values the typeahead should return. You can choose from one of the following: `custom_field`, `goal`, `project`, `project_template`, `portfolio`, `tag`, `task`, `team`, and `user`. Note that unlike in the names of endpoints, the types listed here are in singular form (e.g. `task`). Using multiple types is not yet supported
-    "custom_field"|"goal"|"project"|"project_template"|"portfolio"|"tag"|"task"|"team"|"user" resource_type = "user";
+    @http:Query {name: "resource_type"}
+    "custom_field"|"goal"|"project"|"project_template"|"portfolio"|"tag"|"task"|"team"|"user" resourceType = "user";
     # The number of results to return. The default is 20 if this parameter is omitted, with a minimum of 1 and a maximum of 100. If there are fewer results found than requested, all will be returned
     int count?;
     # *Deprecated: new integrations should prefer the resource_type field.*
     "custom_field"|"portfolio"|"project"|"tag"|"task"|"user" 'type = "user";
+};
+
+public type TimeTrackingEntryBases record {
+    TimeTrackingEntryBase data?;
 };
 
 # Represents the Queries record for the operation: updateTag
@@ -3473,6 +3633,10 @@ public type PortfolioRemoveItemRequest record {
 };
 
 public type ProjectTemplateResponse ProjectTemplateBase;
+
+public type TagCreatedResponse record {
+    TagResponse data?;
+};
 
 # Represents the Queries record for the operation: instantiateTask
 public type InstantiateTaskQueries record {
@@ -3564,7 +3728,8 @@ public type GetFavoritesForUserQueries record {
     @constraint:Int {minValue: 1, maxValue: 100}
     int 'limit?;
     # The resource type of favorites to be returned
-    "portfolio"|"project"|"tag"|"task"|"user"|"project_template" resource_type = "project";
+    @http:Query {name: "resource_type"}
+    "portfolio"|"project"|"tag"|"task"|"user"|"project_template" resourceType = "project";
 };
 
 public type GoalsgoalGidBody record {
@@ -3914,10 +4079,22 @@ public type DuplicateTaskQueries record {
     boolean optPretty?;
 };
 
+public type ProjectCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    ProjectCompact[] data?;
+};
+
 public type GoalMetricCurrentValueRequestAllOf2 record {
     # *Conditional*. This number is the current value of a goal metric of type number
     @jsondata:Name {value: "current_number_value"}
     decimal currentNumberValue?;
+};
+
+public type ProjectStatusCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    ProjectStatusCompact[] data?;
 };
 
 # The context from which this event originated
@@ -3944,6 +4121,12 @@ public type AuditLogEventContext record {
 
 public type GoalGidRemoveFollowersBody record {
     TaskAddFollowersRequest data?;
+};
+
+public type StatusUpdateCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    StatusUpdateCompact[] data?;
 };
 
 public type OrganizationExportResponse OrganizationExportBase;
@@ -4191,6 +4374,12 @@ public type GetAttachmentQueries record {
     boolean optPretty?;
 };
 
+public type PortfolioMembershipCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    PortfolioMembershipCompact[] data?;
+};
+
 public type StatusUpdateRequestAllOf2 record {
     string parent;
 };
@@ -4315,6 +4504,12 @@ public type GoalMembershipBase record {
     string resourceSubtype?;
 };
 
+public type ProjectMembershipCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    ProjectMembershipCompact[] data?;
+};
+
 # Represents the Queries record for the operation: getWorkspaceMembership
 public type GetWorkspaceMembershipQueries record {
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
@@ -4357,6 +4552,10 @@ public type RemoveFollowersForProjectQueries record {
     boolean optPretty?;
 };
 
+public type UserCompacts record {
+    UserCompact[] data?;
+};
+
 # Represents the Queries record for the operation: updatePortfolio
 public type UpdatePortfolioQueries record {
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
@@ -4366,12 +4565,6 @@ public type UpdatePortfolioQueries record {
     # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
     @http:Query {name: "opt_pretty"}
     boolean optPretty?;
-};
-
-public type InlineResponse20019 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    ProjectCompact[] data?;
 };
 
 public type CustomFieldSettingResponse record {
@@ -4397,6 +4590,14 @@ public type PortfolioGidRemoveItemBody record {
 public type GoalMembershipResponse record {
     *GoalMembershipBase;
     *GoalMembershipResponseAllOf2;
+};
+
+public type UserBaseOkResponse record {
+    UserBaseResponse data?;
+};
+
+public type ProjectBriefOkResponse record {
+    ProjectBriefResponse data?;
 };
 
 # Represents the Queries record for the operation: createTag
@@ -4445,6 +4646,10 @@ public type UpdateTaskQueries record {
     boolean optPretty?;
 };
 
+public type TimePeriodOkResponse record {
+    TimePeriodResponse data?;
+};
+
 public type RequestedRoleRequest record {
     # Globally unique identifier of the template role in the project template
     string gid?;
@@ -4452,8 +4657,8 @@ public type RequestedRoleRequest record {
     string value?;
 };
 
-public type InlineResponse20021 record {
-    ProjectBriefResponse data?;
+public type WorkspaceMembershipOkResponse record {
+    WorkspaceMembershipResponse data?;
 };
 
 # An *organization_export* object represents a request to export the complete data of an Organization in JSON format
@@ -4476,10 +4681,6 @@ public type OrganizationExportCompactAllOf2 record {
     "pending"|"started"|"finished"|"error" state?;
 };
 
-public type InlineResponse20020 record {
-    CustomFieldSettingResponse data?;
-};
-
 # Represents the Queries record for the operation: getUserTaskListForUser
 public type GetUserTaskListForUserQueries record {
     # The workspace in which to get the user task list
@@ -4493,10 +4694,8 @@ public type GetUserTaskListForUserQueries record {
     boolean optPretty?;
 };
 
-public type InlineResponse20023 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    ProjectMembershipCompact[] data?;
+public type EmptyOkResponse record {
+    EmptyResponse data?;
 };
 
 # Represents the Queries record for the operation: addMembersForProject
@@ -4510,8 +4709,8 @@ public type AddMembersForProjectQueries record {
     boolean optPretty?;
 };
 
-public type InlineResponse20022 record {
-    ProjectMembershipNormalResponse data?;
+public type TeamMembershipOkResponse record {
+    TeamMembershipResponse data?;
 };
 
 # Contains keys `start_on` and `end_on` for the vacation dates for the user in this workspace. If `start_on` is null, the entire `vacation_dates` object will be null. If `end_on` is before today, the entire `vacation_dates` object will be null
@@ -4522,12 +4721,6 @@ public type WorkspaceMembershipResponseVacationDates record {
     # The day on which the user's vacation in this workspace ends, or null if there is no end date. This is a date with `YYYY-MM-DD` format
     @jsondata:Name {value: "end_on"}
     string? endOn?;
-};
-
-public type InlineResponse20025 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    ProjectStatusCompact[] data?;
 };
 
 public type AttachmentRequest record {
@@ -4547,31 +4740,9 @@ public type AttachmentRequest record {
     string url?;
 };
 
-public type InlineResponse20024 record {
-    ProjectStatusResponse data?;
-};
-
-public type InlineResponse20027 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    ProjectTemplateCompact[] data?;
-};
-
-public type InlineResponse20026 record {
-    ProjectTemplateResponse data?;
-};
-
 public type TaskResponse record {
     *TaskBase;
     *TaskResponseAllOf2;
-};
-
-public type InlineResponse20029 record {
-    RuleTriggerResponse data?;
-};
-
-public type InlineResponse20028 record {
-    TaskCountResponse data?;
 };
 
 # Represents the Queries record for the operation: removeCustomFieldSettingForPortfolio
@@ -4714,10 +4885,6 @@ public type GetWebhookQueries record {
     boolean optPretty?;
 };
 
-public type InlineResponse20030 record {
-    SectionResponse data?;
-};
-
 # Represents the Queries record for the operation: duplicateProject
 public type DuplicateProjectQueries record {
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
@@ -4729,41 +4896,19 @@ public type DuplicateProjectQueries record {
     boolean optPretty?;
 };
 
-public type InlineResponse20032 record {
-    StatusUpdateResponse data?;
+public type AsanaNamedResourceResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    AsanaNamedResource[] data?;
+};
+
+public type ProjectStatusOkResponse record {
+    ProjectStatusResponse data?;
 };
 
 public type ProjectRequest record {
     *ProjectBase;
     *ProjectRequestAllOf2;
-};
-
-public type InlineResponse20031 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    SectionCompact[] data?;
-};
-
-public type InlineResponse20034 record {
-    StoryResponse data?;
-};
-
-public type InlineResponse20033 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    StatusUpdateCompact[] data?;
-};
-
-public type InlineResponse20036 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    TagCompact[] data?;
-};
-
-public type InlineResponse20035 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    StoryCompact[] data?;
 };
 
 public type CustomFieldBase record {
@@ -4910,14 +5055,6 @@ public type StoryResponseAllOf2 record {
     StoryCompact story?;
 };
 
-public type InlineResponse20038 record {
-    TaskTemplateResponse data?;
-};
-
-public type InlineResponse20037 record {
-    TaskTemplateCompact[] data?;
-};
-
 public type UserBaseResponseAllOf2 record {
     UserBaseResponsePhoto? photo?;
     # The user's email address
@@ -4941,12 +5078,6 @@ public type GetTagsForWorkspaceQueries record {
     # The number of objects to return per page. The value must be between 1 and 100
     @constraint:Int {minValue: 1, maxValue: 100}
     int 'limit?;
-};
-
-public type InlineResponse20039 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    TaskCompact[] data?;
 };
 
 public type TaskGidSetParentBody record {
@@ -5021,6 +5152,28 @@ public type ProjectStatusBaseAllOf2 record {
     string text?;
 };
 
+public type CustomFieldSettingOkResponse record {
+    CustomFieldSettingResponse data?;
+};
+
+public type ProjectTemplateCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    ProjectTemplateCompact[] data?;
+};
+
+public type TimeTrackingEntryCompactsResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    TimeTrackingEntryCompact[] data?;
+};
+
+public type WorkspaceCompactResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    WorkspaceCompact[] data?;
+};
+
 # Represents the Queries record for the operation: deleteStory
 public type DeleteStoryQueries record {
     # Provides “pretty” output.
@@ -5052,20 +5205,6 @@ public type GetProjectBriefQueries record {
     boolean optPretty?;
 };
 
-public type InlineResponse20041 record {
-    TeamMembershipResponse data?;
-};
-
-public type InlineResponse20040 record {
-    TaskCompact[] data?;
-};
-
-public type InlineResponse20043 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    TeamCompact[] data?;
-};
-
 # Represents the Queries record for the operation: getCustomField
 public type GetCustomFieldQueries record {
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
@@ -5082,18 +5221,6 @@ public type ModifyDependenciesRequest record {
     string[] dependencies?;
 };
 
-public type InlineResponse20042 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    TeamMembershipCompact[] data?;
-};
-
-public type InlineResponse20045 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    TimePeriodCompact[] data?;
-};
-
 public type ProjectSectionInsertRequest record {
     # Insert the given section immediately after the section specified by this parameter
     @jsondata:Name {value: "after_section"}
@@ -5105,35 +5232,10 @@ public type ProjectSectionInsertRequest record {
     string section;
 };
 
-public type InlineResponse20044 record {
-    TimePeriodResponse data?;
-};
-
-# A generic list of objects, such as those returned by the typeahead search endpoint
-public type InlineResponse20047 record {
-    AsanaNamedResource[] data?;
-};
-
 # A user identification object for specification with the addUser/removeUser endpoints
 public type TeamRemoveUserRequest record {
     # A string identifying a user. This can either be the string "me", an email, or the gid of a user
     string user?;
-};
-
-public type InlineResponse20046 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    TimeTrackingEntryCompact[] data?;
-};
-
-public type InlineResponse20049 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    UserCompact[] data?;
-};
-
-public type InlineResponse20048 record {
-    UserTaskListResponse data?;
 };
 
 # Represents the Queries record for the operation: getStatus
@@ -5192,6 +5294,10 @@ public type DeleteTaskQueries record {
     boolean optPretty?;
 };
 
+public type EnumOptions0 record {
+    WebhookResponse data?;
+};
+
 # Represents the Queries record for the operation: getStatusesForObject
 public type GetStatusesForObjectQueries record {
     # Globally unique identifier for object to fetch statuses from. Must be a GID for a project, portfolio, or goal
@@ -5216,45 +5322,15 @@ public type GetStatusesForObjectQueries record {
     int 'limit?;
 };
 
-public type InlineResponse20050 record {
-    UserResponse data?;
-};
-
 public type CreateMembershipRequest record {
     *MembershipRequest;
     *CreateMembershipRequestAllOf2;
 };
 
-public type InlineResponse20052 record {
-    UserCompact[] data?;
-};
-
-public type InlineResponse20051 record {
+public type GoalCompactsResponse record {
     @jsondata:Name {value: "next_page"}
     NextPage? nextPage?;
-    AsanaNamedResource[] data?;
-};
-
-public type InlineResponse20054 record {
-    WorkspaceMembershipResponse data?;
-};
-
-public type InlineResponse20053 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    WebhookResponse[] data?;
-};
-
-public type InlineResponse20056 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    WorkspaceCompact[] data?;
-};
-
-public type InlineResponse20055 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    WorkspaceMembershipCompact[] data?;
+    GoalCompact[] data?;
 };
 
 # Represents the Queries record for the operation: deleteProjectBrief
@@ -5265,14 +5341,6 @@ public type DeleteProjectBriefQueries record {
     boolean optPretty?;
 };
 
-public type InlineResponse20058 record {
-    UserBaseResponse data?;
-};
-
-public type InlineResponse20057 record {
-    WorkspaceResponse data?;
-};
-
 public type ProjectStatusCompact record {
     *AsanaResource;
     *ProjectStatusCompactAllOf2;
@@ -5280,6 +5348,12 @@ public type ProjectStatusCompact record {
 
 public type TaskGidRemoveDependentsBody record {
     ModifyDependentsRequest data?;
+};
+
+public type MembershipCompacts record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    MembershipCompact[] data?;
 };
 
 # An *attachment* object represents any file attached to a task in Asana, whether it’s an uploaded file or one associated via a third-party service such as Dropbox or Google Drive
@@ -5349,8 +5423,18 @@ public type ProjectsBody record {
     ProjectRequest data?;
 };
 
+public type AuditLogEventResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    AuditLogEvent[] data?;
+};
+
 public type PortfolioGidAddMembersBody record {
     AddMembersRequest data?;
+};
+
+public type RuleTriggerOkResponse record {
+    RuleTriggerResponse data?;
 };
 
 # Represents the Queries record for the operation: deleteProjectStatus
@@ -5424,10 +5508,6 @@ public type CreateWebhookQueries record {
 };
 
 public type WorkspaceRequest WorkspaceBase;
-
-public type InlineResponse2019 record {
-    TimeTrackingEntryBase data?;
-};
 
 public type WorkspacesworkspaceGidBody record {
     WorkspaceRequest data?;
@@ -5528,10 +5608,6 @@ public type UpdateTimeTrackingEntryQueries record {
     # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging
     @http:Query {name: "opt_pretty"}
     boolean optPretty?;
-};
-
-public type InlineResponse20110 record {
-    WebhookResponse data?;
 };
 
 public type EnumOptionsInsertBody record {
@@ -5743,6 +5819,16 @@ public type WorkspaceGidAddUserBody record {
     WorkspaceAddUserRequest data?;
 };
 
+public type CustomFieldSettingsResponse record {
+    @jsondata:Name {value: "next_page"}
+    NextPage? nextPage?;
+    CustomFieldSettingResponse[] data?;
+};
+
+public type PortfolioMembershipOkResponse record {
+    PortfolioMembershipResponse data?;
+};
+
 # The primary object that was affected by this event
 public type AuditLogEventResource record {
     # Globally unique identifier of the resource
@@ -5804,8 +5890,8 @@ public type AddItemForPortfolioQueries record {
     boolean optPretty?;
 };
 
-public type InlineResponse20010 record {
-    GoalResponse data?;
+public type JobOkResponse record {
+    JobResponse data?;
 };
 
 # Represents the Queries record for the operation: addUserForWorkspace
@@ -5824,22 +5910,6 @@ public type WorkspaceCompact record {
     *WorkspaceCompactAllOf2;
 };
 
-public type InlineResponse20012 record {
-    GoalCompact[] data?;
-};
-
-public type InlineResponse20011 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    GoalCompact[] data?;
-};
-
-public type InlineResponse20014 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    MembershipCompact[] data?;
-};
-
 # Represents the Queries record for the operation: createProjectForTeam
 public type CreateProjectForTeamQueries record {
     # This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include
@@ -5854,10 +5924,6 @@ public type CreateProjectForTeamQueries record {
 public type TaskRemoveFollowersRequest record {
     # An array of strings identifying users. These can either be the string "me", an email, or the gid of a user
     string[] followers;
-};
-
-public type InlineResponse20013 record {
-    JobResponse data?;
 };
 
 # Represents the Queries record for the operation: getTeamMembershipsForUser
@@ -5881,26 +5947,12 @@ public type GetTeamMembershipsForUserQueries record {
     int 'limit?;
 };
 
-public type InlineResponse20016 record {
-    @jsondata:Name {value: "next_page"}
-    NextPage? nextPage?;
-    PortfolioMembershipCompact[] data?;
-};
-
-public type InlineResponse20015 record {
-    ProjectMembershipCompactResponse data?;
-};
-
 # Custom Fields Settings objects represent the many-to-many join of the Custom Field and Project as well as stores information that is relevant to that particular pairing
 public type CustomFieldSettingCompactAllOf2 record {
 };
 
-public type InlineResponse20018 record {
+public type UserCompactsResponse record {
     @jsondata:Name {value: "next_page"}
     NextPage? nextPage?;
-    PortfolioCompact[] data?;
-};
-
-public type InlineResponse20017 record {
-    PortfolioMembershipResponse data?;
+    UserCompact[] data?;
 };

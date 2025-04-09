@@ -36,12 +36,12 @@ public isolated client class Client {
 
     # Get an attachment
     #
-    # + attachment_gid - Globally unique identifier for the attachment
+    # + attachmentGid - Globally unique identifier for the attachment
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the record for a single attachment 
-    resource isolated function get attachments/[string attachment_gid](map<string|string[]> headers = {}, *GetAttachmentQueries queries) returns InlineResponse200|error {
-        string resourcePath = string `/attachments/${getEncodedUri(attachment_gid)}`;
+    resource isolated function get attachments/[string attachmentGid](map<string|string[]> headers = {}, *GetAttachmentQueries queries) returns AttachmentOkResponse|error {
+        string resourcePath = string `/attachments/${getEncodedUri(attachmentGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -49,12 +49,12 @@ public isolated client class Client {
 
     # Delete an attachment
     #
-    # + attachment_gid - Globally unique identifier for the attachment
+    # + attachmentGid - Globally unique identifier for the attachment
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified attachment 
-    resource isolated function delete attachments/[string attachment_gid](map<string|string[]> headers = {}, *DeleteAttachmentQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/attachments/${getEncodedUri(attachment_gid)}`;
+    resource isolated function delete attachments/[string attachmentGid](map<string|string[]> headers = {}, *DeleteAttachmentQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/attachments/${getEncodedUri(attachmentGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
@@ -64,7 +64,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified object's attachments 
-    resource isolated function get attachments(map<string|string[]> headers = {}, *GetAttachmentsForObjectQueries queries) returns InlineResponse2002|error {
+    resource isolated function get attachments(map<string|string[]> headers = {}, *GetAttachmentsForObjectQueries queries) returns AttachmentCompacts|error {
         string resourcePath = string `/attachments`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -77,7 +77,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The file you want to upload 
     # + return - Successfully uploaded the attachment to the parent object 
-    resource isolated function post attachments(AttachmentRequest payload, map<string|string[]> headers = {}, *CreateAttachmentForObjectQueries queries) returns InlineResponse200|error {
+    resource isolated function post attachments(AttachmentRequest payload, map<string|string[]> headers = {}, *CreateAttachmentForObjectQueries queries) returns AttachmentOkResponse|error {
         string resourcePath = string `/attachments`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -89,12 +89,12 @@ public isolated client class Client {
 
     # Get audit log events
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - AuditLogEvents were successfully retrieved 
-    resource isolated function get workspaces/[string workspace_gid]/audit_log_events(map<string|string[]> headers = {}, *GetAuditLogEventsQueries queries) returns InlineResponse2003|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/audit_log_events`;
+    resource isolated function get workspaces/[string workspaceGid]/audit_log_events(map<string|string[]> headers = {}, *GetAuditLogEventsQueries queries) returns AuditLogEventResponse|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/audit_log_events`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
     }
@@ -105,7 +105,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The requests to batch together via the Batch API 
     # + return - Successfully completed the requested batch API operations 
-    resource isolated function post batch(BatchBody payload, map<string|string[]> headers = {}, *CreateBatchRequestQueries queries) returns InlineResponse2004|error {
+    resource isolated function post batch(BatchBody payload, map<string|string[]> headers = {}, *CreateBatchRequestQueries queries) returns BatchesResponse|error {
         string resourcePath = string `/batch`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -117,12 +117,12 @@ public isolated client class Client {
 
     # Get a project's custom fields
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved custom field settings objects for a project 
-    resource isolated function get projects/[string project_gid]/custom_field_settings(map<string|string[]> headers = {}, *GetCustomFieldSettingsForProjectQueries queries) returns InlineResponse2005|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/custom_field_settings`;
+    resource isolated function get projects/[string projectGid]/custom_field_settings(map<string|string[]> headers = {}, *GetCustomFieldSettingsForProjectQueries queries) returns CustomFieldSettingsResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/custom_field_settings`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -130,12 +130,12 @@ public isolated client class Client {
 
     # Get a portfolio's custom fields
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved custom field settings objects for a portfolio 
-    resource isolated function get portfolios/[string portfolio_gid]/custom_field_settings(map<string|string[]> headers = {}, *GetCustomFieldSettingsForPortfolioQueries queries) returns InlineResponse2005|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/custom_field_settings`;
+    resource isolated function get portfolios/[string portfolioGid]/custom_field_settings(map<string|string[]> headers = {}, *GetCustomFieldSettingsForPortfolioQueries queries) returns CustomFieldSettingsResponse|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}/custom_field_settings`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -147,7 +147,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The custom field object to create 
     # + return - Custom field successfully created 
-    resource isolated function post custom_fields(CustomFieldsBody payload, map<string|string[]> headers = {}, *CreateCustomFieldQueries queries) returns InlineResponse201|error {
+    resource isolated function post custom_fields(CustomFieldsBody payload, map<string|string[]> headers = {}, *CreateCustomFieldQueries queries) returns CustomFieldCreatedResponse|error {
         string resourcePath = string `/custom_fields`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -159,12 +159,12 @@ public isolated client class Client {
 
     # Get a custom field
     #
-    # + custom_field_gid - Globally unique identifier for the custom field
+    # + customFieldGid - Globally unique identifier for the custom field
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the complete definition of a custom field’s metadata 
-    resource isolated function get custom_fields/[string custom_field_gid](map<string|string[]> headers = {}, *GetCustomFieldQueries queries) returns InlineResponse201|error {
-        string resourcePath = string `/custom_fields/${getEncodedUri(custom_field_gid)}`;
+    resource isolated function get custom_fields/[string customFieldGid](map<string|string[]> headers = {}, *GetCustomFieldQueries queries) returns CustomFieldCreatedResponse|error {
+        string resourcePath = string `/custom_fields/${getEncodedUri(customFieldGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -172,13 +172,13 @@ public isolated client class Client {
 
     # Update a custom field
     #
-    # + custom_field_gid - Globally unique identifier for the custom field
+    # + customFieldGid - Globally unique identifier for the custom field
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The custom field object with all updated properties 
     # + return - The custom field was successfully updated 
-    resource isolated function put custom_fields/[string custom_field_gid](CustomFieldscustomFieldGidBody payload, map<string|string[]> headers = {}, *UpdateCustomFieldQueries queries) returns InlineResponse201|error {
-        string resourcePath = string `/custom_fields/${getEncodedUri(custom_field_gid)}`;
+    resource isolated function put custom_fields/[string customFieldGid](CustomFieldscustomFieldGidBody payload, map<string|string[]> headers = {}, *UpdateCustomFieldQueries queries) returns CustomFieldCreatedResponse|error {
+        string resourcePath = string `/custom_fields/${getEncodedUri(customFieldGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -189,24 +189,24 @@ public isolated client class Client {
 
     # Delete a custom field
     #
-    # + custom_field_gid - Globally unique identifier for the custom field
+    # + customFieldGid - Globally unique identifier for the custom field
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The custom field was successfully deleted 
-    resource isolated function delete custom_fields/[string custom_field_gid](map<string|string[]> headers = {}, *DeleteCustomFieldQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/custom_fields/${getEncodedUri(custom_field_gid)}`;
+    resource isolated function delete custom_fields/[string customFieldGid](map<string|string[]> headers = {}, *DeleteCustomFieldQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/custom_fields/${getEncodedUri(customFieldGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
     # Get a workspace's custom fields
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved all custom fields for the given workspace 
-    resource isolated function get workspaces/[string workspace_gid]/custom_fields(map<string|string[]> headers = {}, *GetCustomFieldsForWorkspaceQueries queries) returns InlineResponse2006|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/custom_fields`;
+    resource isolated function get workspaces/[string workspaceGid]/custom_fields(map<string|string[]> headers = {}, *GetCustomFieldsForWorkspaceQueries queries) returns CustomFieldsResponse|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/custom_fields`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -214,13 +214,13 @@ public isolated client class Client {
 
     # Create an enum option
     #
-    # + custom_field_gid - Globally unique identifier for the custom field
+    # + customFieldGid - Globally unique identifier for the custom field
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The enum option object to create 
     # + return - Custom field enum option successfully created 
-    resource isolated function post custom_fields/[string custom_field_gid]/enum_options(CustomFieldGidEnumOptionsBody payload, map<string|string[]> headers = {}, *CreateEnumOptionForCustomFieldQueries queries) returns InlineResponse2011|error {
-        string resourcePath = string `/custom_fields/${getEncodedUri(custom_field_gid)}/enum_options`;
+    resource isolated function post custom_fields/[string customFieldGid]/enum_options(CustomFieldGidEnumOptionsBody payload, map<string|string[]> headers = {}, *CreateEnumOptionForCustomFieldQueries queries) returns EnumOptions|error {
+        string resourcePath = string `/custom_fields/${getEncodedUri(customFieldGid)}/enum_options`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -231,13 +231,13 @@ public isolated client class Client {
 
     # Reorder a custom field's enum
     #
-    # + custom_field_gid - Globally unique identifier for the custom field
+    # + customFieldGid - Globally unique identifier for the custom field
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The enum option object to create 
     # + return - Custom field enum option successfully reordered 
-    resource isolated function post custom_fields/[string custom_field_gid]/enum_options/insert(EnumOptionsInsertBody payload, map<string|string[]> headers = {}, *InsertEnumOptionForCustomFieldQueries queries) returns InlineResponse2011|error {
-        string resourcePath = string `/custom_fields/${getEncodedUri(custom_field_gid)}/enum_options/insert`;
+    resource isolated function post custom_fields/[string customFieldGid]/enum_options/insert(EnumOptionsInsertBody payload, map<string|string[]> headers = {}, *InsertEnumOptionForCustomFieldQueries queries) returns EnumOptions|error {
+        string resourcePath = string `/custom_fields/${getEncodedUri(customFieldGid)}/enum_options/insert`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -248,13 +248,13 @@ public isolated client class Client {
 
     # Update an enum option
     #
-    # + enum_option_gid - Globally unique identifier for the enum option
+    # + enumOptionGid - Globally unique identifier for the enum option
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The enum option object to update 
     # + return - Successfully updated the specified custom field enum 
-    resource isolated function put enum_options/[string enum_option_gid](EnumOptionsenumOptionGidBody payload, map<string|string[]> headers = {}, *UpdateEnumOptionQueries queries) returns InlineResponse2011|error {
-        string resourcePath = string `/enum_options/${getEncodedUri(enum_option_gid)}`;
+    resource isolated function put enum_options/[string enumOptionGid](EnumOptionsenumOptionGidBody payload, map<string|string[]> headers = {}, *UpdateEnumOptionQueries queries) returns EnumOptions|error {
+        string resourcePath = string `/enum_options/${getEncodedUri(enumOptionGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -268,7 +268,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved events 
-    resource isolated function get events(map<string|string[]> headers = {}, *GetEventsQueries queries) returns InlineResponse2007|error {
+    resource isolated function get events(map<string|string[]> headers = {}, *GetEventsQueries queries) returns EventsResponse|error {
         string resourcePath = string `/events`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -277,12 +277,12 @@ public isolated client class Client {
 
     # Get a goal relationship
     #
-    # + goal_relationship_gid - Globally unique identifier for the goal relationship
+    # + goalRelationshipGid - Globally unique identifier for the goal relationship
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the record for the goal relationship 
-    resource isolated function get goal_relationships/[string goal_relationship_gid](map<string|string[]> headers = {}, *GetGoalRelationshipQueries queries) returns InlineResponse2008|error {
-        string resourcePath = string `/goal_relationships/${getEncodedUri(goal_relationship_gid)}`;
+    resource isolated function get goal_relationships/[string goalRelationshipGid](map<string|string[]> headers = {}, *GetGoalRelationshipQueries queries) returns GoalRelationshipOkResponse|error {
+        string resourcePath = string `/goal_relationships/${getEncodedUri(goalRelationshipGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -290,13 +290,13 @@ public isolated client class Client {
 
     # Update a goal relationship
     #
-    # + goal_relationship_gid - Globally unique identifier for the goal relationship
+    # + goalRelationshipGid - Globally unique identifier for the goal relationship
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The updated fields for the goal relationship 
     # + return - Successfully updated the goal relationship 
-    resource isolated function put goal_relationships/[string goal_relationship_gid](GoalRelationshipsgoalRelationshipGidBody payload, map<string|string[]> headers = {}, *UpdateGoalRelationshipQueries queries) returns InlineResponse2008|error {
-        string resourcePath = string `/goal_relationships/${getEncodedUri(goal_relationship_gid)}`;
+    resource isolated function put goal_relationships/[string goalRelationshipGid](GoalRelationshipsgoalRelationshipGidBody payload, map<string|string[]> headers = {}, *UpdateGoalRelationshipQueries queries) returns GoalRelationshipOkResponse|error {
+        string resourcePath = string `/goal_relationships/${getEncodedUri(goalRelationshipGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -310,7 +310,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested goal relationships 
-    resource isolated function get goal_relationships(map<string|string[]> headers = {}, *GetGoalRelationshipsQueries queries) returns InlineResponse2009|error {
+    resource isolated function get goal_relationships(map<string|string[]> headers = {}, *GetGoalRelationshipsQueries queries) returns GoalRelationshipCompacts|error {
         string resourcePath = string `/goal_relationships`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -319,13 +319,13 @@ public isolated client class Client {
 
     # Add a supporting goal relationship
     #
-    # + goal_gid - Globally unique identifier for the goal
+    # + goalGid - Globally unique identifier for the goal
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The supporting resource to be added to the goal 
     # + return - Successfully created the goal relationship 
-    resource isolated function post goals/[string goal_gid]/addSupportingRelationship(GoalGidAddSupportingRelationshipBody payload, map<string|string[]> headers = {}, *AddSupportingRelationshipQueries queries) returns InlineResponse2008|error {
-        string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/addSupportingRelationship`;
+    resource isolated function post goals/[string goalGid]/addSupportingRelationship(GoalGidAddSupportingRelationshipBody payload, map<string|string[]> headers = {}, *AddSupportingRelationshipQueries queries) returns GoalRelationshipOkResponse|error {
+        string resourcePath = string `/goals/${getEncodedUri(goalGid)}/addSupportingRelationship`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -336,13 +336,13 @@ public isolated client class Client {
 
     # Removes a supporting goal relationship
     #
-    # + goal_gid - Globally unique identifier for the goal
+    # + goalGid - Globally unique identifier for the goal
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The supporting resource to be removed from the goal 
     # + return - Successfully removed the goal relationship 
-    resource isolated function post goals/[string goal_gid]/removeSupportingRelationship(GoalGidRemoveSupportingRelationshipBody payload, map<string|string[]> headers = {}, *RemoveSupportingRelationshipQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/removeSupportingRelationship`;
+    resource isolated function post goals/[string goalGid]/removeSupportingRelationship(GoalGidRemoveSupportingRelationshipBody payload, map<string|string[]> headers = {}, *RemoveSupportingRelationshipQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/goals/${getEncodedUri(goalGid)}/removeSupportingRelationship`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -352,12 +352,12 @@ public isolated client class Client {
 
     # Get a goal
     #
-    # + goal_gid - Globally unique identifier for the goal
+    # + goalGid - Globally unique identifier for the goal
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the record for a single goal 
-    resource isolated function get goals/[string goal_gid](map<string|string[]> headers = {}, *GetGoalQueries queries) returns InlineResponse20010|error {
-        string resourcePath = string `/goals/${getEncodedUri(goal_gid)}`;
+    resource isolated function get goals/[string goalGid](map<string|string[]> headers = {}, *GetGoalQueries queries) returns GoalOkResponse|error {
+        string resourcePath = string `/goals/${getEncodedUri(goalGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -365,13 +365,13 @@ public isolated client class Client {
 
     # Update a goal
     #
-    # + goal_gid - Globally unique identifier for the goal
+    # + goalGid - Globally unique identifier for the goal
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The updated fields for the goal 
     # + return - Successfully updated the goal 
-    resource isolated function put goals/[string goal_gid](GoalsgoalGidBody payload, map<string|string[]> headers = {}, *UpdateGoalQueries queries) returns InlineResponse20010|error {
-        string resourcePath = string `/goals/${getEncodedUri(goal_gid)}`;
+    resource isolated function put goals/[string goalGid](GoalsgoalGidBody payload, map<string|string[]> headers = {}, *UpdateGoalQueries queries) returns GoalOkResponse|error {
+        string resourcePath = string `/goals/${getEncodedUri(goalGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -382,12 +382,12 @@ public isolated client class Client {
 
     # Delete a goal
     #
-    # + goal_gid - Globally unique identifier for the goal
+    # + goalGid - Globally unique identifier for the goal
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified goal 
-    resource isolated function delete goals/[string goal_gid](map<string|string[]> headers = {}, *DeleteGoalQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/goals/${getEncodedUri(goal_gid)}`;
+    resource isolated function delete goals/[string goalGid](map<string|string[]> headers = {}, *DeleteGoalQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/goals/${getEncodedUri(goalGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
@@ -397,7 +397,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested goals 
-    resource isolated function get goals(map<string|string[]> headers = {}, *GetGoalsQueries queries) returns InlineResponse20011|error {
+    resource isolated function get goals(map<string|string[]> headers = {}, *GetGoalsQueries queries) returns GoalCompactsResponse|error {
         string resourcePath = string `/goals`;
         map<Encoding> queryParamEncoding = {"time_periods": {style: FORM, explode: true}, "opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -410,7 +410,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The goal to create 
     # + return - Successfully created a new goal 
-    resource isolated function post goals(GoalsBody payload, map<string|string[]> headers = {}, *CreateGoalQueries queries) returns InlineResponse20010|error {
+    resource isolated function post goals(GoalsBody payload, map<string|string[]> headers = {}, *CreateGoalQueries queries) returns GoalOkResponse|error {
         string resourcePath = string `/goals`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -422,13 +422,13 @@ public isolated client class Client {
 
     # Create a goal metric
     #
-    # + goal_gid - Globally unique identifier for the goal
+    # + goalGid - Globally unique identifier for the goal
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The goal metric to create 
     # + return - Successfully created a new goal metric 
-    resource isolated function post goals/[string goal_gid]/setMetric(GoalGidSetMetricBody payload, map<string|string[]> headers = {}, *CreateGoalMetricQueries queries) returns InlineResponse20010|error {
-        string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/setMetric`;
+    resource isolated function post goals/[string goalGid]/setMetric(GoalGidSetMetricBody payload, map<string|string[]> headers = {}, *CreateGoalMetricQueries queries) returns GoalOkResponse|error {
+        string resourcePath = string `/goals/${getEncodedUri(goalGid)}/setMetric`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -439,13 +439,13 @@ public isolated client class Client {
 
     # Update a goal metric
     #
-    # + goal_gid - Globally unique identifier for the goal
+    # + goalGid - Globally unique identifier for the goal
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The updated fields for the goal metric 
     # + return - Successfully updated the goal metric 
-    resource isolated function post goals/[string goal_gid]/setMetricCurrentValue(GoalGidSetMetricCurrentValueBody payload, map<string|string[]> headers = {}, *UpdateGoalMetricQueries queries) returns InlineResponse20010|error {
-        string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/setMetricCurrentValue`;
+    resource isolated function post goals/[string goalGid]/setMetricCurrentValue(GoalGidSetMetricCurrentValueBody payload, map<string|string[]> headers = {}, *UpdateGoalMetricQueries queries) returns GoalOkResponse|error {
+        string resourcePath = string `/goals/${getEncodedUri(goalGid)}/setMetricCurrentValue`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -456,13 +456,13 @@ public isolated client class Client {
 
     # Add a collaborator to a goal
     #
-    # + goal_gid - Globally unique identifier for the goal
+    # + goalGid - Globally unique identifier for the goal
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The followers to be added as collaborators 
     # + return - Successfully added users as collaborators 
-    resource isolated function post goals/[string goal_gid]/addFollowers(GoalGidAddFollowersBody payload, map<string|string[]> headers = {}, *AddFollowersQueries queries) returns InlineResponse20010|error {
-        string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/addFollowers`;
+    resource isolated function post goals/[string goalGid]/addFollowers(GoalGidAddFollowersBody payload, map<string|string[]> headers = {}, *AddFollowersQueries queries) returns GoalOkResponse|error {
+        string resourcePath = string `/goals/${getEncodedUri(goalGid)}/addFollowers`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -473,13 +473,13 @@ public isolated client class Client {
 
     # Remove a collaborator from a goal
     #
-    # + goal_gid - Globally unique identifier for the goal
+    # + goalGid - Globally unique identifier for the goal
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The followers to be removed as collaborators 
     # + return - Successfully removed users as collaborators 
-    resource isolated function post goals/[string goal_gid]/removeFollowers(GoalGidRemoveFollowersBody payload, map<string|string[]> headers = {}, *RemoveFollowersQueries queries) returns InlineResponse20010|error {
-        string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/removeFollowers`;
+    resource isolated function post goals/[string goalGid]/removeFollowers(GoalGidRemoveFollowersBody payload, map<string|string[]> headers = {}, *RemoveFollowersQueries queries) returns GoalOkResponse|error {
+        string resourcePath = string `/goals/${getEncodedUri(goalGid)}/removeFollowers`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -490,12 +490,12 @@ public isolated client class Client {
 
     # Get parent goals from a goal
     #
-    # + goal_gid - Globally unique identifier for the goal
+    # + goalGid - Globally unique identifier for the goal
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified goal's parent goals 
-    resource isolated function get goals/[string goal_gid]/parentGoals(map<string|string[]> headers = {}, *GetParentGoalsForGoalQueries queries) returns InlineResponse20012|error {
-        string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/parentGoals`;
+    resource isolated function get goals/[string goalGid]/parentGoals(map<string|string[]> headers = {}, *GetParentGoalsForGoalQueries queries) returns GoalCompacts|error {
+        string resourcePath = string `/goals/${getEncodedUri(goalGid)}/parentGoals`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -503,12 +503,12 @@ public isolated client class Client {
 
     # Get a job by id
     #
-    # + job_gid - Globally unique identifier for the job
+    # + jobGid - Globally unique identifier for the job
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved Job 
-    resource isolated function get jobs/[string job_gid](map<string|string[]> headers = {}, *GetJobQueries queries) returns InlineResponse20013|error {
-        string resourcePath = string `/jobs/${getEncodedUri(job_gid)}`;
+    resource isolated function get jobs/[string jobGid](map<string|string[]> headers = {}, *GetJobQueries queries) returns JobOkResponse|error {
+        string resourcePath = string `/jobs/${getEncodedUri(jobGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -519,7 +519,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested membership 
-    resource isolated function get memberships(map<string|string[]> headers = {}, *GetMembershipsQueries queries) returns InlineResponse20014|error {
+    resource isolated function get memberships(map<string|string[]> headers = {}, *GetMembershipsQueries queries) returns MembershipCompacts|error {
         string resourcePath = string `/memberships`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -532,7 +532,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The updated fields for the membership 
     # + return - Successfully created the requested membership 
-    resource isolated function post memberships(MembershipsBody payload, map<string|string[]> headers = {}, *CreateMembershipQueries queries) returns InlineResponse2012|error {
+    resource isolated function post memberships(MembershipsBody payload, map<string|string[]> headers = {}, *CreateMembershipQueries queries) returns MembershipCreatedResponse|error {
         string resourcePath = string `/memberships`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
@@ -543,12 +543,12 @@ public isolated client class Client {
 
     # Get a membership
     #
-    # + membership_gid - Globally unique identifier for the membership
+    # + membershipGid - Globally unique identifier for the membership
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the record for a single membership 
-    resource isolated function get memberships/[string membership_gid](map<string|string[]> headers = {}, *GetMembershipQueries queries) returns InlineResponse20015|error {
-        string resourcePath = string `/memberships/${getEncodedUri(membership_gid)}`;
+    resource isolated function get memberships/[string membershipGid](map<string|string[]> headers = {}, *GetMembershipQueries queries) returns ProjectMembershipCompactOkResponse|error {
+        string resourcePath = string `/memberships/${getEncodedUri(membershipGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -556,13 +556,13 @@ public isolated client class Client {
 
     # Update a membership
     #
-    # + membership_gid - Globally unique identifier for the membership
+    # + membershipGid - Globally unique identifier for the membership
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The membership to update 
     # + return - Successfully updated the requested membership 
-    resource isolated function put memberships/[string membership_gid](MembershipsmembershipGidBody payload, map<string|string[]> headers = {}, *UpdateMembershipQueries queries) returns InlineResponse2012|error {
-        string resourcePath = string `/memberships/${getEncodedUri(membership_gid)}`;
+    resource isolated function put memberships/[string membershipGid](MembershipsmembershipGidBody payload, map<string|string[]> headers = {}, *UpdateMembershipQueries queries) returns MembershipCreatedResponse|error {
+        string resourcePath = string `/memberships/${getEncodedUri(membershipGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -572,12 +572,12 @@ public isolated client class Client {
 
     # Delete a membership
     #
-    # + membership_gid - Globally unique identifier for the membership
+    # + membershipGid - Globally unique identifier for the membership
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the requested membership 
-    resource isolated function delete memberships/[string membership_gid](map<string|string[]> headers = {}, *DeleteMembershipQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/memberships/${getEncodedUri(membership_gid)}`;
+    resource isolated function delete memberships/[string membershipGid](map<string|string[]> headers = {}, *DeleteMembershipQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/memberships/${getEncodedUri(membershipGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
@@ -588,7 +588,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The organization to export 
     # + return - Successfully created organization export request 
-    resource isolated function post organization_exports(OrganizationExportsBody payload, map<string|string[]> headers = {}, *CreateOrganizationExportQueries queries) returns InlineResponse2013|error {
+    resource isolated function post organization_exports(OrganizationExportsBody payload, map<string|string[]> headers = {}, *CreateOrganizationExportQueries queries) returns OrganizationExportCreatedResponse|error {
         string resourcePath = string `/organization_exports`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -600,12 +600,12 @@ public isolated client class Client {
 
     # Get details on an org export request
     #
-    # + organization_export_gid - Globally unique identifier for the organization export
+    # + organizationExportGid - Globally unique identifier for the organization export
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved organization export object 
-    resource isolated function get organization_exports/[string organization_export_gid](map<string|string[]> headers = {}, *GetOrganizationExportQueries queries) returns InlineResponse2013|error {
-        string resourcePath = string `/organization_exports/${getEncodedUri(organization_export_gid)}`;
+    resource isolated function get organization_exports/[string organizationExportGid](map<string|string[]> headers = {}, *GetOrganizationExportQueries queries) returns OrganizationExportCreatedResponse|error {
+        string resourcePath = string `/organization_exports/${getEncodedUri(organizationExportGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -616,7 +616,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved portfolio memberships 
-    resource isolated function get portfolio_memberships(map<string|string[]> headers = {}, *GetPortfolioMembershipsQueries queries) returns InlineResponse20016|error {
+    resource isolated function get portfolio_memberships(map<string|string[]> headers = {}, *GetPortfolioMembershipsQueries queries) returns PortfolioMembershipCompacts|error {
         string resourcePath = string `/portfolio_memberships`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -628,8 +628,8 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested portfolio membership 
-    resource isolated function get portfolio_memberships/[string portfolio_membership_gid](map<string|string[]> headers = {}, *GetPortfolioMembershipQueries queries) returns InlineResponse20017|error {
-        string resourcePath = string `/portfolio_memberships/${getEncodedUri(portfolio_membership_gid)}`;
+    resource isolated function get portfolio_memberships/[string portfolioMembershipGid](map<string|string[]> headers = {}, *GetPortfolioMembershipQueries queries) returns PortfolioMembershipOkResponse|error {
+        string resourcePath = string `/portfolio_memberships/${getEncodedUri(portfolioMembershipGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -637,12 +637,12 @@ public isolated client class Client {
 
     # Get memberships from a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested portfolio's memberships 
-    resource isolated function get portfolios/[string portfolio_gid]/portfolio_memberships(map<string|string[]> headers = {}, *GetPortfolioMembershipsForPortfolioQueries queries) returns InlineResponse20016|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/portfolio_memberships`;
+    resource isolated function get portfolios/[string portfolioGid]/portfolio_memberships(map<string|string[]> headers = {}, *GetPortfolioMembershipsForPortfolioQueries queries) returns PortfolioMembershipCompacts|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}/portfolio_memberships`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -653,7 +653,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved portfolios 
-    resource isolated function get portfolios(map<string|string[]> headers = {}, *GetPortfoliosQueries queries) returns InlineResponse20018|error {
+    resource isolated function get portfolios(map<string|string[]> headers = {}, *GetPortfoliosQueries queries) returns PortfolioCompacts|error {
         string resourcePath = string `/portfolios`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -666,7 +666,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The portfolio to create 
     # + return - Successfully created portfolio 
-    resource isolated function post portfolios(PortfoliosBody payload, map<string|string[]> headers = {}, *CreatePortfolioQueries queries) returns InlineResponse2014|error {
+    resource isolated function post portfolios(PortfoliosBody payload, map<string|string[]> headers = {}, *CreatePortfolioQueries queries) returns PortfolioCreatedResponse|error {
         string resourcePath = string `/portfolios`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -678,12 +678,12 @@ public isolated client class Client {
 
     # Get a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested portfolio 
-    resource isolated function get portfolios/[string portfolio_gid](map<string|string[]> headers = {}, *GetPortfolioQueries queries) returns InlineResponse2014|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}`;
+    resource isolated function get portfolios/[string portfolioGid](map<string|string[]> headers = {}, *GetPortfolioQueries queries) returns PortfolioCreatedResponse|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -691,13 +691,13 @@ public isolated client class Client {
 
     # Update a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The updated fields for the portfolio 
     # + return - Successfully updated the portfolio 
-    resource isolated function put portfolios/[string portfolio_gid](PortfoliosportfolioGidBody payload, map<string|string[]> headers = {}, *UpdatePortfolioQueries queries) returns InlineResponse2014|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}`;
+    resource isolated function put portfolios/[string portfolioGid](PortfoliosportfolioGidBody payload, map<string|string[]> headers = {}, *UpdatePortfolioQueries queries) returns PortfolioCreatedResponse|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -708,24 +708,24 @@ public isolated client class Client {
 
     # Delete a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified portfolio 
-    resource isolated function delete portfolios/[string portfolio_gid](map<string|string[]> headers = {}, *DeletePortfolioQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}`;
+    resource isolated function delete portfolios/[string portfolioGid](map<string|string[]> headers = {}, *DeletePortfolioQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
     # Get portfolio items
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested portfolio's items 
-    resource isolated function get portfolios/[string portfolio_gid]/items(map<string|string[]> headers = {}, *GetItemsForPortfolioQueries queries) returns InlineResponse20019|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/items`;
+    resource isolated function get portfolios/[string portfolioGid]/items(map<string|string[]> headers = {}, *GetItemsForPortfolioQueries queries) returns ProjectCompacts|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}/items`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -733,13 +733,13 @@ public isolated client class Client {
 
     # Add a portfolio item
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the item being inserted 
     # + return - Successfully added the item to the portfolio 
-    resource isolated function post portfolios/[string portfolio_gid]/addItem(PortfolioGidAddItemBody payload, map<string|string[]> headers = {}, *AddItemForPortfolioQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/addItem`;
+    resource isolated function post portfolios/[string portfolioGid]/addItem(PortfolioGidAddItemBody payload, map<string|string[]> headers = {}, *AddItemForPortfolioQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}/addItem`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -749,13 +749,13 @@ public isolated client class Client {
 
     # Remove a portfolio item
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the item being removed 
     # + return - Successfully removed the item from the portfolio 
-    resource isolated function post portfolios/[string portfolio_gid]/removeItem(PortfolioGidRemoveItemBody payload, map<string|string[]> headers = {}, *RemoveItemForPortfolioQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/removeItem`;
+    resource isolated function post portfolios/[string portfolioGid]/removeItem(PortfolioGidRemoveItemBody payload, map<string|string[]> headers = {}, *RemoveItemForPortfolioQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}/removeItem`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -765,13 +765,13 @@ public isolated client class Client {
 
     # Add a custom field to a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the custom field setting 
     # + return - Successfully added the custom field to the portfolio 
-    resource isolated function post portfolios/[string portfolio_gid]/addCustomFieldSetting(PortfolioGidAddCustomFieldSettingBody payload, map<string|string[]> headers = {}, *AddCustomFieldSettingForPortfolioQueries queries) returns InlineResponse20020|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/addCustomFieldSetting`;
+    resource isolated function post portfolios/[string portfolioGid]/addCustomFieldSetting(PortfolioGidAddCustomFieldSettingBody payload, map<string|string[]> headers = {}, *AddCustomFieldSettingForPortfolioQueries queries) returns CustomFieldSettingOkResponse|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}/addCustomFieldSetting`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -781,13 +781,13 @@ public isolated client class Client {
 
     # Remove a custom field from a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the custom field setting being removed 
     # + return - Successfully removed the custom field from the portfolio 
-    resource isolated function post portfolios/[string portfolio_gid]/removeCustomFieldSetting(PortfolioGidRemoveCustomFieldSettingBody payload, map<string|string[]> headers = {}, *RemoveCustomFieldSettingForPortfolioQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/removeCustomFieldSetting`;
+    resource isolated function post portfolios/[string portfolioGid]/removeCustomFieldSetting(PortfolioGidRemoveCustomFieldSettingBody payload, map<string|string[]> headers = {}, *RemoveCustomFieldSettingForPortfolioQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}/removeCustomFieldSetting`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -797,13 +797,13 @@ public isolated client class Client {
 
     # Add users to a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the members being added 
     # + return - Successfully added members to the portfolio 
-    resource isolated function post portfolios/[string portfolio_gid]/addMembers(PortfolioGidAddMembersBody payload, map<string|string[]> headers = {}, *AddMembersForPortfolioQueries queries) returns InlineResponse2014|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/addMembers`;
+    resource isolated function post portfolios/[string portfolioGid]/addMembers(PortfolioGidAddMembersBody payload, map<string|string[]> headers = {}, *AddMembersForPortfolioQueries queries) returns PortfolioCreatedResponse|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}/addMembers`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -814,13 +814,13 @@ public isolated client class Client {
 
     # Remove users from a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + portfolioGid - Globally unique identifier for the portfolio
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the members being removed 
     # + return - Successfully removed the members from the portfolio 
-    resource isolated function post portfolios/[string portfolio_gid]/removeMembers(PortfolioGidRemoveMembersBody payload, map<string|string[]> headers = {}, *RemoveMembersForPortfolioQueries queries) returns InlineResponse2014|error {
-        string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/removeMembers`;
+    resource isolated function post portfolios/[string portfolioGid]/removeMembers(PortfolioGidRemoveMembersBody payload, map<string|string[]> headers = {}, *RemoveMembersForPortfolioQueries queries) returns PortfolioCreatedResponse|error {
+        string resourcePath = string `/portfolios/${getEncodedUri(portfolioGid)}/removeMembers`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -831,12 +831,12 @@ public isolated client class Client {
 
     # Get a project brief
     #
-    # + project_brief_gid - Globally unique identifier for the project brief
+    # + projectBriefGid - Globally unique identifier for the project brief
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the record for a project brief 
-    resource isolated function get project_briefs/[string project_brief_gid](map<string|string[]> headers = {}, *GetProjectBriefQueries queries) returns InlineResponse20021|error {
-        string resourcePath = string `/project_briefs/${getEncodedUri(project_brief_gid)}`;
+    resource isolated function get project_briefs/[string projectBriefGid](map<string|string[]> headers = {}, *GetProjectBriefQueries queries) returns ProjectBriefOkResponse|error {
+        string resourcePath = string `/project_briefs/${getEncodedUri(projectBriefGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -844,13 +844,13 @@ public isolated client class Client {
 
     # Update a project brief
     #
-    # + project_brief_gid - Globally unique identifier for the project brief
+    # + projectBriefGid - Globally unique identifier for the project brief
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The updated fields for the project brief 
     # + return - Successfully updated the project brief 
-    resource isolated function put project_briefs/[string project_brief_gid](ProjectBriefsprojectBriefGidBody payload, map<string|string[]> headers = {}, *UpdateProjectBriefQueries queries) returns InlineResponse20021|error {
-        string resourcePath = string `/project_briefs/${getEncodedUri(project_brief_gid)}`;
+    resource isolated function put project_briefs/[string projectBriefGid](ProjectBriefsprojectBriefGidBody payload, map<string|string[]> headers = {}, *UpdateProjectBriefQueries queries) returns ProjectBriefOkResponse|error {
+        string resourcePath = string `/project_briefs/${getEncodedUri(projectBriefGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -861,25 +861,25 @@ public isolated client class Client {
 
     # Delete a project brief
     #
-    # + project_brief_gid - Globally unique identifier for the project brief
+    # + projectBriefGid - Globally unique identifier for the project brief
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified project brief 
-    resource isolated function delete project_briefs/[string project_brief_gid](map<string|string[]> headers = {}, *DeleteProjectBriefQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/project_briefs/${getEncodedUri(project_brief_gid)}`;
+    resource isolated function delete project_briefs/[string projectBriefGid](map<string|string[]> headers = {}, *DeleteProjectBriefQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/project_briefs/${getEncodedUri(projectBriefGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
     # Create a project brief
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The project brief to create 
     # + return - Successfully created a new project brief 
-    resource isolated function post projects/[string project_gid]/project_briefs(ProjectGidProjectBriefsBody payload, map<string|string[]> headers = {}, *CreateProjectBriefQueries queries) returns InlineResponse20021|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/project_briefs`;
+    resource isolated function post projects/[string projectGid]/project_briefs(ProjectGidProjectBriefsBody payload, map<string|string[]> headers = {}, *CreateProjectBriefQueries queries) returns ProjectBriefOkResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/project_briefs`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -893,8 +893,8 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested project membership 
-    resource isolated function get project_memberships/[string project_membership_gid](map<string|string[]> headers = {}, *GetProjectMembershipQueries queries) returns InlineResponse20022|error {
-        string resourcePath = string `/project_memberships/${getEncodedUri(project_membership_gid)}`;
+    resource isolated function get project_memberships/[string projectMembershipGid](map<string|string[]> headers = {}, *GetProjectMembershipQueries queries) returns ProjectMembershipNormalOkResponse|error {
+        string resourcePath = string `/project_memberships/${getEncodedUri(projectMembershipGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -902,12 +902,12 @@ public isolated client class Client {
 
     # Get memberships from a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested project's memberships 
-    resource isolated function get projects/[string project_gid]/project_memberships(map<string|string[]> headers = {}, *GetProjectMembershipsForProjectQueries queries) returns InlineResponse20023|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/project_memberships`;
+    resource isolated function get projects/[string projectGid]/project_memberships(map<string|string[]> headers = {}, *GetProjectMembershipsForProjectQueries queries) returns ProjectMembershipCompacts|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/project_memberships`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -915,12 +915,12 @@ public isolated client class Client {
 
     # Get a project status
     #
-    # + project_status_gid - The project status update to get
+    # + projectStatusGid - The project status update to get
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified project's status updates 
-    resource isolated function get project_statuses/[string project_status_gid](map<string|string[]> headers = {}, *GetProjectStatusQueries queries) returns InlineResponse20024|error {
-        string resourcePath = string `/project_statuses/${getEncodedUri(project_status_gid)}`;
+    resource isolated function get project_statuses/[string projectStatusGid](map<string|string[]> headers = {}, *GetProjectStatusQueries queries) returns ProjectStatusOkResponse|error {
+        string resourcePath = string `/project_statuses/${getEncodedUri(projectStatusGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -928,24 +928,24 @@ public isolated client class Client {
 
     # Delete a project status
     #
-    # + project_status_gid - The project status update to get
+    # + projectStatusGid - The project status update to get
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified project status 
-    resource isolated function delete project_statuses/[string project_status_gid](map<string|string[]> headers = {}, *DeleteProjectStatusQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/project_statuses/${getEncodedUri(project_status_gid)}`;
+    resource isolated function delete project_statuses/[string projectStatusGid](map<string|string[]> headers = {}, *DeleteProjectStatusQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/project_statuses/${getEncodedUri(projectStatusGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
     # Get statuses from a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified project's status updates 
-    resource isolated function get projects/[string project_gid]/project_statuses(map<string|string[]> headers = {}, *GetProjectStatusesForProjectQueries queries) returns InlineResponse20025|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/project_statuses`;
+    resource isolated function get projects/[string projectGid]/project_statuses(map<string|string[]> headers = {}, *GetProjectStatusesForProjectQueries queries) returns ProjectStatusCompacts|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/project_statuses`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -953,13 +953,13 @@ public isolated client class Client {
 
     # Create a project status
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The project status to create 
     # + return - Successfully created a new story 
-    resource isolated function post projects/[string project_gid]/project_statuses(ProjectGidProjectStatusesBody payload, map<string|string[]> headers = {}, *CreateProjectStatusForProjectQueries queries) returns InlineResponse20024|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/project_statuses`;
+    resource isolated function post projects/[string projectGid]/project_statuses(ProjectGidProjectStatusesBody payload, map<string|string[]> headers = {}, *CreateProjectStatusForProjectQueries queries) returns ProjectStatusOkResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/project_statuses`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -970,12 +970,12 @@ public isolated client class Client {
 
     # Get a project template
     #
-    # + project_template_gid - Globally unique identifier for the project template
+    # + projectTemplateGid - Globally unique identifier for the project template
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested project template 
-    resource isolated function get project_templates/[string project_template_gid](map<string|string[]> headers = {}, *GetProjectTemplateQueries queries) returns InlineResponse20026|error {
-        string resourcePath = string `/project_templates/${getEncodedUri(project_template_gid)}`;
+    resource isolated function get project_templates/[string projectTemplateGid](map<string|string[]> headers = {}, *GetProjectTemplateQueries queries) returns ProjectTemplateOkResponse|error {
+        string resourcePath = string `/project_templates/${getEncodedUri(projectTemplateGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -983,12 +983,12 @@ public isolated client class Client {
 
     # Delete a project template
     #
-    # + project_template_gid - Globally unique identifier for the project template
+    # + projectTemplateGid - Globally unique identifier for the project template
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified project template 
-    resource isolated function delete project_templates/[string project_template_gid](map<string|string[]> headers = {}, *DeleteProjectTemplateQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/project_templates/${getEncodedUri(project_template_gid)}`;
+    resource isolated function delete project_templates/[string projectTemplateGid](map<string|string[]> headers = {}, *DeleteProjectTemplateQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/project_templates/${getEncodedUri(projectTemplateGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
@@ -998,7 +998,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested team's or workspace's project templates 
-    resource isolated function get project_templates(map<string|string[]> headers = {}, *GetProjectTemplatesQueries queries) returns InlineResponse20027|error {
+    resource isolated function get project_templates(map<string|string[]> headers = {}, *GetProjectTemplatesQueries queries) returns ProjectTemplateCompacts|error {
         string resourcePath = string `/project_templates`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1007,12 +1007,12 @@ public isolated client class Client {
 
     # Get a team's project templates
     #
-    # + team_gid - Globally unique identifier for the team
+    # + teamGid - Globally unique identifier for the team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested team's project templates 
-    resource isolated function get teams/[string team_gid]/project_templates(map<string|string[]> headers = {}, *GetProjectTemplatesForTeamQueries queries) returns InlineResponse20027|error {
-        string resourcePath = string `/teams/${getEncodedUri(team_gid)}/project_templates`;
+    resource isolated function get teams/[string teamGid]/project_templates(map<string|string[]> headers = {}, *GetProjectTemplatesForTeamQueries queries) returns ProjectTemplateCompacts|error {
+        string resourcePath = string `/teams/${getEncodedUri(teamGid)}/project_templates`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1020,13 +1020,13 @@ public isolated client class Client {
 
     # Instantiate a project from a project template
     #
-    # + project_template_gid - Globally unique identifier for the project template
+    # + projectTemplateGid - Globally unique identifier for the project template
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Describes the inputs used for instantiating a project, such as the resulting project's name, which team it should be created in, and values for date variables 
     # + return - Successfully created the job to handle project instantiation 
-    resource isolated function post project_templates/[string project_template_gid]/instantiateProject(ProjectTemplateGidInstantiateProjectBody payload, map<string|string[]> headers = {}, *InstantiateProjectQueries queries) returns InlineResponse20013|error {
-        string resourcePath = string `/project_templates/${getEncodedUri(project_template_gid)}/instantiateProject`;
+    resource isolated function post project_templates/[string projectTemplateGid]/instantiateProject(ProjectTemplateGidInstantiateProjectBody payload, map<string|string[]> headers = {}, *InstantiateProjectQueries queries) returns JobOkResponse|error {
+        string resourcePath = string `/project_templates/${getEncodedUri(projectTemplateGid)}/instantiateProject`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1040,7 +1040,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved projects 
-    resource isolated function get projects(map<string|string[]> headers = {}, *GetProjectsQueries queries) returns InlineResponse20019|error {
+    resource isolated function get projects(map<string|string[]> headers = {}, *GetProjectsQueries queries) returns ProjectCompacts|error {
         string resourcePath = string `/projects`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1053,7 +1053,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The project to create 
     # + return - Successfully retrieved projects 
-    resource isolated function post projects(ProjectsBody payload, map<string|string[]> headers = {}, *CreateProjectQueries queries) returns InlineResponse2015|error {
+    resource isolated function post projects(ProjectsBody payload, map<string|string[]> headers = {}, *CreateProjectQueries queries) returns ProjectCreatedResponse|error {
         string resourcePath = string `/projects`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1065,12 +1065,12 @@ public isolated client class Client {
 
     # Get a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested project 
-    resource isolated function get projects/[string project_gid](map<string|string[]> headers = {}, *GetProjectQueries queries) returns InlineResponse2015|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}`;
+    resource isolated function get projects/[string projectGid](map<string|string[]> headers = {}, *GetProjectQueries queries) returns ProjectCreatedResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1078,13 +1078,13 @@ public isolated client class Client {
 
     # Update a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The updated fields for the project 
     # + return - Successfully updated the project 
-    resource isolated function put projects/[string project_gid](ProjectsprojectGidBody payload, map<string|string[]> headers = {}, *UpdateProjectQueries queries) returns InlineResponse2015|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}`;
+    resource isolated function put projects/[string projectGid](ProjectsprojectGidBody payload, map<string|string[]> headers = {}, *UpdateProjectQueries queries) returns ProjectCreatedResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1095,25 +1095,25 @@ public isolated client class Client {
 
     # Delete a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified project 
-    resource isolated function delete projects/[string project_gid](map<string|string[]> headers = {}, *DeleteProjectQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}`;
+    resource isolated function delete projects/[string projectGid](map<string|string[]> headers = {}, *DeleteProjectQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
     # Duplicate a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Describes the duplicate's name and the elements that will be duplicated 
     # + return - Successfully created the job to handle duplication 
-    resource isolated function post projects/[string project_gid]/duplicate(ProjectGidDuplicateBody payload, map<string|string[]> headers = {}, *DuplicateProjectQueries queries) returns InlineResponse20013|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/duplicate`;
+    resource isolated function post projects/[string projectGid]/duplicate(ProjectGidDuplicateBody payload, map<string|string[]> headers = {}, *DuplicateProjectQueries queries) returns JobOkResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/duplicate`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1124,12 +1124,12 @@ public isolated client class Client {
 
     # Get projects a task is in
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the projects for the given task 
-    resource isolated function get tasks/[string task_gid]/projects(map<string|string[]> headers = {}, *GetProjectsForTaskQueries queries) returns InlineResponse20019|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/projects`;
+    resource isolated function get tasks/[string taskGid]/projects(map<string|string[]> headers = {}, *GetProjectsForTaskQueries queries) returns ProjectCompacts|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/projects`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1137,12 +1137,12 @@ public isolated client class Client {
 
     # Get a team's projects
     #
-    # + team_gid - Globally unique identifier for the team
+    # + teamGid - Globally unique identifier for the team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested team's projects 
-    resource isolated function get teams/[string team_gid]/projects(map<string|string[]> headers = {}, *GetProjectsForTeamQueries queries) returns InlineResponse20019|error {
-        string resourcePath = string `/teams/${getEncodedUri(team_gid)}/projects`;
+    resource isolated function get teams/[string teamGid]/projects(map<string|string[]> headers = {}, *GetProjectsForTeamQueries queries) returns ProjectCompacts|error {
+        string resourcePath = string `/teams/${getEncodedUri(teamGid)}/projects`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1150,13 +1150,13 @@ public isolated client class Client {
 
     # Create a project in a team
     #
-    # + team_gid - Globally unique identifier for the team
+    # + teamGid - Globally unique identifier for the team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The new project to create 
     # + return - Successfully created the specified project 
-    resource isolated function post teams/[string team_gid]/projects(TeamGidProjectsBody payload, map<string|string[]> headers = {}, *CreateProjectForTeamQueries queries) returns InlineResponse2015|error {
-        string resourcePath = string `/teams/${getEncodedUri(team_gid)}/projects`;
+    resource isolated function post teams/[string teamGid]/projects(TeamGidProjectsBody payload, map<string|string[]> headers = {}, *CreateProjectForTeamQueries queries) returns ProjectCreatedResponse|error {
+        string resourcePath = string `/teams/${getEncodedUri(teamGid)}/projects`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1167,12 +1167,12 @@ public isolated client class Client {
 
     # Get all projects in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested workspace's projects 
-    resource isolated function get workspaces/[string workspace_gid]/projects(map<string|string[]> headers = {}, *GetProjectsForWorkspaceQueries queries) returns InlineResponse20019|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/projects`;
+    resource isolated function get workspaces/[string workspaceGid]/projects(map<string|string[]> headers = {}, *GetProjectsForWorkspaceQueries queries) returns ProjectCompacts|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/projects`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1180,13 +1180,13 @@ public isolated client class Client {
 
     # Create a project in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The new project to create 
     # + return - Successfully created a new project in the specified workspace 
-    resource isolated function post workspaces/[string workspace_gid]/projects(WorkspaceGidProjectsBody payload, map<string|string[]> headers = {}, *CreateProjectForWorkspaceQueries queries) returns InlineResponse2015|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/projects`;
+    resource isolated function post workspaces/[string workspaceGid]/projects(WorkspaceGidProjectsBody payload, map<string|string[]> headers = {}, *CreateProjectForWorkspaceQueries queries) returns ProjectCreatedResponse|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/projects`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1197,13 +1197,13 @@ public isolated client class Client {
 
     # Add a custom field to a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the custom field setting 
     # + return - Successfully added the custom field to the project 
-    resource isolated function post projects/[string project_gid]/addCustomFieldSetting(ProjectGidAddCustomFieldSettingBody payload, map<string|string[]> headers = {}, *AddCustomFieldSettingForProjectQueries queries) returns InlineResponse20020|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/addCustomFieldSetting`;
+    resource isolated function post projects/[string projectGid]/addCustomFieldSetting(ProjectGidAddCustomFieldSettingBody payload, map<string|string[]> headers = {}, *AddCustomFieldSettingForProjectQueries queries) returns CustomFieldSettingOkResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/addCustomFieldSetting`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1214,13 +1214,13 @@ public isolated client class Client {
 
     # Remove a custom field from a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the custom field setting being removed 
     # + return - Successfully removed the custom field from the project 
-    resource isolated function post projects/[string project_gid]/removeCustomFieldSetting(ProjectGidRemoveCustomFieldSettingBody payload, map<string|string[]> headers = {}, *RemoveCustomFieldSettingForProjectQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/removeCustomFieldSetting`;
+    resource isolated function post projects/[string projectGid]/removeCustomFieldSetting(ProjectGidRemoveCustomFieldSettingBody payload, map<string|string[]> headers = {}, *RemoveCustomFieldSettingForProjectQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/removeCustomFieldSetting`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1230,12 +1230,12 @@ public isolated client class Client {
 
     # Get task count of a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested project's task counts 
-    resource isolated function get projects/[string project_gid]/task_counts(map<string|string[]> headers = {}, *GetTaskCountsForProjectQueries queries) returns InlineResponse20028|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/task_counts`;
+    resource isolated function get projects/[string projectGid]/task_counts(map<string|string[]> headers = {}, *GetTaskCountsForProjectQueries queries) returns TaskCountOkResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/task_counts`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1243,13 +1243,13 @@ public isolated client class Client {
 
     # Add users to a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the members being added 
     # + return - Successfully added members to the project 
-    resource isolated function post projects/[string project_gid]/addMembers(ProjectGidAddMembersBody payload, map<string|string[]> headers = {}, *AddMembersForProjectQueries queries) returns InlineResponse2015|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/addMembers`;
+    resource isolated function post projects/[string projectGid]/addMembers(ProjectGidAddMembersBody payload, map<string|string[]> headers = {}, *AddMembersForProjectQueries queries) returns ProjectCreatedResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/addMembers`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1260,13 +1260,13 @@ public isolated client class Client {
 
     # Remove users from a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the members being removed 
     # + return - Successfully removed the members from the project 
-    resource isolated function post projects/[string project_gid]/removeMembers(ProjectGidRemoveMembersBody payload, map<string|string[]> headers = {}, *RemoveMembersForProjectQueries queries) returns InlineResponse2015|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/removeMembers`;
+    resource isolated function post projects/[string projectGid]/removeMembers(ProjectGidRemoveMembersBody payload, map<string|string[]> headers = {}, *RemoveMembersForProjectQueries queries) returns ProjectCreatedResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/removeMembers`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1277,13 +1277,13 @@ public isolated client class Client {
 
     # Add followers to a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the followers being added 
     # + return - Successfully added followers to the project 
-    resource isolated function post projects/[string project_gid]/addFollowers(ProjectGidAddFollowersBody payload, map<string|string[]> headers = {}, *AddFollowersForProjectQueries queries) returns InlineResponse2015|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/addFollowers`;
+    resource isolated function post projects/[string projectGid]/addFollowers(ProjectGidAddFollowersBody payload, map<string|string[]> headers = {}, *AddFollowersForProjectQueries queries) returns ProjectCreatedResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/addFollowers`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1294,13 +1294,13 @@ public isolated client class Client {
 
     # Remove followers from a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the followers being removed 
     # + return - Successfully removed followers from the project 
-    resource isolated function post projects/[string project_gid]/removeFollowers(ProjectGidRemoveFollowersBody payload, map<string|string[]> headers = {}, *RemoveFollowersForProjectQueries queries) returns InlineResponse2015|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/removeFollowers`;
+    resource isolated function post projects/[string projectGid]/removeFollowers(ProjectGidRemoveFollowersBody payload, map<string|string[]> headers = {}, *RemoveFollowersForProjectQueries queries) returns ProjectCreatedResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/removeFollowers`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1311,13 +1311,13 @@ public isolated client class Client {
 
     # Create a project template from a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Describes the inputs used for creating a project template, such as the resulting project template's name, which team it should be created in 
     # + return - Successfully created the job to handle project template creation 
-    resource isolated function post projects/[string project_gid]/saveAsTemplate(ProjectGidSaveAsTemplateBody payload, map<string|string[]> headers = {}, *ProjectSaveAsTemplateQueries queries) returns InlineResponse20013|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/saveAsTemplate`;
+    resource isolated function post projects/[string projectGid]/saveAsTemplate(ProjectGidSaveAsTemplateBody payload, map<string|string[]> headers = {}, *ProjectSaveAsTemplateQueries queries) returns JobOkResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/saveAsTemplate`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1328,12 +1328,12 @@ public isolated client class Client {
 
     # Trigger a rule
     #
-    # + rule_trigger_gid - The ID of the incoming web request trigger. This value is a path parameter that is automatically generated for the API endpoint
+    # + ruleTriggerGid - The ID of the incoming web request trigger. This value is a path parameter that is automatically generated for the API endpoint
     # + headers - Headers to be sent with the request 
     # + payload - A dictionary of variables accessible from within the rule 
     # + return - Successfully triggered a rule 
-    resource isolated function post rule_triggers/[string rule_trigger_gid]/run(RuleTriggerGidRunBody payload, map<string|string[]> headers = {}) returns InlineResponse20029|error {
-        string resourcePath = string `/rule_triggers/${getEncodedUri(rule_trigger_gid)}/run`;
+    resource isolated function post rule_triggers/[string ruleTriggerGid]/run(RuleTriggerGidRunBody payload, map<string|string[]> headers = {}) returns RuleTriggerOkResponse|error {
+        string resourcePath = string `/rule_triggers/${getEncodedUri(ruleTriggerGid)}/run`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
         request.setPayload(jsonBody, "application/json");
@@ -1342,12 +1342,12 @@ public isolated client class Client {
 
     # Get a section
     #
-    # + section_gid - The globally unique identifier for the section
+    # + sectionGid - The globally unique identifier for the section
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved section 
-    resource isolated function get sections/[string section_gid](map<string|string[]> headers = {}, *GetSectionQueries queries) returns InlineResponse20030|error {
-        string resourcePath = string `/sections/${getEncodedUri(section_gid)}`;
+    resource isolated function get sections/[string sectionGid](map<string|string[]> headers = {}, *GetSectionQueries queries) returns SectionOkResponse|error {
+        string resourcePath = string `/sections/${getEncodedUri(sectionGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1355,13 +1355,13 @@ public isolated client class Client {
 
     # Update a section
     #
-    # + section_gid - The globally unique identifier for the section
+    # + sectionGid - The globally unique identifier for the section
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The section to create 
     # + return - Successfully updated the specified section 
-    resource isolated function put sections/[string section_gid](SectionssectionGidBody payload, map<string|string[]> headers = {}, *UpdateSectionQueries queries) returns InlineResponse20030|error {
-        string resourcePath = string `/sections/${getEncodedUri(section_gid)}`;
+    resource isolated function put sections/[string sectionGid](SectionssectionGidBody payload, map<string|string[]> headers = {}, *UpdateSectionQueries queries) returns SectionOkResponse|error {
+        string resourcePath = string `/sections/${getEncodedUri(sectionGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1372,24 +1372,24 @@ public isolated client class Client {
 
     # Delete a section
     #
-    # + section_gid - The globally unique identifier for the section
+    # + sectionGid - The globally unique identifier for the section
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified section 
-    resource isolated function delete sections/[string section_gid](map<string|string[]> headers = {}, *DeleteSectionQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/sections/${getEncodedUri(section_gid)}`;
+    resource isolated function delete sections/[string sectionGid](map<string|string[]> headers = {}, *DeleteSectionQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/sections/${getEncodedUri(sectionGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
     # Get sections in a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved sections in project 
-    resource isolated function get projects/[string project_gid]/sections(map<string|string[]> headers = {}, *GetSectionsForProjectQueries queries) returns InlineResponse20031|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/sections`;
+    resource isolated function get projects/[string projectGid]/sections(map<string|string[]> headers = {}, *GetSectionsForProjectQueries queries) returns SectionCompacts|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/sections`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1397,13 +1397,13 @@ public isolated client class Client {
 
     # Create a section in a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The section to create 
     # + return - Successfully created the specified section 
-    resource isolated function post projects/[string project_gid]/sections(ProjectGidSectionsBody payload, map<string|string[]> headers = {}, *CreateSectionForProjectQueries queries) returns InlineResponse20030|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/sections`;
+    resource isolated function post projects/[string projectGid]/sections(ProjectGidSectionsBody payload, map<string|string[]> headers = {}, *CreateSectionForProjectQueries queries) returns SectionOkResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/sections`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1414,13 +1414,13 @@ public isolated client class Client {
 
     # Add task to section
     #
-    # + section_gid - The globally unique identifier for the section
+    # + sectionGid - The globally unique identifier for the section
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The task and optionally the insert location 
     # + return - Successfully added the task 
-    resource isolated function post sections/[string section_gid]/addTask(SectionGidAddTaskBody payload, map<string|string[]> headers = {}, *AddTaskForSectionQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/sections/${getEncodedUri(section_gid)}/addTask`;
+    resource isolated function post sections/[string sectionGid]/addTask(SectionGidAddTaskBody payload, map<string|string[]> headers = {}, *AddTaskForSectionQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/sections/${getEncodedUri(sectionGid)}/addTask`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1430,13 +1430,13 @@ public isolated client class Client {
 
     # Move or Insert sections
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The section's move action 
     # + return - Successfully moved the specified section 
-    resource isolated function post projects/[string project_gid]/sections/insert(SectionsInsertBody payload, map<string|string[]> headers = {}, *InsertSectionForProjectQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/sections/insert`;
+    resource isolated function post projects/[string projectGid]/sections/insert(SectionsInsertBody payload, map<string|string[]> headers = {}, *InsertSectionForProjectQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/sections/insert`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1446,12 +1446,12 @@ public isolated client class Client {
 
     # Get a status update
     #
-    # + status_update_gid - The status update to get
+    # + statusUpdateGid - The status update to get
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified object's status updates 
-    resource isolated function get status_updates/[string status_update_gid](map<string|string[]> headers = {}, *GetStatusQueries queries) returns InlineResponse20032|error {
-        string resourcePath = string `/status_updates/${getEncodedUri(status_update_gid)}`;
+    resource isolated function get status_updates/[string statusUpdateGid](map<string|string[]> headers = {}, *GetStatusQueries queries) returns StatusUpdateOkResponse|error {
+        string resourcePath = string `/status_updates/${getEncodedUri(statusUpdateGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1459,12 +1459,12 @@ public isolated client class Client {
 
     # Delete a status update
     #
-    # + status_update_gid - The status update to get
+    # + statusUpdateGid - The status update to get
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified status 
-    resource isolated function delete status_updates/[string status_update_gid](map<string|string[]> headers = {}, *DeleteStatusQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/status_updates/${getEncodedUri(status_update_gid)}`;
+    resource isolated function delete status_updates/[string statusUpdateGid](map<string|string[]> headers = {}, *DeleteStatusQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/status_updates/${getEncodedUri(statusUpdateGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
@@ -1474,7 +1474,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified object's status updates 
-    resource isolated function get status_updates(map<string|string[]> headers = {}, *GetStatusesForObjectQueries queries) returns InlineResponse20033|error {
+    resource isolated function get status_updates(map<string|string[]> headers = {}, *GetStatusesForObjectQueries queries) returns StatusUpdateCompacts|error {
         string resourcePath = string `/status_updates`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1487,7 +1487,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The status update to create 
     # + return - Successfully created a new status update 
-    resource isolated function post status_updates(StatusUpdatesBody payload, map<string|string[]> headers = {}, *CreateStatusForObjectQueries queries) returns InlineResponse20032|error {
+    resource isolated function post status_updates(StatusUpdatesBody payload, map<string|string[]> headers = {}, *CreateStatusForObjectQueries queries) returns StatusUpdateOkResponse|error {
         string resourcePath = string `/status_updates`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1499,12 +1499,12 @@ public isolated client class Client {
 
     # Get a story
     #
-    # + story_gid - Globally unique identifier for the story
+    # + storyGid - Globally unique identifier for the story
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified story 
-    resource isolated function get stories/[string story_gid](map<string|string[]> headers = {}, *GetStoryQueries queries) returns InlineResponse20034|error {
-        string resourcePath = string `/stories/${getEncodedUri(story_gid)}`;
+    resource isolated function get stories/[string storyGid](map<string|string[]> headers = {}, *GetStoryQueries queries) returns StoryOkResponse|error {
+        string resourcePath = string `/stories/${getEncodedUri(storyGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1512,13 +1512,13 @@ public isolated client class Client {
 
     # Update a story
     #
-    # + story_gid - Globally unique identifier for the story
+    # + storyGid - Globally unique identifier for the story
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The comment story to update 
     # + return - Successfully retrieved the specified story 
-    resource isolated function put stories/[string story_gid](StoriesstoryGidBody payload, map<string|string[]> headers = {}, *UpdateStoryQueries queries) returns InlineResponse20034|error {
-        string resourcePath = string `/stories/${getEncodedUri(story_gid)}`;
+    resource isolated function put stories/[string storyGid](StoriesstoryGidBody payload, map<string|string[]> headers = {}, *UpdateStoryQueries queries) returns StoryOkResponse|error {
+        string resourcePath = string `/stories/${getEncodedUri(storyGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1529,24 +1529,24 @@ public isolated client class Client {
 
     # Delete a story
     #
-    # + story_gid - Globally unique identifier for the story
+    # + storyGid - Globally unique identifier for the story
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified story 
-    resource isolated function delete stories/[string story_gid](map<string|string[]> headers = {}, *DeleteStoryQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/stories/${getEncodedUri(story_gid)}`;
+    resource isolated function delete stories/[string storyGid](map<string|string[]> headers = {}, *DeleteStoryQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/stories/${getEncodedUri(storyGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
     # Get stories from a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified task's stories 
-    resource isolated function get tasks/[string task_gid]/stories(map<string|string[]> headers = {}, *GetStoriesForTaskQueries queries) returns InlineResponse20035|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/stories`;
+    resource isolated function get tasks/[string taskGid]/stories(map<string|string[]> headers = {}, *GetStoriesForTaskQueries queries) returns StoryCompacts|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/stories`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1554,13 +1554,13 @@ public isolated client class Client {
 
     # Create a story on a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The story to create 
     # + return - Successfully created a new story 
-    resource isolated function post tasks/[string task_gid]/stories(TaskGidStoriesBody payload, map<string|string[]> headers = {}, *CreateStoryForTaskQueries queries) returns InlineResponse20034|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/stories`;
+    resource isolated function post tasks/[string taskGid]/stories(TaskGidStoriesBody payload, map<string|string[]> headers = {}, *CreateStoryForTaskQueries queries) returns StoryOkResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/stories`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1574,7 +1574,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified set of tags 
-    resource isolated function get tags(map<string|string[]> headers = {}, *GetTagsQueries queries) returns InlineResponse20036|error {
+    resource isolated function get tags(map<string|string[]> headers = {}, *GetTagsQueries queries) returns TagCompacts|error {
         string resourcePath = string `/tags`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1587,7 +1587,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The tag to create 
     # + return - Successfully created the newly specified tag 
-    resource isolated function post tags(TagsBody payload, map<string|string[]> headers = {}, *CreateTagQueries queries) returns InlineResponse2016|error {
+    resource isolated function post tags(TagsBody payload, map<string|string[]> headers = {}, *CreateTagQueries queries) returns TagCreatedResponse|error {
         string resourcePath = string `/tags`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1599,12 +1599,12 @@ public isolated client class Client {
 
     # Get a tag
     #
-    # + tag_gid - Globally unique identifier for the tag
+    # + tagGid - Globally unique identifier for the tag
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified tag 
-    resource isolated function get tags/[string tag_gid](map<string|string[]> headers = {}, *GetTagQueries queries) returns InlineResponse2016|error {
-        string resourcePath = string `/tags/${getEncodedUri(tag_gid)}`;
+    resource isolated function get tags/[string tagGid](map<string|string[]> headers = {}, *GetTagQueries queries) returns TagCreatedResponse|error {
+        string resourcePath = string `/tags/${getEncodedUri(tagGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1612,12 +1612,12 @@ public isolated client class Client {
 
     # Update a tag
     #
-    # + tag_gid - Globally unique identifier for the tag
+    # + tagGid - Globally unique identifier for the tag
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully updated the specified tag 
-    resource isolated function put tags/[string tag_gid](map<string|string[]> headers = {}, *UpdateTagQueries queries) returns InlineResponse2016|error {
-        string resourcePath = string `/tags/${getEncodedUri(tag_gid)}`;
+    resource isolated function put tags/[string tagGid](map<string|string[]> headers = {}, *UpdateTagQueries queries) returns TagCreatedResponse|error {
+        string resourcePath = string `/tags/${getEncodedUri(tagGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1626,24 +1626,24 @@ public isolated client class Client {
 
     # Delete a tag
     #
-    # + tag_gid - Globally unique identifier for the tag
+    # + tagGid - Globally unique identifier for the tag
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified tag 
-    resource isolated function delete tags/[string tag_gid](map<string|string[]> headers = {}, *DeleteTagQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/tags/${getEncodedUri(tag_gid)}`;
+    resource isolated function delete tags/[string tagGid](map<string|string[]> headers = {}, *DeleteTagQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/tags/${getEncodedUri(tagGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
     # Get a task's tags
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the tags for the given task 
-    resource isolated function get tasks/[string task_gid]/tags(map<string|string[]> headers = {}, *GetTagsForTaskQueries queries) returns InlineResponse20036|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/tags`;
+    resource isolated function get tasks/[string taskGid]/tags(map<string|string[]> headers = {}, *GetTagsForTaskQueries queries) returns TagCompacts|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/tags`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1651,12 +1651,12 @@ public isolated client class Client {
 
     # Get tags in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified set of tags 
-    resource isolated function get workspaces/[string workspace_gid]/tags(map<string|string[]> headers = {}, *GetTagsForWorkspaceQueries queries) returns InlineResponse20036|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/tags`;
+    resource isolated function get workspaces/[string workspaceGid]/tags(map<string|string[]> headers = {}, *GetTagsForWorkspaceQueries queries) returns TagCompacts|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/tags`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1664,13 +1664,13 @@ public isolated client class Client {
 
     # Create a tag in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The tag to create 
     # + return - Successfully created the newly specified tag 
-    resource isolated function post workspaces/[string workspace_gid]/tags(WorkspaceGidTagsBody payload, map<string|string[]> headers = {}, *CreateTagForWorkspaceQueries queries) returns InlineResponse2016|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/tags`;
+    resource isolated function post workspaces/[string workspaceGid]/tags(WorkspaceGidTagsBody payload, map<string|string[]> headers = {}, *CreateTagForWorkspaceQueries queries) returns TagCreatedResponse|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/tags`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1684,7 +1684,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved requested task templates 
-    resource isolated function get task_templates(map<string|string[]> headers = {}, *GetTaskTemplatesQueries queries) returns InlineResponse20037|error {
+    resource isolated function get task_templates(map<string|string[]> headers = {}, *GetTaskTemplatesQueries queries) returns TaskTemplateCompacts|error {
         string resourcePath = string `/task_templates`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1693,12 +1693,12 @@ public isolated client class Client {
 
     # Get a task template
     #
-    # + task_template_gid - Globally unique identifier for the task template
+    # + taskTemplateGid - Globally unique identifier for the task template
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved requested task template 
-    resource isolated function get task_templates/[string task_template_gid](map<string|string[]> headers = {}, *GetTaskTemplateQueries queries) returns InlineResponse20038|error {
-        string resourcePath = string `/task_templates/${getEncodedUri(task_template_gid)}`;
+    resource isolated function get task_templates/[string taskTemplateGid](map<string|string[]> headers = {}, *GetTaskTemplateQueries queries) returns TaskTemplateOkResponse|error {
+        string resourcePath = string `/task_templates/${getEncodedUri(taskTemplateGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1706,25 +1706,25 @@ public isolated client class Client {
 
     # Delete a task template
     #
-    # + task_template_gid - Globally unique identifier for the task template
+    # + taskTemplateGid - Globally unique identifier for the task template
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified task template 
-    resource isolated function delete task_templates/[string task_template_gid](map<string|string[]> headers = {}, *DeleteTaskTemplateQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/task_templates/${getEncodedUri(task_template_gid)}`;
+    resource isolated function delete task_templates/[string taskTemplateGid](map<string|string[]> headers = {}, *DeleteTaskTemplateQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/task_templates/${getEncodedUri(taskTemplateGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
     # Instantiate a task from a task template
     #
-    # + task_template_gid - Globally unique identifier for the task template
+    # + taskTemplateGid - Globally unique identifier for the task template
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Describes the inputs used for instantiating a task - the task's name 
     # + return - Successfully created the job to handle task instantiation 
-    resource isolated function post task_templates/[string task_template_gid]/instantiateTask(TaskTemplateGidInstantiateTaskBody payload, map<string|string[]> headers = {}, *InstantiateTaskQueries queries) returns InlineResponse20013|error {
-        string resourcePath = string `/task_templates/${getEncodedUri(task_template_gid)}/instantiateTask`;
+    resource isolated function post task_templates/[string taskTemplateGid]/instantiateTask(TaskTemplateGidInstantiateTaskBody payload, map<string|string[]> headers = {}, *InstantiateTaskQueries queries) returns JobOkResponse|error {
+        string resourcePath = string `/task_templates/${getEncodedUri(taskTemplateGid)}/instantiateTask`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1738,7 +1738,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved requested tasks 
-    resource isolated function get tasks(map<string|string[]> headers = {}, *GetTasksQueries queries) returns InlineResponse20039|error {
+    resource isolated function get tasks(map<string|string[]> headers = {}, *GetTasksQueries queries) returns TaskCompactsResponse|error {
         string resourcePath = string `/tasks`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1751,7 +1751,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The task to create 
     # + return - Successfully created a new task 
-    resource isolated function post tasks(TasksBody payload, map<string|string[]> headers = {}, *CreateTaskQueries queries) returns InlineResponse2017|error {
+    resource isolated function post tasks(TasksBody payload, map<string|string[]> headers = {}, *CreateTaskQueries queries) returns TaskCreatedResponse|error {
         string resourcePath = string `/tasks`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1763,12 +1763,12 @@ public isolated client class Client {
 
     # Get a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified task 
-    resource isolated function get tasks/[string task_gid](map<string|string[]> headers = {}, *GetTaskQueries queries) returns InlineResponse2017|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}`;
+    resource isolated function get tasks/[string taskGid](map<string|string[]> headers = {}, *GetTaskQueries queries) returns TaskCreatedResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1776,13 +1776,13 @@ public isolated client class Client {
 
     # Update a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The task to update 
     # + return - Successfully updated the specified task 
-    resource isolated function put tasks/[string task_gid](TaskstaskGidBody payload, map<string|string[]> headers = {}, *UpdateTaskQueries queries) returns InlineResponse2017|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}`;
+    resource isolated function put tasks/[string taskGid](TaskstaskGidBody payload, map<string|string[]> headers = {}, *UpdateTaskQueries queries) returns TaskCreatedResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1793,25 +1793,25 @@ public isolated client class Client {
 
     # Delete a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified task 
-    resource isolated function delete tasks/[string task_gid](map<string|string[]> headers = {}, *DeleteTaskQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}`;
+    resource isolated function delete tasks/[string taskGid](map<string|string[]> headers = {}, *DeleteTaskQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
     # Duplicate a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Describes the duplicate's name and the fields that will be duplicated 
     # + return - Successfully created the job to handle duplication 
-    resource isolated function post tasks/[string task_gid]/duplicate(TaskGidDuplicateBody payload, map<string|string[]> headers = {}, *DuplicateTaskQueries queries) returns InlineResponse20013|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/duplicate`;
+    resource isolated function post tasks/[string taskGid]/duplicate(TaskGidDuplicateBody payload, map<string|string[]> headers = {}, *DuplicateTaskQueries queries) returns JobOkResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/duplicate`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1822,12 +1822,12 @@ public isolated client class Client {
 
     # Get tasks from a project
     #
-    # + project_gid - Globally unique identifier for the project
+    # + projectGid - Globally unique identifier for the project
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested project's tasks 
-    resource isolated function get projects/[string project_gid]/tasks(map<string|string[]> headers = {}, *GetTasksForProjectQueries queries) returns InlineResponse20039|error {
-        string resourcePath = string `/projects/${getEncodedUri(project_gid)}/tasks`;
+    resource isolated function get projects/[string projectGid]/tasks(map<string|string[]> headers = {}, *GetTasksForProjectQueries queries) returns TaskCompactsResponse|error {
+        string resourcePath = string `/projects/${getEncodedUri(projectGid)}/tasks`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1835,12 +1835,12 @@ public isolated client class Client {
 
     # Get tasks from a section
     #
-    # + section_gid - The globally unique identifier for the section
+    # + sectionGid - The globally unique identifier for the section
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the section's tasks 
-    resource isolated function get sections/[string section_gid]/tasks(map<string|string[]> headers = {}, *GetTasksForSectionQueries queries) returns InlineResponse20039|error {
-        string resourcePath = string `/sections/${getEncodedUri(section_gid)}/tasks`;
+    resource isolated function get sections/[string sectionGid]/tasks(map<string|string[]> headers = {}, *GetTasksForSectionQueries queries) returns TaskCompactsResponse|error {
+        string resourcePath = string `/sections/${getEncodedUri(sectionGid)}/tasks`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1848,12 +1848,12 @@ public isolated client class Client {
 
     # Get tasks from a tag
     #
-    # + tag_gid - Globally unique identifier for the tag
+    # + tagGid - Globally unique identifier for the tag
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the tasks associated with the specified tag 
-    resource isolated function get tags/[string tag_gid]/tasks(map<string|string[]> headers = {}, *GetTasksForTagQueries queries) returns InlineResponse20039|error {
-        string resourcePath = string `/tags/${getEncodedUri(tag_gid)}/tasks`;
+    resource isolated function get tags/[string tagGid]/tasks(map<string|string[]> headers = {}, *GetTasksForTagQueries queries) returns TaskCompactsResponse|error {
+        string resourcePath = string `/tags/${getEncodedUri(tagGid)}/tasks`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1861,12 +1861,12 @@ public isolated client class Client {
 
     # Get tasks from a user task list
     #
-    # + user_task_list_gid - Globally unique identifier for the user task list
+    # + userTaskListGid - Globally unique identifier for the user task list
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the user task list's tasks 
-    resource isolated function get user_task_lists/[string user_task_list_gid]/tasks(map<string|string[]> headers = {}, *GetTasksForUserTaskListQueries queries) returns InlineResponse20039|error {
-        string resourcePath = string `/user_task_lists/${getEncodedUri(user_task_list_gid)}/tasks`;
+    resource isolated function get user_task_lists/[string userTaskListGid]/tasks(map<string|string[]> headers = {}, *GetTasksForUserTaskListQueries queries) returns TaskCompactsResponse|error {
+        string resourcePath = string `/user_task_lists/${getEncodedUri(userTaskListGid)}/tasks`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1874,12 +1874,12 @@ public isolated client class Client {
 
     # Get subtasks from a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified task's subtasks 
-    resource isolated function get tasks/[string task_gid]/subtasks(map<string|string[]> headers = {}, *GetSubtasksForTaskQueries queries) returns InlineResponse20039|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/subtasks`;
+    resource isolated function get tasks/[string taskGid]/subtasks(map<string|string[]> headers = {}, *GetSubtasksForTaskQueries queries) returns TaskCompactsResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/subtasks`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1887,13 +1887,13 @@ public isolated client class Client {
 
     # Create a subtask
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The new subtask to create 
     # + return - Successfully created the specified subtask 
-    resource isolated function post tasks/[string task_gid]/subtasks(TaskGidSubtasksBody payload, map<string|string[]> headers = {}, *CreateSubtaskForTaskQueries queries) returns InlineResponse2017|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/subtasks`;
+    resource isolated function post tasks/[string taskGid]/subtasks(TaskGidSubtasksBody payload, map<string|string[]> headers = {}, *CreateSubtaskForTaskQueries queries) returns TaskCreatedResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/subtasks`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1904,13 +1904,13 @@ public isolated client class Client {
 
     # Set the parent of a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The new parent of the subtask 
     # + return - Successfully changed the parent of the specified subtask 
-    resource isolated function post tasks/[string task_gid]/setParent(TaskGidSetParentBody payload, map<string|string[]> headers = {}, *SetParentForTaskQueries queries) returns InlineResponse2017|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/setParent`;
+    resource isolated function post tasks/[string taskGid]/setParent(TaskGidSetParentBody payload, map<string|string[]> headers = {}, *SetParentForTaskQueries queries) returns TaskCreatedResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/setParent`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -1921,12 +1921,12 @@ public isolated client class Client {
 
     # Get dependencies from a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified task's dependencies 
-    resource isolated function get tasks/[string task_gid]/dependencies(map<string|string[]> headers = {}, *GetDependenciesForTaskQueries queries) returns InlineResponse20039|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/dependencies`;
+    resource isolated function get tasks/[string taskGid]/dependencies(map<string|string[]> headers = {}, *GetDependenciesForTaskQueries queries) returns TaskCompactsResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/dependencies`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1934,13 +1934,13 @@ public isolated client class Client {
 
     # Set dependencies for a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The list of tasks to set as dependencies 
     # + return - Successfully set the specified dependencies on the task 
-    resource isolated function post tasks/[string task_gid]/addDependencies(TaskGidAddDependenciesBody payload, map<string|string[]> headers = {}, *AddDependenciesForTaskQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/addDependencies`;
+    resource isolated function post tasks/[string taskGid]/addDependencies(TaskGidAddDependenciesBody payload, map<string|string[]> headers = {}, *AddDependenciesForTaskQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/addDependencies`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1950,13 +1950,13 @@ public isolated client class Client {
 
     # Unlink dependencies from a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The list of tasks to unlink as dependencies 
     # + return - Successfully unlinked the dependencies from the specified task 
-    resource isolated function post tasks/[string task_gid]/removeDependencies(TaskGidRemoveDependenciesBody payload, map<string|string[]> headers = {}, *RemoveDependenciesForTaskQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/removeDependencies`;
+    resource isolated function post tasks/[string taskGid]/removeDependencies(TaskGidRemoveDependenciesBody payload, map<string|string[]> headers = {}, *RemoveDependenciesForTaskQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/removeDependencies`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1966,12 +1966,12 @@ public isolated client class Client {
 
     # Get dependents from a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the specified dependents of the task 
-    resource isolated function get tasks/[string task_gid]/dependents(map<string|string[]> headers = {}, *GetDependentsForTaskQueries queries) returns InlineResponse20039|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/dependents`;
+    resource isolated function get tasks/[string taskGid]/dependents(map<string|string[]> headers = {}, *GetDependentsForTaskQueries queries) returns TaskCompactsResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/dependents`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -1979,13 +1979,13 @@ public isolated client class Client {
 
     # Set dependents for a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The list of tasks to add as dependents 
     # + return - Successfully set the specified dependents on the given task 
-    resource isolated function post tasks/[string task_gid]/addDependents(TaskGidAddDependentsBody payload, map<string|string[]> headers = {}, *AddDependentsForTaskQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/addDependents`;
+    resource isolated function post tasks/[string taskGid]/addDependents(TaskGidAddDependentsBody payload, map<string|string[]> headers = {}, *AddDependentsForTaskQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/addDependents`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1995,13 +1995,13 @@ public isolated client class Client {
 
     # Unlink dependents from a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The list of tasks to remove as dependents 
     # + return - Successfully unlinked the specified tasks as dependents 
-    resource isolated function post tasks/[string task_gid]/removeDependents(TaskGidRemoveDependentsBody payload, map<string|string[]> headers = {}, *RemoveDependentsForTaskQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/removeDependents`;
+    resource isolated function post tasks/[string taskGid]/removeDependents(TaskGidRemoveDependentsBody payload, map<string|string[]> headers = {}, *RemoveDependentsForTaskQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/removeDependents`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2011,13 +2011,13 @@ public isolated client class Client {
 
     # Add a project to a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The project to add the task to 
     # + return - Successfully added the specified project to the task 
-    resource isolated function post tasks/[string task_gid]/addProject(TaskGidAddProjectBody payload, map<string|string[]> headers = {}, *AddProjectForTaskQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/addProject`;
+    resource isolated function post tasks/[string taskGid]/addProject(TaskGidAddProjectBody payload, map<string|string[]> headers = {}, *AddProjectForTaskQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/addProject`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2027,13 +2027,13 @@ public isolated client class Client {
 
     # Remove a project from a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The project to remove the task from 
     # + return - Successfully removed the specified project from the task 
-    resource isolated function post tasks/[string task_gid]/removeProject(TaskGidRemoveProjectBody payload, map<string|string[]> headers = {}, *RemoveProjectForTaskQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/removeProject`;
+    resource isolated function post tasks/[string taskGid]/removeProject(TaskGidRemoveProjectBody payload, map<string|string[]> headers = {}, *RemoveProjectForTaskQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/removeProject`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2043,13 +2043,13 @@ public isolated client class Client {
 
     # Add a tag to a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The tag to add to the task 
     # + return - Successfully added the specified tag to the task 
-    resource isolated function post tasks/[string task_gid]/addTag(TaskGidAddTagBody payload, map<string|string[]> headers = {}, *AddTagForTaskQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/addTag`;
+    resource isolated function post tasks/[string taskGid]/addTag(TaskGidAddTagBody payload, map<string|string[]> headers = {}, *AddTagForTaskQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/addTag`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2059,13 +2059,13 @@ public isolated client class Client {
 
     # Remove a tag from a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The tag to remove from the task 
     # + return - Successfully removed the specified tag from the task 
-    resource isolated function post tasks/[string task_gid]/removeTag(TaskGidRemoveTagBody payload, map<string|string[]> headers = {}, *RemoveTagForTaskQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/removeTag`;
+    resource isolated function post tasks/[string taskGid]/removeTag(TaskGidRemoveTagBody payload, map<string|string[]> headers = {}, *RemoveTagForTaskQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/removeTag`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2075,13 +2075,13 @@ public isolated client class Client {
 
     # Add followers to a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The followers to add to the task 
     # + return - Successfully added the specified followers to the task 
-    resource isolated function post tasks/[string task_gid]/addFollowers(TaskGidAddFollowersBody payload, map<string|string[]> headers = {}, *AddFollowersForTaskQueries queries) returns InlineResponse2017|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/addFollowers`;
+    resource isolated function post tasks/[string taskGid]/addFollowers(TaskGidAddFollowersBody payload, map<string|string[]> headers = {}, *AddFollowersForTaskQueries queries) returns TaskCreatedResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/addFollowers`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -2092,13 +2092,13 @@ public isolated client class Client {
 
     # Remove followers from a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The followers to remove from the task 
     # + return - Successfully removed the specified followers from the task 
-    resource isolated function post tasks/[string task_gid]/removeFollowers(TaskGidRemoveFollowersBody payload, map<string|string[]> headers = {}, *RemoveFollowerForTaskQueries queries) returns InlineResponse2017|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/removeFollowers`;
+    resource isolated function post tasks/[string taskGid]/removeFollowers(TaskGidRemoveFollowersBody payload, map<string|string[]> headers = {}, *RemoveFollowerForTaskQueries queries) returns TaskCreatedResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/removeFollowers`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -2109,23 +2109,23 @@ public isolated client class Client {
 
     # Get a task for a given custom ID
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
-    # + custom_id - Generated custom ID for a task
+    # + workspaceGid - Globally unique identifier for the workspace or organization
+    # + customId - Generated custom ID for a task
     # + headers - Headers to be sent with the request 
     # + return - Successfully retrieved task for given custom ID 
-    resource isolated function get workspaces/[string workspace_gid]/tasks/custom_id/[string custom_id](map<string|string[]> headers = {}) returns InlineResponse2017|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/tasks/custom_id/${getEncodedUri(custom_id)}`;
+    resource isolated function get workspaces/[string workspaceGid]/tasks/custom_id/[string customId](map<string|string[]> headers = {}) returns TaskCreatedResponse|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/tasks/custom_id/${getEncodedUri(customId)}`;
         return self.clientEp->get(resourcePath, headers);
     }
 
     # Search tasks in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the section's tasks 
-    resource isolated function get workspaces/[string workspace_gid]/tasks/search(map<string|string[]> headers = {}, *SearchTasksForWorkspaceQueries queries) returns InlineResponse20040|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/tasks/search`;
+    resource isolated function get workspaces/[string workspaceGid]/tasks/search(map<string|string[]> headers = {}, *SearchTasksForWorkspaceQueries queries) returns TaskCompacts|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/tasks/search`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2136,8 +2136,8 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested team membership 
-    resource isolated function get team_memberships/[string team_membership_gid](map<string|string[]> headers = {}, *GetTeamMembershipQueries queries) returns InlineResponse20041|error {
-        string resourcePath = string `/team_memberships/${getEncodedUri(team_membership_gid)}`;
+    resource isolated function get team_memberships/[string teamMembershipGid](map<string|string[]> headers = {}, *GetTeamMembershipQueries queries) returns TeamMembershipOkResponse|error {
+        string resourcePath = string `/team_memberships/${getEncodedUri(teamMembershipGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2148,7 +2148,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested team memberships 
-    resource isolated function get team_memberships(map<string|string[]> headers = {}, *GetTeamMembershipsQueries queries) returns InlineResponse20042|error {
+    resource isolated function get team_memberships(map<string|string[]> headers = {}, *GetTeamMembershipsQueries queries) returns TeamMembershipCompactsResponse|error {
         string resourcePath = string `/team_memberships`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2157,12 +2157,12 @@ public isolated client class Client {
 
     # Get memberships from a team
     #
-    # + team_gid - Globally unique identifier for the team
+    # + teamGid - Globally unique identifier for the team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested team's memberships 
-    resource isolated function get teams/[string team_gid]/team_memberships(map<string|string[]> headers = {}, *GetTeamMembershipsForTeamQueries queries) returns InlineResponse20042|error {
-        string resourcePath = string `/teams/${getEncodedUri(team_gid)}/team_memberships`;
+    resource isolated function get teams/[string teamGid]/team_memberships(map<string|string[]> headers = {}, *GetTeamMembershipsForTeamQueries queries) returns TeamMembershipCompactsResponse|error {
+        string resourcePath = string `/teams/${getEncodedUri(teamGid)}/team_memberships`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2170,12 +2170,12 @@ public isolated client class Client {
 
     # Get memberships from a user
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + userGid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested users's memberships 
-    resource isolated function get users/[string user_gid]/team_memberships(map<string|string[]> headers = {}, *GetTeamMembershipsForUserQueries queries) returns InlineResponse20042|error {
-        string resourcePath = string `/users/${getEncodedUri(user_gid)}/team_memberships`;
+    resource isolated function get users/[string userGid]/team_memberships(map<string|string[]> headers = {}, *GetTeamMembershipsForUserQueries queries) returns TeamMembershipCompactsResponse|error {
+        string resourcePath = string `/users/${getEncodedUri(userGid)}/team_memberships`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2187,7 +2187,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The team to create 
     # + return - Successfully created a new team 
-    resource isolated function post teams(TeamsBody payload, map<string|string[]> headers = {}, *CreateTeamQueries queries) returns InlineResponse2018|error {
+    resource isolated function post teams(TeamsBody payload, map<string|string[]> headers = {}, *CreateTeamQueries queries) returns TeamCreatedResponse|error {
         string resourcePath = string `/teams`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2199,12 +2199,12 @@ public isolated client class Client {
 
     # Get a team
     #
-    # + team_gid - Globally unique identifier for the team
+    # + teamGid - Globally unique identifier for the team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the record for a single team 
-    resource isolated function get teams/[string team_gid](map<string|string[]> headers = {}, *GetTeamQueries queries) returns InlineResponse2018|error {
-        string resourcePath = string `/teams/${getEncodedUri(team_gid)}`;
+    resource isolated function get teams/[string teamGid](map<string|string[]> headers = {}, *GetTeamQueries queries) returns TeamCreatedResponse|error {
+        string resourcePath = string `/teams/${getEncodedUri(teamGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2212,13 +2212,13 @@ public isolated client class Client {
 
     # Update a team
     #
-    # + team_gid - Globally unique identifier for the team
+    # + teamGid - Globally unique identifier for the team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The team to update 
     # + return - Successfully updated the team 
-    resource isolated function put teams/[string team_gid](TeamsteamGidBody payload, map<string|string[]> headers = {}, *UpdateTeamQueries queries) returns InlineResponse2018|error {
-        string resourcePath = string `/teams/${getEncodedUri(team_gid)}`;
+    resource isolated function put teams/[string teamGid](TeamsteamGidBody payload, map<string|string[]> headers = {}, *UpdateTeamQueries queries) returns TeamCreatedResponse|error {
+        string resourcePath = string `/teams/${getEncodedUri(teamGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -2229,12 +2229,12 @@ public isolated client class Client {
 
     # Get teams in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Returns the team records for all teams in the organization or workspace accessible to the authenticated user 
-    resource isolated function get workspaces/[string workspace_gid]/teams(map<string|string[]> headers = {}, *GetTeamsForWorkspaceQueries queries) returns InlineResponse20043|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/teams`;
+    resource isolated function get workspaces/[string workspaceGid]/teams(map<string|string[]> headers = {}, *GetTeamsForWorkspaceQueries queries) returns TeamCompactsResponse|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/teams`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2242,12 +2242,12 @@ public isolated client class Client {
 
     # Get teams for a user
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + userGid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Returns the team records for all teams in the organization or workspace to which the given user is assigned 
-    resource isolated function get users/[string user_gid]/teams(map<string|string[]> headers = {}, *GetTeamsForUserQueries queries) returns InlineResponse20043|error {
-        string resourcePath = string `/users/${getEncodedUri(user_gid)}/teams`;
+    resource isolated function get users/[string userGid]/teams(map<string|string[]> headers = {}, *GetTeamsForUserQueries queries) returns TeamCompactsResponse|error {
+        string resourcePath = string `/users/${getEncodedUri(userGid)}/teams`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2255,13 +2255,13 @@ public isolated client class Client {
 
     # Add a user to a team
     #
-    # + team_gid - Globally unique identifier for the team
+    # + teamGid - Globally unique identifier for the team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The user to add to the team 
     # + return - Successfully added user to the team 
-    resource isolated function post teams/[string team_gid]/addUser(TeamGidAddUserBody payload, map<string|string[]> headers = {}, *AddUserForTeamQueries queries) returns InlineResponse20041|error {
-        string resourcePath = string `/teams/${getEncodedUri(team_gid)}/addUser`;
+    resource isolated function post teams/[string teamGid]/addUser(TeamGidAddUserBody payload, map<string|string[]> headers = {}, *AddUserForTeamQueries queries) returns TeamMembershipOkResponse|error {
+        string resourcePath = string `/teams/${getEncodedUri(teamGid)}/addUser`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -2272,13 +2272,13 @@ public isolated client class Client {
 
     # Remove a user from a team
     #
-    # + team_gid - Globally unique identifier for the team
+    # + teamGid - Globally unique identifier for the team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The user to remove from the team 
     # + return - Returns an empty data record 
-    resource isolated function post teams/[string team_gid]/removeUser(TeamGidRemoveUserBody payload, map<string|string[]> headers = {}, *RemoveUserForTeamQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/teams/${getEncodedUri(team_gid)}/removeUser`;
+    resource isolated function post teams/[string teamGid]/removeUser(TeamGidRemoveUserBody payload, map<string|string[]> headers = {}, *RemoveUserForTeamQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/teams/${getEncodedUri(teamGid)}/removeUser`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2288,12 +2288,12 @@ public isolated client class Client {
 
     # Get a time period
     #
-    # + time_period_gid - Globally unique identifier for the time period
+    # + timePeriodGid - Globally unique identifier for the time period
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the record for a single time period 
-    resource isolated function get time_periods/[string time_period_gid](map<string|string[]> headers = {}, *GetTimePeriodQueries queries) returns InlineResponse20044|error {
-        string resourcePath = string `/time_periods/${getEncodedUri(time_period_gid)}`;
+    resource isolated function get time_periods/[string timePeriodGid](map<string|string[]> headers = {}, *GetTimePeriodQueries queries) returns TimePeriodOkResponse|error {
+        string resourcePath = string `/time_periods/${getEncodedUri(timePeriodGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2304,7 +2304,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested time periods 
-    resource isolated function get time_periods(map<string|string[]> headers = {}, *GetTimePeriodsQueries queries) returns InlineResponse20045|error {
+    resource isolated function get time_periods(map<string|string[]> headers = {}, *GetTimePeriodsQueries queries) returns TimePeriodCompactsResponse|error {
         string resourcePath = string `/time_periods`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2313,12 +2313,12 @@ public isolated client class Client {
 
     # Get time tracking entries for a task
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested time tracking entries 
-    resource isolated function get tasks/[string task_gid]/time_tracking_entries(map<string|string[]> headers = {}, *GetTimeTrackingEntriesForTaskQueries queries) returns InlineResponse20046|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/time_tracking_entries`;
+    resource isolated function get tasks/[string taskGid]/time_tracking_entries(map<string|string[]> headers = {}, *GetTimeTrackingEntriesForTaskQueries queries) returns TimeTrackingEntryCompactsResponse|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/time_tracking_entries`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2326,13 +2326,13 @@ public isolated client class Client {
 
     # Create a time tracking entry
     #
-    # + task_gid - The task to operate on
+    # + taskGid - The task to operate on
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Information about the time tracking entry 
     # + return - Successfully created a time tracking entry for the task 
-    resource isolated function post tasks/[string task_gid]/time_tracking_entries(TaskGidTimeTrackingEntriesBody payload, map<string|string[]> headers = {}, *CreateTimeTrackingEntryQueries queries) returns InlineResponse2019|error {
-        string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/time_tracking_entries`;
+    resource isolated function post tasks/[string taskGid]/time_tracking_entries(TaskGidTimeTrackingEntriesBody payload, map<string|string[]> headers = {}, *CreateTimeTrackingEntryQueries queries) returns TimeTrackingEntryBases|error {
+        string resourcePath = string `/tasks/${getEncodedUri(taskGid)}/time_tracking_entries`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -2343,12 +2343,12 @@ public isolated client class Client {
 
     # Get a time tracking entry
     #
-    # + time_tracking_entry_gid - Globally unique identifier for the time tracking entry
+    # + timeTrackingEntryGid - Globally unique identifier for the time tracking entry
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested time tracking entry 
-    resource isolated function get time_tracking_entries/[string time_tracking_entry_gid](map<string|string[]> headers = {}, *GetTimeTrackingEntryQueries queries) returns InlineResponse2019|error {
-        string resourcePath = string `/time_tracking_entries/${getEncodedUri(time_tracking_entry_gid)}`;
+    resource isolated function get time_tracking_entries/[string timeTrackingEntryGid](map<string|string[]> headers = {}, *GetTimeTrackingEntryQueries queries) returns TimeTrackingEntryBases|error {
+        string resourcePath = string `/time_tracking_entries/${getEncodedUri(timeTrackingEntryGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2356,13 +2356,13 @@ public isolated client class Client {
 
     # Update a time tracking entry
     #
-    # + time_tracking_entry_gid - Globally unique identifier for the time tracking entry
+    # + timeTrackingEntryGid - Globally unique identifier for the time tracking entry
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The updated fields for the time tracking entry 
     # + return - Successfully updated the time tracking entry 
-    resource isolated function put time_tracking_entries/[string time_tracking_entry_gid](TimeTrackingEntriestimeTrackingEntryGidBody payload, map<string|string[]> headers = {}, *UpdateTimeTrackingEntryQueries queries) returns InlineResponse2019|error {
-        string resourcePath = string `/time_tracking_entries/${getEncodedUri(time_tracking_entry_gid)}`;
+    resource isolated function put time_tracking_entries/[string timeTrackingEntryGid](TimeTrackingEntriestimeTrackingEntryGidBody payload, map<string|string[]> headers = {}, *UpdateTimeTrackingEntryQueries queries) returns TimeTrackingEntryBases|error {
+        string resourcePath = string `/time_tracking_entries/${getEncodedUri(timeTrackingEntryGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -2373,24 +2373,24 @@ public isolated client class Client {
 
     # Delete a time tracking entry
     #
-    # + time_tracking_entry_gid - Globally unique identifier for the time tracking entry
+    # + timeTrackingEntryGid - Globally unique identifier for the time tracking entry
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully deleted the specified time tracking entry 
-    resource isolated function delete time_tracking_entries/[string time_tracking_entry_gid](map<string|string[]> headers = {}, *DeleteTimeTrackingEntryQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/time_tracking_entries/${getEncodedUri(time_tracking_entry_gid)}`;
+    resource isolated function delete time_tracking_entries/[string timeTrackingEntryGid](map<string|string[]> headers = {}, *DeleteTimeTrackingEntryQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/time_tracking_entries/${getEncodedUri(timeTrackingEntryGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
     # Get objects via typeahead
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved objects via a typeahead search algorithm 
-    resource isolated function get workspaces/[string workspace_gid]/typeahead(map<string|string[]> headers = {}, *TypeaheadForWorkspaceQueries queries) returns InlineResponse20047|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/typeahead`;
+    resource isolated function get workspaces/[string workspaceGid]/typeahead(map<string|string[]> headers = {}, *TypeaheadForWorkspaceQueries queries) returns AsanaNamedResources|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/typeahead`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2398,12 +2398,12 @@ public isolated client class Client {
 
     # Get a user task list
     #
-    # + user_task_list_gid - Globally unique identifier for the user task list
+    # + userTaskListGid - Globally unique identifier for the user task list
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the user task list 
-    resource isolated function get user_task_lists/[string user_task_list_gid](map<string|string[]> headers = {}, *GetUserTaskListQueries queries) returns InlineResponse20048|error {
-        string resourcePath = string `/user_task_lists/${getEncodedUri(user_task_list_gid)}`;
+    resource isolated function get user_task_lists/[string userTaskListGid](map<string|string[]> headers = {}, *GetUserTaskListQueries queries) returns UserTaskListOkResponse|error {
+        string resourcePath = string `/user_task_lists/${getEncodedUri(userTaskListGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2411,12 +2411,12 @@ public isolated client class Client {
 
     # Get a user's task list
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + userGid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the user's task list 
-    resource isolated function get users/[string user_gid]/user_task_list(map<string|string[]> headers = {}, *GetUserTaskListForUserQueries queries) returns InlineResponse20048|error {
-        string resourcePath = string `/users/${getEncodedUri(user_gid)}/user_task_list`;
+    resource isolated function get users/[string userGid]/user_task_list(map<string|string[]> headers = {}, *GetUserTaskListForUserQueries queries) returns UserTaskListOkResponse|error {
+        string resourcePath = string `/users/${getEncodedUri(userGid)}/user_task_list`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2427,7 +2427,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested user records 
-    resource isolated function get users(map<string|string[]> headers = {}, *GetUsersQueries queries) returns InlineResponse20049|error {
+    resource isolated function get users(map<string|string[]> headers = {}, *GetUsersQueries queries) returns UserCompactsResponse|error {
         string resourcePath = string `/users`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2436,12 +2436,12 @@ public isolated client class Client {
 
     # Get a user
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + userGid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Returns the user specified 
-    resource isolated function get users/[string user_gid](map<string|string[]> headers = {}, *GetUserQueries queries) returns InlineResponse20050|error {
-        string resourcePath = string `/users/${getEncodedUri(user_gid)}`;
+    resource isolated function get users/[string userGid](map<string|string[]> headers = {}, *GetUserQueries queries) returns UserOkResponse|error {
+        string resourcePath = string `/users/${getEncodedUri(userGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2449,12 +2449,12 @@ public isolated client class Client {
 
     # Get a user's favorites
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + userGid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Returns the specified user's favorites 
-    resource isolated function get users/[string user_gid]/favorites(map<string|string[]> headers = {}, *GetFavoritesForUserQueries queries) returns InlineResponse20051|error {
-        string resourcePath = string `/users/${getEncodedUri(user_gid)}/favorites`;
+    resource isolated function get users/[string userGid]/favorites(map<string|string[]> headers = {}, *GetFavoritesForUserQueries queries) returns AsanaNamedResourceResponse|error {
+        string resourcePath = string `/users/${getEncodedUri(userGid)}/favorites`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2462,12 +2462,12 @@ public isolated client class Client {
 
     # Get users in a team
     #
-    # + team_gid - Globally unique identifier for the team
+    # + teamGid - Globally unique identifier for the team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Returns the user records for all the members of the team, including guests and limited access users 
-    resource isolated function get teams/[string team_gid]/users(map<string|string[]> headers = {}, *GetUsersForTeamQueries queries) returns InlineResponse20052|error {
-        string resourcePath = string `/teams/${getEncodedUri(team_gid)}/users`;
+    resource isolated function get teams/[string teamGid]/users(map<string|string[]> headers = {}, *GetUsersForTeamQueries queries) returns UserCompacts|error {
+        string resourcePath = string `/teams/${getEncodedUri(teamGid)}/users`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2475,12 +2475,12 @@ public isolated client class Client {
 
     # Get users in a workspace or organization
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Return the users in the specified workspace or org 
-    resource isolated function get workspaces/[string workspace_gid]/users(map<string|string[]> headers = {}, *GetUsersForWorkspaceQueries queries) returns InlineResponse20052|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/users`;
+    resource isolated function get workspaces/[string workspaceGid]/users(map<string|string[]> headers = {}, *GetUsersForWorkspaceQueries queries) returns UserCompacts|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/users`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2491,7 +2491,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested webhooks 
-    resource isolated function get webhooks(map<string|string[]> headers = {}, *GetWebhooksQueries queries) returns InlineResponse20053|error {
+    resource isolated function get webhooks(map<string|string[]> headers = {}, *GetWebhooksQueries queries) returns WebhookOkResponse|error {
         string resourcePath = string `/webhooks`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2504,7 +2504,7 @@ public isolated client class Client {
     # + queries - Queries to be sent with the request 
     # + payload - The webhook workspace and target 
     # + return - Successfully created the requested webhook 
-    resource isolated function post webhooks(WebhooksBody payload, map<string|string[]> headers = {}, *CreateWebhookQueries queries) returns InlineResponse20110|error {
+    resource isolated function post webhooks(WebhooksBody payload, map<string|string[]> headers = {}, *CreateWebhookQueries queries) returns EnumOptions0|error {
         string resourcePath = string `/webhooks`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2516,12 +2516,12 @@ public isolated client class Client {
 
     # Get a webhook
     #
-    # + webhook_gid - Globally unique identifier for the webhook
+    # + webhookGid - Globally unique identifier for the webhook
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested webhook 
-    resource isolated function get webhooks/[string webhook_gid](map<string|string[]> headers = {}, *GetWebhookQueries queries) returns InlineResponse20110|error {
-        string resourcePath = string `/webhooks/${getEncodedUri(webhook_gid)}`;
+    resource isolated function get webhooks/[string webhookGid](map<string|string[]> headers = {}, *GetWebhookQueries queries) returns EnumOptions0|error {
+        string resourcePath = string `/webhooks/${getEncodedUri(webhookGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2529,13 +2529,13 @@ public isolated client class Client {
 
     # Update a webhook
     #
-    # + webhook_gid - Globally unique identifier for the webhook
+    # + webhookGid - Globally unique identifier for the webhook
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The updated filters for the webhook 
     # + return - Successfully updated the webhook 
-    resource isolated function put webhooks/[string webhook_gid](WebhookswebhookGidBody payload, map<string|string[]> headers = {}, *UpdateWebhookQueries queries) returns InlineResponse20110|error {
-        string resourcePath = string `/webhooks/${getEncodedUri(webhook_gid)}`;
+    resource isolated function put webhooks/[string webhookGid](WebhookswebhookGidBody payload, map<string|string[]> headers = {}, *UpdateWebhookQueries queries) returns EnumOptions0|error {
+        string resourcePath = string `/webhooks/${getEncodedUri(webhookGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -2546,12 +2546,12 @@ public isolated client class Client {
 
     # Delete a webhook
     #
-    # + webhook_gid - Globally unique identifier for the webhook
+    # + webhookGid - Globally unique identifier for the webhook
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested webhook 
-    resource isolated function delete webhooks/[string webhook_gid](map<string|string[]> headers = {}, *DeleteWebhookQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/webhooks/${getEncodedUri(webhook_gid)}`;
+    resource isolated function delete webhooks/[string webhookGid](map<string|string[]> headers = {}, *DeleteWebhookQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/webhooks/${getEncodedUri(webhookGid)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
@@ -2561,8 +2561,8 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested workspace membership 
-    resource isolated function get workspace_memberships/[string workspace_membership_gid](map<string|string[]> headers = {}, *GetWorkspaceMembershipQueries queries) returns InlineResponse20054|error {
-        string resourcePath = string `/workspace_memberships/${getEncodedUri(workspace_membership_gid)}`;
+    resource isolated function get workspace_memberships/[string workspaceMembershipGid](map<string|string[]> headers = {}, *GetWorkspaceMembershipQueries queries) returns WorkspaceMembershipOkResponse|error {
+        string resourcePath = string `/workspace_memberships/${getEncodedUri(workspaceMembershipGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2570,12 +2570,12 @@ public isolated client class Client {
 
     # Get workspace memberships for a user
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + userGid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested user's workspace memberships 
-    resource isolated function get users/[string user_gid]/workspace_memberships(map<string|string[]> headers = {}, *GetWorkspaceMembershipsForUserQueries queries) returns InlineResponse20055|error {
-        string resourcePath = string `/users/${getEncodedUri(user_gid)}/workspace_memberships`;
+    resource isolated function get users/[string userGid]/workspace_memberships(map<string|string[]> headers = {}, *GetWorkspaceMembershipsForUserQueries queries) returns WorkspaceMembershipCompactResponse|error {
+        string resourcePath = string `/users/${getEncodedUri(userGid)}/workspace_memberships`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2583,12 +2583,12 @@ public isolated client class Client {
 
     # Get the workspace memberships for a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved the requested workspace's memberships 
-    resource isolated function get workspaces/[string workspace_gid]/workspace_memberships(map<string|string[]> headers = {}, *GetWorkspaceMembershipsForWorkspaceQueries queries) returns InlineResponse20055|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/workspace_memberships`;
+    resource isolated function get workspaces/[string workspaceGid]/workspace_memberships(map<string|string[]> headers = {}, *GetWorkspaceMembershipsForWorkspaceQueries queries) returns WorkspaceMembershipCompactResponse|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/workspace_memberships`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2599,7 +2599,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Return all workspaces visible to the authorized user 
-    resource isolated function get workspaces(map<string|string[]> headers = {}, *GetWorkspacesQueries queries) returns InlineResponse20056|error {
+    resource isolated function get workspaces(map<string|string[]> headers = {}, *GetWorkspacesQueries queries) returns WorkspaceCompactResponse|error {
         string resourcePath = string `/workspaces`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2608,12 +2608,12 @@ public isolated client class Client {
 
     # Get a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Return the full workspace record 
-    resource isolated function get workspaces/[string workspace_gid](map<string|string[]> headers = {}, *GetWorkspaceQueries queries) returns InlineResponse20057|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}`;
+    resource isolated function get workspaces/[string workspaceGid](map<string|string[]> headers = {}, *GetWorkspaceQueries queries) returns WorkspaceOkResponse|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
@@ -2621,13 +2621,13 @@ public isolated client class Client {
 
     # Update a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The workspace object with all updated properties 
     # + return - Update for the workspace was successful 
-    resource isolated function put workspaces/[string workspace_gid](WorkspacesworkspaceGidBody payload, map<string|string[]> headers = {}, *UpdateWorkspaceQueries queries) returns InlineResponse20057|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}`;
+    resource isolated function put workspaces/[string workspaceGid](WorkspacesworkspaceGidBody payload, map<string|string[]> headers = {}, *UpdateWorkspaceQueries queries) returns WorkspaceOkResponse|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -2638,13 +2638,13 @@ public isolated client class Client {
 
     # Add a user to a workspace or organization
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The user to add to the workspace 
     # + return - The user was added successfully to the workspace or organization 
-    resource isolated function post workspaces/[string workspace_gid]/addUser(WorkspaceGidAddUserBody payload, map<string|string[]> headers = {}, *AddUserForWorkspaceQueries queries) returns InlineResponse20058|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/addUser`;
+    resource isolated function post workspaces/[string workspaceGid]/addUser(WorkspaceGidAddUserBody payload, map<string|string[]> headers = {}, *AddUserForWorkspaceQueries queries) returns UserBaseOkResponse|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/addUser`;
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
@@ -2655,13 +2655,13 @@ public isolated client class Client {
 
     # Remove a user from a workspace or organization
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + workspaceGid - Globally unique identifier for the workspace or organization
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - The user to remove from the workspace 
     # + return - The user was removed successfully to the workspace or organization 
-    resource isolated function post workspaces/[string workspace_gid]/removeUser(WorkspaceGidRemoveUserBody payload, map<string|string[]> headers = {}, *RemoveUserForWorkspaceQueries queries) returns InlineResponse2001|error {
-        string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/removeUser`;
+    resource isolated function post workspaces/[string workspaceGid]/removeUser(WorkspaceGidRemoveUserBody payload, map<string|string[]> headers = {}, *RemoveUserForWorkspaceQueries queries) returns EmptyOkResponse|error {
+        string resourcePath = string `/workspaces/${getEncodedUri(workspaceGid)}/removeUser`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
