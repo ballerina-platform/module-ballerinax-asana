@@ -32,14 +32,14 @@ asana:Client asana = check new (asanaConfig);
 public function main() returns error? {
 
     // Step 1: Create a new onboarding project
-    asana:Projects_body projectBody = {
+    asana:ProjectsBody projectBody = {
         data: {
             name: "Onboarding - " + newEmployeeName,
             workspace: workspaceId
         }
     };
 
-    asana:Inline_response_201_5|error projectResponse = asana->/projects.post(projectBody);
+    asana:ProjectCreatedResponse|error projectResponse = asana->/projects.post(projectBody);
     if projectResponse is error {
         return error("error creating project: " + projectResponse.message());
     }
@@ -52,13 +52,13 @@ public function main() returns error? {
     // Step 2: Add sections to the new project
     string[] sections = ["Documentation", "Training", "Setup"];
     foreach string sectionName in sections {
-        asana:Project_gid_sections_body sectionBody = {
+        asana:ProjectGidSectionsBody sectionBody = {
             data: {
                 name: sectionName
             }
         };
 
-        asana:Inline_response_200_30|error sectionCreationResult = asana->/projects/[projectId]/sections.post(sectionBody);
+        asana:SectionOkResponse|error sectionCreationResult = asana->/projects/[projectId]/sections.post(sectionBody);
         if sectionCreationResult is error {
             return error("error creating section: " + sectionCreationResult.message());
         }
@@ -68,15 +68,15 @@ public function main() returns error? {
     // In a complete implementation, you'd likely query the sections of the project first to get their IDs.
     string[] tasks = ["Complete HR paperwork", "Setup work email", "Attend orientation session"];
     foreach string taskName in tasks {
-        asana:Tasks_body newTaskPayload = {
+        asana:TasksBody newTaskPayload = {
             data: {
                 name: taskName,
                 projects: [projectId],
-                assignee_section: "<section_id>"
+                assigneeSection: "<section_id>"
             }
         };
 
-        asana:Inline_response_201_7|error taskCreationResponse = asana->/tasks.post(newTaskPayload);
+        asana:TaskCreatedResponse|error taskCreationResponse = asana->/tasks.post(newTaskPayload);
         if taskCreationResponse is error {
             return error("error creating task: " + taskCreationResponse.message());
         }
