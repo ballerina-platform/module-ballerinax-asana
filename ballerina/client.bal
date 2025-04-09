@@ -29,3368 +29,2642 @@ public isolated client class Client {
     # + serviceUrl - URL of the target service 
     # + return - An error if connector initialization failed 
     public isolated function init(ConnectionConfig config, string serviceUrl = "https://app.asana.com/api/1.0") returns error? {
-        http:ClientConfiguration httpClientConfig = {auth: config.auth, httpVersion: config.httpVersion, timeout: config.timeout, forwarded: config.forwarded, poolConfig: config.poolConfig, compression: config.compression, circuitBreaker: config.circuitBreaker, retryConfig: config.retryConfig, validation: config.validation};
-        do {
-            if config.http1Settings is ClientHttp1Settings {
-                ClientHttp1Settings settings = check config.http1Settings.ensureType(ClientHttp1Settings);
-                httpClientConfig.http1Settings = {...settings};
-            }
-            if config.http2Settings is http:ClientHttp2Settings {
-                httpClientConfig.http2Settings = check config.http2Settings.ensureType(http:ClientHttp2Settings);
-            }
-            if config.cache is http:CacheConfig {
-                httpClientConfig.cache = check config.cache.ensureType(http:CacheConfig);
-            }
-            if config.responseLimits is http:ResponseLimitConfigs {
-                httpClientConfig.responseLimits = check config.responseLimits.ensureType(http:ResponseLimitConfigs);
-            }
-            if config.secureSocket is http:ClientSecureSocket {
-                httpClientConfig.secureSocket = check config.secureSocket.ensureType(http:ClientSecureSocket);
-            }
-            if config.proxy is http:ProxyConfig {
-                httpClientConfig.proxy = check config.proxy.ensureType(http:ProxyConfig);
-            }
-        }
-        http:Client httpEp = check new (serviceUrl, httpClientConfig);
-        self.clientEp = httpEp;
-        return;
+        http:ClientConfiguration httpClientConfig = {auth: config.auth, httpVersion: config.httpVersion, http1Settings: config.http1Settings, http2Settings: config.http2Settings, timeout: config.timeout, forwarded: config.forwarded, followRedirects: config.followRedirects, poolConfig: config.poolConfig, cache: config.cache, compression: config.compression, circuitBreaker: config.circuitBreaker, retryConfig: config.retryConfig, cookieConfig: config.cookieConfig, responseLimits: config.responseLimits, secureSocket: config.secureSocket, proxy: config.proxy, socketConfig: config.socketConfig, validation: config.validation, laxDataBinding: config.laxDataBinding};
+        self.clientEp = check new (serviceUrl, httpClientConfig);
     }
+
     # Get an attachment
     #
-    # + attachment_gid - Globally unique identifier for the attachment.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the record for a single attachment. 
-    resource isolated function get attachments/[string attachment_gid](boolean? opt_pretty = (), ("connected_to_app"|"created_at"|"download_url"|"host"|"name"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permanent_url"|"resource_subtype"|"size"|"view_url")[]? opt_fields = ()) returns Inline_response_200|error {
+    # + attachment_gid - Globally unique identifier for the attachment
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the record for a single attachment 
+    resource isolated function get attachments/[string attachment_gid](map<string|string[]> headers = {}, *GetAttachmentQueries queries) returns InlineResponse200|error {
         string resourcePath = string `/attachments/${getEncodedUri(attachment_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Delete an attachment
     #
-    # + attachment_gid - Globally unique identifier for the attachment.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified attachment. 
-    resource isolated function delete attachments/[string attachment_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + attachment_gid - Globally unique identifier for the attachment
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified attachment 
+    resource isolated function delete attachments/[string attachment_gid](map<string|string[]> headers = {}, *DeleteAttachmentQueries queries) returns InlineResponse2001|error {
         string resourcePath = string `/attachments/${getEncodedUri(attachment_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get attachments from an object
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + parent - Globally unique identifier for object to fetch statuses from. Must be a GID for a `project`, `project_brief`, or `task`.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified object's attachments. 
-    resource isolated function get attachments(string parent, boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("connected_to_app"|"created_at"|"download_url"|"host"|"name"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permanent_url"|"resource_subtype"|"size"|"uri"|"view_url")[]? opt_fields = ()) returns Inline_response_200_2|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified object's attachments 
+    resource isolated function get attachments(map<string|string[]> headers = {}, *GetAttachmentsForObjectQueries queries) returns InlineResponse2002|error {
         string resourcePath = string `/attachments`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "parent": parent, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_2 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Upload an attachment
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The file you want to upload.
-    # + return - Successfully uploaded the attachment to the parent object. 
-    resource isolated function post attachments(AttachmentRequest payload, boolean? opt_pretty = (), ("connected_to_app"|"created_at"|"download_url"|"host"|"name"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permanent_url"|"resource_subtype"|"size"|"view_url")[]? opt_fields = ()) returns Inline_response_200|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The file you want to upload 
+    # + return - Successfully uploaded the attachment to the parent object 
+    resource isolated function post attachments(AttachmentRequest payload, map<string|string[]> headers = {}, *CreateAttachmentForObjectQueries queries) returns InlineResponse2003|error {
         string resourcePath = string `/attachments`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         mime:Entity[] bodyParts = check createBodyParts(payload);
         request.setBodyParts(bodyParts);
-        Inline_response_200 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get audit log events
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + start_at - Filter to events created after this time (inclusive).
-    # + end_at - Filter to events created before this time (exclusive).
-    # + event_type - Filter to events of this type.
-    # Refer to the [supported audit log events](/docs/audit-log-events#supported-audit-log-events) for a full list of values.
-    # + actor_type - Filter to events with an actor of this type.
-    # This only needs to be included if querying for actor types without an ID. If `actor_gid` is included, this should be excluded.
-    # + actor_gid - Filter to events triggered by the actor with this ID.
-    # + resource_gid - Filter to events with this resource ID.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + return - AuditLogEvents were successfully retrieved. 
-    resource isolated function get workspaces/[string workspace_gid]/audit_log_events(string? start_at = (), string? end_at = (), string? event_type = (), "user"|"asana"|"asana_support"|"anonymous"|"external_administrator"? actor_type = (), string? actor_gid = (), string? resource_gid = (), int? 'limit = (), string? offset = ()) returns Inline_response_200_3|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - AuditLogEvents were successfully retrieved 
+    resource isolated function get workspaces/[string workspace_gid]/audit_log_events(map<string|string[]> headers = {}, *GetAuditLogEventsQueries queries) returns InlineResponse2004|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/audit_log_events`;
-        map<anydata> queryParam = {"start_at": start_at, "end_at": end_at, "event_type": event_type, "actor_type": actor_type, "actor_gid": actor_gid, "resource_gid": resource_gid, "limit": 'limit, "offset": offset};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_3 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Submit parallel requests
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The requests to batch together via the Batch API.
-    # + return - Successfully completed the requested batch API operations. 
-    resource isolated function post batch(Batch_body payload, boolean? opt_pretty = (), ("body"|"headers"|"status_code")[]? opt_fields = ()) returns Inline_response_200_4|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The requests to batch together via the Batch API 
+    # + return - Successfully completed the requested batch API operations 
+    resource isolated function post batch(BatchBody payload, map<string|string[]> headers = {}, *CreateBatchRequestQueries queries) returns InlineResponse2005|error {
         string resourcePath = string `/batch`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_4 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a project's custom fields
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved custom field settings objects for a project. 
-    resource isolated function get projects/[string project_gid]/custom_field_settings(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("custom_field"|"custom_field.asana_created_field"|"custom_field.created_by"|"custom_field.created_by.name"|"custom_field.currency_code"|"custom_field.custom_label"|"custom_field.custom_label_position"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.description"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.format"|"custom_field.has_notifications_enabled"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.is_global_to_workspace"|"custom_field.is_value_read_only"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.people_value"|"custom_field.people_value.name"|"custom_field.precision"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"is_important"|"offset"|"parent"|"parent.name"|"path"|"project"|"project.name"|"uri")[]? opt_fields = ()) returns Inline_response_200_5|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved custom field settings objects for a project 
+    resource isolated function get projects/[string project_gid]/custom_field_settings(map<string|string[]> headers = {}, *GetCustomFieldSettingsForProjectQueries queries) returns InlineResponse2006|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/custom_field_settings`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_5 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a portfolio's custom fields
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved custom field settings objects for a portfolio. 
-    resource isolated function get portfolios/[string portfolio_gid]/custom_field_settings(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("custom_field"|"custom_field.asana_created_field"|"custom_field.created_by"|"custom_field.created_by.name"|"custom_field.currency_code"|"custom_field.custom_label"|"custom_field.custom_label_position"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.description"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.format"|"custom_field.has_notifications_enabled"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.is_global_to_workspace"|"custom_field.is_value_read_only"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.people_value"|"custom_field.people_value.name"|"custom_field.precision"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"is_important"|"offset"|"parent"|"parent.name"|"path"|"project"|"project.name"|"uri")[]? opt_fields = ()) returns Inline_response_200_5|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved custom field settings objects for a portfolio 
+    resource isolated function get portfolios/[string portfolio_gid]/custom_field_settings(map<string|string[]> headers = {}, *GetCustomFieldSettingsForPortfolioQueries queries) returns InlineResponse2007|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/custom_field_settings`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_5 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a custom field
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The custom field object to create.
-    # + return - Custom field successfully created. 
-    resource isolated function post custom_fields(Custom_fields_body payload, boolean? opt_pretty = (), ("asana_created_field"|"created_by"|"created_by.name"|"currency_code"|"custom_label"|"custom_label_position"|"date_value"|"date_value.date"|"date_value.date_time"|"description"|"display_value"|"enabled"|"enum_options"|"enum_options.color"|"enum_options.enabled"|"enum_options.name"|"enum_value"|"enum_value.color"|"enum_value.enabled"|"enum_value.name"|"format"|"has_notifications_enabled"|"id_prefix"|"is_formula_field"|"is_global_to_workspace"|"is_value_read_only"|"multi_enum_values"|"multi_enum_values.color"|"multi_enum_values.enabled"|"multi_enum_values.name"|"name"|"number_value"|"people_value"|"people_value.name"|"precision"|"representation_type"|"resource_subtype"|"text_value"|"type")[]? opt_fields = ()) returns Inline_response_201|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The custom field object to create 
+    # + return - Custom field successfully created 
+    resource isolated function post custom_fields(CustomFieldsBody payload, map<string|string[]> headers = {}, *CreateCustomFieldQueries queries) returns InlineResponse201|error {
         string resourcePath = string `/custom_fields`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a custom field
     #
-    # + custom_field_gid - Globally unique identifier for the custom field.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the complete definition of a custom field’s metadata. 
-    resource isolated function get custom_fields/[string custom_field_gid](boolean? opt_pretty = (), ("asana_created_field"|"created_by"|"created_by.name"|"currency_code"|"custom_label"|"custom_label_position"|"date_value"|"date_value.date"|"date_value.date_time"|"description"|"display_value"|"enabled"|"enum_options"|"enum_options.color"|"enum_options.enabled"|"enum_options.name"|"enum_value"|"enum_value.color"|"enum_value.enabled"|"enum_value.name"|"format"|"has_notifications_enabled"|"id_prefix"|"is_formula_field"|"is_global_to_workspace"|"is_value_read_only"|"multi_enum_values"|"multi_enum_values.color"|"multi_enum_values.enabled"|"multi_enum_values.name"|"name"|"number_value"|"people_value"|"people_value.name"|"precision"|"representation_type"|"resource_subtype"|"text_value"|"type")[]? opt_fields = ()) returns Inline_response_201|error {
+    # + custom_field_gid - Globally unique identifier for the custom field
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the complete definition of a custom field’s metadata 
+    resource isolated function get custom_fields/[string custom_field_gid](map<string|string[]> headers = {}, *GetCustomFieldQueries queries) returns InlineResponse2008|error {
         string resourcePath = string `/custom_fields/${getEncodedUri(custom_field_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_201 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a custom field
     #
-    # + custom_field_gid - Globally unique identifier for the custom field.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The custom field object with all updated properties.
-    # + return - The custom field was successfully updated. 
-    resource isolated function put custom_fields/[string custom_field_gid](Custom_fields_custom_field_gid_body payload, boolean? opt_pretty = (), ("asana_created_field"|"created_by"|"created_by.name"|"currency_code"|"custom_label"|"custom_label_position"|"date_value"|"date_value.date"|"date_value.date_time"|"description"|"display_value"|"enabled"|"enum_options"|"enum_options.color"|"enum_options.enabled"|"enum_options.name"|"enum_value"|"enum_value.color"|"enum_value.enabled"|"enum_value.name"|"format"|"has_notifications_enabled"|"id_prefix"|"is_formula_field"|"is_global_to_workspace"|"is_value_read_only"|"multi_enum_values"|"multi_enum_values.color"|"multi_enum_values.enabled"|"multi_enum_values.name"|"name"|"number_value"|"people_value"|"people_value.name"|"precision"|"representation_type"|"resource_subtype"|"text_value"|"type")[]? opt_fields = ()) returns Inline_response_201|error {
+    # + custom_field_gid - Globally unique identifier for the custom field
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The custom field object with all updated properties 
+    # + return - The custom field was successfully updated 
+    resource isolated function put custom_fields/[string custom_field_gid](CustomFieldscustomFieldGidBody payload, map<string|string[]> headers = {}, *UpdateCustomFieldQueries queries) returns InlineResponse2009|error {
         string resourcePath = string `/custom_fields/${getEncodedUri(custom_field_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a custom field
     #
-    # + custom_field_gid - Globally unique identifier for the custom field.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - The custom field was successfully deleted. 
-    resource isolated function delete custom_fields/[string custom_field_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + custom_field_gid - Globally unique identifier for the custom field
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - The custom field was successfully deleted 
+    resource isolated function delete custom_fields/[string custom_field_gid](map<string|string[]> headers = {}, *DeleteCustomFieldQueries queries) returns InlineResponse20010|error {
         string resourcePath = string `/custom_fields/${getEncodedUri(custom_field_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get a workspace's custom fields
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved all custom fields for the given workspace. 
-    resource isolated function get workspaces/[string workspace_gid]/custom_fields(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("asana_created_field"|"created_by"|"created_by.name"|"currency_code"|"custom_label"|"custom_label_position"|"date_value"|"date_value.date"|"date_value.date_time"|"description"|"display_value"|"enabled"|"enum_options"|"enum_options.color"|"enum_options.enabled"|"enum_options.name"|"enum_value"|"enum_value.color"|"enum_value.enabled"|"enum_value.name"|"format"|"has_notifications_enabled"|"id_prefix"|"is_formula_field"|"is_global_to_workspace"|"is_value_read_only"|"multi_enum_values"|"multi_enum_values.color"|"multi_enum_values.enabled"|"multi_enum_values.name"|"name"|"number_value"|"offset"|"path"|"people_value"|"people_value.name"|"precision"|"representation_type"|"resource_subtype"|"text_value"|"type"|"uri")[]? opt_fields = ()) returns Inline_response_200_6|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved all custom fields for the given workspace 
+    resource isolated function get workspaces/[string workspace_gid]/custom_fields(map<string|string[]> headers = {}, *GetCustomFieldsForWorkspaceQueries queries) returns InlineResponse20011|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/custom_fields`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_6 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create an enum option
     #
-    # + custom_field_gid - Globally unique identifier for the custom field.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The enum option object to create.
-    # + return - Custom field enum option successfully created. 
-    resource isolated function post custom_fields/[string custom_field_gid]/enum_options(Custom_field_gid_enum_options_body payload, boolean? opt_pretty = (), ("color"|"enabled"|"name")[]? opt_fields = ()) returns Inline_response_201_1|error {
+    # + custom_field_gid - Globally unique identifier for the custom field
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The enum option object to create 
+    # + return - Custom field enum option successfully created 
+    resource isolated function post custom_fields/[string custom_field_gid]/enum_options(CustomFieldGidEnumOptionsBody payload, map<string|string[]> headers = {}, *CreateEnumOptionForCustomFieldQueries queries) returns InlineResponse2011|error {
         string resourcePath = string `/custom_fields/${getEncodedUri(custom_field_gid)}/enum_options`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Reorder a custom field's enum
     #
-    # + custom_field_gid - Globally unique identifier for the custom field.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The enum option object to create.
-    # + return - Custom field enum option successfully reordered. 
-    resource isolated function post custom_fields/[string custom_field_gid]/enum_options/insert(Enum_options_insert_body payload, boolean? opt_pretty = (), ("color"|"enabled"|"name")[]? opt_fields = ()) returns Inline_response_201_1|error {
+    # + custom_field_gid - Globally unique identifier for the custom field
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The enum option object to create 
+    # + return - Custom field enum option successfully reordered 
+    resource isolated function post custom_fields/[string custom_field_gid]/enum_options/insert(EnumOptionsInsertBody payload, map<string|string[]> headers = {}, *InsertEnumOptionForCustomFieldQueries queries) returns InlineResponse20012|error {
         string resourcePath = string `/custom_fields/${getEncodedUri(custom_field_gid)}/enum_options/insert`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Update an enum option
     #
-    # + enum_option_gid - Globally unique identifier for the enum option.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The enum option object to update
-    # + return - Successfully updated the specified custom field enum. 
-    resource isolated function put enum_options/[string enum_option_gid](Enum_options_enum_option_gid_body payload, boolean? opt_pretty = (), ("color"|"enabled"|"name")[]? opt_fields = ()) returns Inline_response_201_1|error {
+    # + enum_option_gid - Globally unique identifier for the enum option
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The enum option object to update 
+    # + return - Successfully updated the specified custom field enum 
+    resource isolated function put enum_options/[string enum_option_gid](EnumOptionsenumOptionGidBody payload, map<string|string[]> headers = {}, *UpdateEnumOptionQueries queries) returns InlineResponse20013|error {
         string resourcePath = string `/enum_options/${getEncodedUri(enum_option_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_1 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Get events on a resource
     #
-    # + 'resource - A resource ID to subscribe to. The resource can be a task, project, or goal.
-    # + sync - A sync token received from the last request, or none on first sync. Events will be returned from the point in time that the sync token was generated.
-    # *Note: On your first request, omit the sync token. The response will be the same as for an expired sync token, and will include a new valid sync token.If the sync token is too old (which may happen from time to time) the API will return a `412 Precondition Failed` error, and include a fresh sync token in the response.*
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved events. 
-    resource isolated function get events(string 'resource, string? sync = (), boolean? opt_pretty = (), ("action"|"change"|"change.action"|"change.added_value"|"change.field"|"change.new_value"|"change.removed_value"|"created_at"|"parent"|"parent.name"|"resource"|"resource.name"|"type"|"user"|"user.name")[]? opt_fields = ()) returns Inline_response_200_7|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved events 
+    resource isolated function get events(map<string|string[]> headers = {}, *GetEventsQueries queries) returns InlineResponse20014|error {
         string resourcePath = string `/events`;
-        map<anydata> queryParam = {"resource": 'resource, "sync": sync, "opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_7 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a goal relationship
     #
-    # + goal_relationship_gid - Globally unique identifier for the goal relationship.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the record for the goal relationship. 
-    resource isolated function get goal_relationships/[string goal_relationship_gid](boolean? opt_pretty = (), ("contribution_weight"|"resource_subtype"|"supported_goal"|"supported_goal.name"|"supported_goal.owner"|"supported_goal.owner.name"|"supporting_resource"|"supporting_resource.name")[]? opt_fields = ()) returns Inline_response_200_8|error {
+    # + goal_relationship_gid - Globally unique identifier for the goal relationship
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the record for the goal relationship 
+    resource isolated function get goal_relationships/[string goal_relationship_gid](map<string|string[]> headers = {}, *GetGoalRelationshipQueries queries) returns InlineResponse20015|error {
         string resourcePath = string `/goal_relationships/${getEncodedUri(goal_relationship_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_8 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a goal relationship
     #
-    # + goal_relationship_gid - Globally unique identifier for the goal relationship.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The updated fields for the goal relationship.
-    # + return - Successfully updated the goal relationship. 
-    resource isolated function put goal_relationships/[string goal_relationship_gid](Goal_relationships_goal_relationship_gid_body payload, boolean? opt_pretty = (), ("contribution_weight"|"resource_subtype"|"supported_goal"|"supported_goal.name"|"supported_goal.owner"|"supported_goal.owner.name"|"supporting_resource"|"supporting_resource.name")[]? opt_fields = ()) returns Inline_response_200_8|error {
+    # + goal_relationship_gid - Globally unique identifier for the goal relationship
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The updated fields for the goal relationship 
+    # + return - Successfully updated the goal relationship 
+    resource isolated function put goal_relationships/[string goal_relationship_gid](GoalRelationshipsgoalRelationshipGidBody payload, map<string|string[]> headers = {}, *UpdateGoalRelationshipQueries queries) returns InlineResponse20016|error {
         string resourcePath = string `/goal_relationships/${getEncodedUri(goal_relationship_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_8 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Get goal relationships
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + supported_goal - Globally unique identifier for the supported goal in the goal relationship.
-    # + resource_subtype - If provided, filter to goal relationships with a given resource_subtype.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested goal relationships. 
-    resource isolated function get goal_relationships(string supported_goal, boolean? opt_pretty = (), int? 'limit = (), string? offset = (), string? resource_subtype = (), ("contribution_weight"|"offset"|"path"|"resource_subtype"|"supported_goal"|"supported_goal.name"|"supported_goal.owner"|"supported_goal.owner.name"|"supporting_resource"|"supporting_resource.name"|"uri")[]? opt_fields = ()) returns Inline_response_200_9|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested goal relationships 
+    resource isolated function get goal_relationships(map<string|string[]> headers = {}, *GetGoalRelationshipsQueries queries) returns InlineResponse20017|error {
         string resourcePath = string `/goal_relationships`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "supported_goal": supported_goal, "resource_subtype": resource_subtype, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_9 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Add a supporting goal relationship
     #
-    # + goal_gid - Globally unique identifier for the goal.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The supporting resource to be added to the goal
-    # + return - Successfully created the goal relationship. 
-    resource isolated function post goals/[string goal_gid]/addSupportingRelationship(Goal_gid_addSupportingRelationship_body payload, boolean? opt_pretty = (), ("contribution_weight"|"resource_subtype"|"supported_goal"|"supported_goal.name"|"supported_goal.owner"|"supported_goal.owner.name"|"supporting_resource"|"supporting_resource.name")[]? opt_fields = ()) returns Inline_response_200_8|error {
+    # + goal_gid - Globally unique identifier for the goal
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The supporting resource to be added to the goal 
+    # + return - Successfully created the goal relationship 
+    resource isolated function post goals/[string goal_gid]/addSupportingRelationship(GoalGidAddSupportingRelationshipBody payload, map<string|string[]> headers = {}, *AddSupportingRelationshipQueries queries) returns InlineResponse20018|error {
         string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/addSupportingRelationship`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_8 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Removes a supporting goal relationship
     #
-    # + goal_gid - Globally unique identifier for the goal.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The supporting resource to be removed from the goal
-    # + return - Successfully removed the goal relationship. 
-    resource isolated function post goals/[string goal_gid]/removeSupportingRelationship(Goal_gid_removeSupportingRelationship_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + goal_gid - Globally unique identifier for the goal
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The supporting resource to be removed from the goal 
+    # + return - Successfully removed the goal relationship 
+    resource isolated function post goals/[string goal_gid]/removeSupportingRelationship(GoalGidRemoveSupportingRelationshipBody payload, map<string|string[]> headers = {}, *RemoveSupportingRelationshipQueries queries) returns InlineResponse20019|error {
         string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/removeSupportingRelationship`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a goal
     #
-    # + goal_gid - Globally unique identifier for the goal.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the record for a single goal. 
-    resource isolated function get goals/[string goal_gid](boolean? opt_pretty = (), ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_10|error {
+    # + goal_gid - Globally unique identifier for the goal
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the record for a single goal 
+    resource isolated function get goals/[string goal_gid](map<string|string[]> headers = {}, *GetGoalQueries queries) returns InlineResponse20020|error {
         string resourcePath = string `/goals/${getEncodedUri(goal_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_10 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a goal
     #
-    # + goal_gid - Globally unique identifier for the goal.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The updated fields for the goal.
-    # + return - Successfully updated the goal. 
-    resource isolated function put goals/[string goal_gid](Goals_goal_gid_body payload, boolean? opt_pretty = (), ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_10|error {
+    # + goal_gid - Globally unique identifier for the goal
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The updated fields for the goal 
+    # + return - Successfully updated the goal 
+    resource isolated function put goals/[string goal_gid](GoalsgoalGidBody payload, map<string|string[]> headers = {}, *UpdateGoalQueries queries) returns InlineResponse20021|error {
         string resourcePath = string `/goals/${getEncodedUri(goal_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_10 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a goal
     #
-    # + goal_gid - Globally unique identifier for the goal.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified goal. 
-    resource isolated function delete goals/[string goal_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + goal_gid - Globally unique identifier for the goal
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified goal 
+    resource isolated function delete goals/[string goal_gid](map<string|string[]> headers = {}, *DeleteGoalQueries queries) returns InlineResponse20022|error {
         string resourcePath = string `/goals/${getEncodedUri(goal_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get goals
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + portfolio - Globally unique identifier for supporting portfolio.
-    # + project - Globally unique identifier for supporting project.
-    # + task - Globally unique identifier for supporting task.
-    # + is_workspace_level - Filter to goals with is_workspace_level set to query value. Must be used with the workspace parameter.
-    # + team - Globally unique identifier for the team.
-    # + workspace - Globally unique identifier for the workspace.
-    # + time_periods - Globally unique identifiers for the time periods.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested goals. 
-    resource isolated function get goals(boolean? opt_pretty = (), string? portfolio = (), string? project = (), string? task = (), boolean? is_workspace_level = (), string? team = (), string? workspace = (), string[]? time_periods = (), int? 'limit = (), string? offset = (), ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"offset"|"owner"|"owner.name"|"path"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_11|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested goals 
+    resource isolated function get goals(map<string|string[]> headers = {}, *GetGoalsQueries queries) returns InlineResponse20023|error {
         string resourcePath = string `/goals`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "portfolio": portfolio, "project": project, "task": task, "is_workspace_level": is_workspace_level, "team": team, "workspace": workspace, "time_periods": time_periods, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"time_periods": {style: FORM, explode: true}, "opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_11 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a goal
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The goal to create.
-    # + return - Successfully created a new goal. 
-    resource isolated function post goals(Goals_body payload, boolean? opt_pretty = (), ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_10|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The goal to create 
+    # + return - Successfully created a new goal 
+    resource isolated function post goals(GoalsBody payload, map<string|string[]> headers = {}, *CreateGoalQueries queries) returns InlineResponse2012|error {
         string resourcePath = string `/goals`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_10 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Create a goal metric
     #
-    # + goal_gid - Globally unique identifier for the goal.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The goal metric to create.
-    # + return - Successfully created a new goal metric. 
-    resource isolated function post goals/[string goal_gid]/setMetric(Goal_gid_setMetric_body payload, boolean? opt_pretty = (), ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_10|error {
+    # + goal_gid - Globally unique identifier for the goal
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The goal metric to create 
+    # + return - Successfully created a new goal metric 
+    resource isolated function post goals/[string goal_gid]/setMetric(GoalGidSetMetricBody payload, map<string|string[]> headers = {}, *CreateGoalMetricQueries queries) returns InlineResponse20024|error {
         string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/setMetric`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_10 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Update a goal metric
     #
-    # + goal_gid - Globally unique identifier for the goal.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The updated fields for the goal metric.
-    # + return - Successfully updated the goal metric. 
-    resource isolated function post goals/[string goal_gid]/setMetricCurrentValue(Goal_gid_setMetricCurrentValue_body payload, boolean? opt_pretty = (), ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_10|error {
+    # + goal_gid - Globally unique identifier for the goal
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The updated fields for the goal metric 
+    # + return - Successfully updated the goal metric 
+    resource isolated function post goals/[string goal_gid]/setMetricCurrentValue(GoalGidSetMetricCurrentValueBody payload, map<string|string[]> headers = {}, *UpdateGoalMetricQueries queries) returns InlineResponse20025|error {
         string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/setMetricCurrentValue`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_10 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Add a collaborator to a goal
     #
-    # + goal_gid - Globally unique identifier for the goal.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The followers to be added as collaborators
-    # + return - Successfully added users as collaborators. 
-    resource isolated function post goals/[string goal_gid]/addFollowers(Goal_gid_addFollowers_body payload, boolean? opt_pretty = (), ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_10|error {
+    # + goal_gid - Globally unique identifier for the goal
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The followers to be added as collaborators 
+    # + return - Successfully added users as collaborators 
+    resource isolated function post goals/[string goal_gid]/addFollowers(GoalGidAddFollowersBody payload, map<string|string[]> headers = {}, *AddFollowersQueries queries) returns InlineResponse20026|error {
         string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/addFollowers`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_10 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove a collaborator from a goal
     #
-    # + goal_gid - Globally unique identifier for the goal.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The followers to be removed as collaborators
-    # + return - Successfully removed users as collaborators. 
-    resource isolated function post goals/[string goal_gid]/removeFollowers(Goal_gid_removeFollowers_body payload, boolean? opt_pretty = (), ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_10|error {
+    # + goal_gid - Globally unique identifier for the goal
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The followers to be removed as collaborators 
+    # + return - Successfully removed users as collaborators 
+    resource isolated function post goals/[string goal_gid]/removeFollowers(GoalGidRemoveFollowersBody payload, map<string|string[]> headers = {}, *RemoveFollowersQueries queries) returns InlineResponse20027|error {
         string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/removeFollowers`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_10 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get parent goals from a goal
     #
-    # + goal_gid - Globally unique identifier for the goal.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified goal's parent goals. 
-    resource isolated function get goals/[string goal_gid]/parentGoals(boolean? opt_pretty = (), ("current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"due_on"|"followers"|"followers.name"|"html_notes"|"is_workspace_level"|"liked"|"likes"|"likes.user"|"likes.user.name"|"metric"|"metric.can_manage"|"metric.currency_code"|"metric.current_display_value"|"metric.current_number_value"|"metric.initial_number_value"|"metric.precision"|"metric.progress_source"|"metric.resource_subtype"|"metric.target_number_value"|"metric.unit"|"name"|"notes"|"num_likes"|"owner"|"owner.name"|"start_on"|"status"|"team"|"team.name"|"time_period"|"time_period.display_name"|"time_period.end_on"|"time_period.period"|"time_period.start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_12|error {
+    # + goal_gid - Globally unique identifier for the goal
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified goal's parent goals 
+    resource isolated function get goals/[string goal_gid]/parentGoals(map<string|string[]> headers = {}, *GetParentGoalsForGoalQueries queries) returns InlineResponse20028|error {
         string resourcePath = string `/goals/${getEncodedUri(goal_gid)}/parentGoals`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_12 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a job by id
     #
-    # + job_gid - Globally unique identifier for the job.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved Job. 
-    resource isolated function get jobs/[string job_gid](boolean? opt_pretty = (), ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[]? opt_fields = ()) returns Inline_response_200_13|error {
+    # + job_gid - Globally unique identifier for the job
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved Job 
+    resource isolated function get jobs/[string job_gid](map<string|string[]> headers = {}, *GetJobQueries queries) returns InlineResponse20029|error {
         string resourcePath = string `/jobs/${getEncodedUri(job_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_13 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get multiple memberships
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + parent - Globally unique identifier for `goal` or `project`.
-    # + member - Globally unique identifier for `team` or `user`.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested membership. 
-    resource isolated function get memberships(boolean? opt_pretty = (), string? parent = (), string? member = (), int? 'limit = (), string? offset = (), ("offset"|"path"|"uri")[]? opt_fields = ()) returns Inline_response_200_14|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested membership 
+    resource isolated function get memberships(map<string|string[]> headers = {}, *GetMembershipsQueries queries) returns InlineResponse20030|error {
         string resourcePath = string `/memberships`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "parent": parent, "member": member, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_14 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a membership
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The updated fields for the membership.
-    # + return - Successfully created the requested membership. 
-    resource isolated function post memberships(Memberships_body payload, boolean? opt_pretty = ()) returns Inline_response_201_2|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The updated fields for the membership 
+    # + return - Successfully created the requested membership 
+    resource isolated function post memberships(MembershipsBody payload, map<string|string[]> headers = {}, *CreateMembershipQueries queries) returns InlineResponse2013|error {
         string resourcePath = string `/memberships`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_2 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a membership
     #
-    # + membership_gid - Globally unique identifier for the membership.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the record for a single membership. 
-    resource isolated function get memberships/[string membership_gid](boolean? opt_pretty = (), ("access_level"|"member"|"member.name"|"parent"|"parent.name"|"resource_subtype")[]? opt_fields = ()) returns Inline_response_200_15|error {
+    # + membership_gid - Globally unique identifier for the membership
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the record for a single membership 
+    resource isolated function get memberships/[string membership_gid](map<string|string[]> headers = {}, *GetMembershipQueries queries) returns InlineResponse20031|error {
         string resourcePath = string `/memberships/${getEncodedUri(membership_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_15 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a membership
     #
-    # + membership_gid - Globally unique identifier for the membership.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The membership to update.
-    # + return - Successfully updated the requested membership. 
-    resource isolated function put memberships/[string membership_gid](Memberships_membership_gid_body payload, boolean? opt_pretty = ()) returns Inline_response_201_2|error {
+    # + membership_gid - Globally unique identifier for the membership
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The membership to update 
+    # + return - Successfully updated the requested membership 
+    resource isolated function put memberships/[string membership_gid](MembershipsmembershipGidBody payload, map<string|string[]> headers = {}, *UpdateMembershipQueries queries) returns InlineResponse20032|error {
         string resourcePath = string `/memberships/${getEncodedUri(membership_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_2 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a membership
     #
-    # + membership_gid - Globally unique identifier for the membership.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the requested membership. 
-    resource isolated function delete memberships/[string membership_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + membership_gid - Globally unique identifier for the membership
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the requested membership 
+    resource isolated function delete memberships/[string membership_gid](map<string|string[]> headers = {}, *DeleteMembershipQueries queries) returns InlineResponse20033|error {
         string resourcePath = string `/memberships/${getEncodedUri(membership_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Create an organization export request
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The organization to export.
-    # + return - Successfully created organization export request. 
-    resource isolated function post organization_exports(Organization_exports_body payload, boolean? opt_pretty = (), ("created_at"|"download_url"|"organization"|"organization.name"|"state")[]? opt_fields = ()) returns Inline_response_201_3|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The organization to export 
+    # + return - Successfully created organization export request 
+    resource isolated function post organization_exports(OrganizationExportsBody payload, map<string|string[]> headers = {}, *CreateOrganizationExportQueries queries) returns InlineResponse2014|error {
         string resourcePath = string `/organization_exports`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_3 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get details on an org export request
     #
-    # + organization_export_gid - Globally unique identifier for the organization export.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved organization export object. 
-    resource isolated function get organization_exports/[string organization_export_gid](boolean? opt_pretty = (), ("created_at"|"download_url"|"organization"|"organization.name"|"state")[]? opt_fields = ()) returns Inline_response_201_3|error {
+    # + organization_export_gid - Globally unique identifier for the organization export
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved organization export object 
+    resource isolated function get organization_exports/[string organization_export_gid](map<string|string[]> headers = {}, *GetOrganizationExportQueries queries) returns InlineResponse20034|error {
         string resourcePath = string `/organization_exports/${getEncodedUri(organization_export_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_201_3 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get multiple portfolio memberships
     #
-    # + portfolio - The portfolio to filter results on.
-    # + workspace - The workspace to filter results on.
-    # + user - A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved portfolio memberships. 
-    resource isolated function get portfolio_memberships(string? portfolio = (), string? workspace = (), string? user = (), boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("offset"|"path"|"portfolio"|"portfolio.name"|"uri"|"user"|"user.name")[]? opt_fields = ()) returns Inline_response_200_16|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved portfolio memberships 
+    resource isolated function get portfolio_memberships(map<string|string[]> headers = {}, *GetPortfolioMembershipsQueries queries) returns InlineResponse20035|error {
         string resourcePath = string `/portfolio_memberships`;
-        map<anydata> queryParam = {"portfolio": portfolio, "workspace": workspace, "user": user, "opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_16 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a portfolio membership
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested portfolio membership. 
-    resource isolated function get portfolio_memberships/[string portfolio_membership_gid](boolean? opt_pretty = (), ("portfolio"|"portfolio.name"|"user"|"user.name")[]? opt_fields = ()) returns Inline_response_200_17|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested portfolio membership 
+    resource isolated function get portfolio_memberships/[string portfolio_membership_gid](map<string|string[]> headers = {}, *GetPortfolioMembershipQueries queries) returns InlineResponse20036|error {
         string resourcePath = string `/portfolio_memberships/${getEncodedUri(portfolio_membership_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_17 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get memberships from a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + user - A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested portfolio's memberships. 
-    resource isolated function get portfolios/[string portfolio_gid]/portfolio_memberships(string? user = (), boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("offset"|"path"|"portfolio"|"portfolio.name"|"uri"|"user"|"user.name")[]? opt_fields = ()) returns Inline_response_200_16|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested portfolio's memberships 
+    resource isolated function get portfolios/[string portfolio_gid]/portfolio_memberships(map<string|string[]> headers = {}, *GetPortfolioMembershipsForPortfolioQueries queries) returns InlineResponse20037|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/portfolio_memberships`;
-        map<anydata> queryParam = {"user": user, "opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_16 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get multiple portfolios
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + workspace - The workspace or organization to filter portfolios on.
-    # + owner - The user who owns the portfolio. Currently, API users can only get a list of portfolios that they themselves own, unless the request is made from a Service Account. In the case of a Service Account, if this parameter is specified, then all portfolios owned by this parameter are returned. Otherwise, all portfolios across the workspace are returned.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved portfolios. 
-    resource isolated function get portfolios(string workspace, boolean? opt_pretty = (), int? 'limit = (), string? offset = (), string? owner = (), ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"offset"|"owner"|"owner.name"|"path"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_18|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved portfolios 
+    resource isolated function get portfolios(map<string|string[]> headers = {}, *GetPortfoliosQueries queries) returns InlineResponse20038|error {
         string resourcePath = string `/portfolios`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "workspace": workspace, "owner": owner, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_18 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a portfolio
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The portfolio to create.
-    # + return - Successfully created portfolio. 
-    resource isolated function post portfolios(Portfolios_body payload, boolean? opt_pretty = (), ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"owner"|"owner.name"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_4|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The portfolio to create 
+    # + return - Successfully created portfolio 
+    resource isolated function post portfolios(PortfoliosBody payload, map<string|string[]> headers = {}, *CreatePortfolioQueries queries) returns InlineResponse2015|error {
         string resourcePath = string `/portfolios`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_4 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested portfolio. 
-    resource isolated function get portfolios/[string portfolio_gid](boolean? opt_pretty = (), ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"owner"|"owner.name"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_4|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested portfolio 
+    resource isolated function get portfolios/[string portfolio_gid](map<string|string[]> headers = {}, *GetPortfolioQueries queries) returns InlineResponse20039|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_201_4 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The updated fields for the portfolio.
-    # + return - Successfully updated the portfolio. 
-    resource isolated function put portfolios/[string portfolio_gid](Portfolios_portfolio_gid_body payload, boolean? opt_pretty = (), ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"owner"|"owner.name"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_4|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The updated fields for the portfolio 
+    # + return - Successfully updated the portfolio 
+    resource isolated function put portfolios/[string portfolio_gid](PortfoliosportfolioGidBody payload, map<string|string[]> headers = {}, *UpdatePortfolioQueries queries) returns InlineResponse20040|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_4 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified portfolio. 
-    resource isolated function delete portfolios/[string portfolio_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified portfolio 
+    resource isolated function delete portfolios/[string portfolio_gid](map<string|string[]> headers = {}, *DeletePortfolioQueries queries) returns InlineResponse20041|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get portfolio items
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested portfolio's items. 
-    resource isolated function get portfolios/[string portfolio_gid]/items(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"offset"|"owner"|"path"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_19|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested portfolio's items 
+    resource isolated function get portfolios/[string portfolio_gid]/items(map<string|string[]> headers = {}, *GetItemsForPortfolioQueries queries) returns InlineResponse20042|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/items`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_19 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Add a portfolio item
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - Information about the item being inserted.
-    # + return - Successfully added the item to the portfolio. 
-    resource isolated function post portfolios/[string portfolio_gid]/addItem(Portfolio_gid_addItem_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the item being inserted 
+    # + return - Successfully added the item to the portfolio 
+    resource isolated function post portfolios/[string portfolio_gid]/addItem(PortfolioGidAddItemBody payload, map<string|string[]> headers = {}, *AddItemForPortfolioQueries queries) returns InlineResponse20043|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/addItem`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove a portfolio item
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - Information about the item being removed.
-    # + return - Successfully removed the item from the portfolio. 
-    resource isolated function post portfolios/[string portfolio_gid]/removeItem(Portfolio_gid_removeItem_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the item being removed 
+    # + return - Successfully removed the item from the portfolio 
+    resource isolated function post portfolios/[string portfolio_gid]/removeItem(PortfolioGidRemoveItemBody payload, map<string|string[]> headers = {}, *RemoveItemForPortfolioQueries queries) returns InlineResponse20044|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/removeItem`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Add a custom field to a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - Information about the custom field setting.
-    # + return - Successfully added the custom field to the portfolio. 
-    resource isolated function post portfolios/[string portfolio_gid]/addCustomFieldSetting(Portfolio_gid_addCustomFieldSetting_body payload, boolean? opt_pretty = ()) returns Inline_response_200_20|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the custom field setting 
+    # + return - Successfully added the custom field to the portfolio 
+    resource isolated function post portfolios/[string portfolio_gid]/addCustomFieldSetting(PortfolioGidAddCustomFieldSettingBody payload, map<string|string[]> headers = {}, *AddCustomFieldSettingForPortfolioQueries queries) returns InlineResponse20045|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/addCustomFieldSetting`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_20 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove a custom field from a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - Information about the custom field setting being removed.
-    # + return - Successfully removed the custom field from the portfolio. 
-    resource isolated function post portfolios/[string portfolio_gid]/removeCustomFieldSetting(Portfolio_gid_removeCustomFieldSetting_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the custom field setting being removed 
+    # + return - Successfully removed the custom field from the portfolio 
+    resource isolated function post portfolios/[string portfolio_gid]/removeCustomFieldSetting(PortfolioGidRemoveCustomFieldSettingBody payload, map<string|string[]> headers = {}, *RemoveCustomFieldSettingForPortfolioQueries queries) returns InlineResponse20046|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/removeCustomFieldSetting`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Add users to a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Information about the members being added.
-    # + return - Successfully added members to the portfolio. 
-    resource isolated function post portfolios/[string portfolio_gid]/addMembers(Portfolio_gid_addMembers_body payload, boolean? opt_pretty = (), ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"owner"|"owner.name"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_4|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the members being added 
+    # + return - Successfully added members to the portfolio 
+    resource isolated function post portfolios/[string portfolio_gid]/addMembers(PortfolioGidAddMembersBody payload, map<string|string[]> headers = {}, *AddMembersForPortfolioQueries queries) returns InlineResponse20047|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/addMembers`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_4 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove users from a portfolio
     #
-    # + portfolio_gid - Globally unique identifier for the portfolio.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Information about the members being removed.
-    # + return - Successfully removed the members from the portfolio. 
-    resource isolated function post portfolios/[string portfolio_gid]/removeMembers(Portfolio_gid_removeMembers_body payload, boolean? opt_pretty = (), ("color"|"created_at"|"created_by"|"created_by.name"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"due_on"|"members"|"members.name"|"name"|"owner"|"owner.name"|"permalink_url"|"project_templates"|"project_templates.name"|"public"|"start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_4|error {
+    # + portfolio_gid - Globally unique identifier for the portfolio
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the members being removed 
+    # + return - Successfully removed the members from the portfolio 
+    resource isolated function post portfolios/[string portfolio_gid]/removeMembers(PortfolioGidRemoveMembersBody payload, map<string|string[]> headers = {}, *RemoveMembersForPortfolioQueries queries) returns InlineResponse20048|error {
         string resourcePath = string `/portfolios/${getEncodedUri(portfolio_gid)}/removeMembers`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_4 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a project brief
     #
-    # + project_brief_gid - Globally unique identifier for the project brief.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the record for a project brief. 
-    resource isolated function get project_briefs/[string project_brief_gid](boolean? opt_pretty = (), ("html_text"|"permalink_url"|"project"|"project.name"|"text"|"title")[]? opt_fields = ()) returns Inline_response_200_21|error {
+    # + project_brief_gid - Globally unique identifier for the project brief
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the record for a project brief 
+    resource isolated function get project_briefs/[string project_brief_gid](map<string|string[]> headers = {}, *GetProjectBriefQueries queries) returns InlineResponse20049|error {
         string resourcePath = string `/project_briefs/${getEncodedUri(project_brief_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_21 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a project brief
     #
-    # + project_brief_gid - Globally unique identifier for the project brief.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The updated fields for the project brief.
-    # + return - Successfully updated the project brief. 
-    resource isolated function put project_briefs/[string project_brief_gid](Project_briefs_project_brief_gid_body payload, boolean? opt_pretty = (), ("html_text"|"permalink_url"|"project"|"project.name"|"text"|"title")[]? opt_fields = ()) returns Inline_response_200_21|error {
+    # + project_brief_gid - Globally unique identifier for the project brief
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The updated fields for the project brief 
+    # + return - Successfully updated the project brief 
+    resource isolated function put project_briefs/[string project_brief_gid](ProjectBriefsprojectBriefGidBody payload, map<string|string[]> headers = {}, *UpdateProjectBriefQueries queries) returns InlineResponse20050|error {
         string resourcePath = string `/project_briefs/${getEncodedUri(project_brief_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_21 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a project brief
     #
-    # + project_brief_gid - Globally unique identifier for the project brief.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified project brief. 
-    resource isolated function delete project_briefs/[string project_brief_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + project_brief_gid - Globally unique identifier for the project brief
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified project brief 
+    resource isolated function delete project_briefs/[string project_brief_gid](map<string|string[]> headers = {}, *DeleteProjectBriefQueries queries) returns InlineResponse20051|error {
         string resourcePath = string `/project_briefs/${getEncodedUri(project_brief_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Create a project brief
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The project brief to create.
-    # + return - Successfully created a new project brief. 
-    resource isolated function post projects/[string project_gid]/project_briefs(Project_gid_project_briefs_body payload, boolean? opt_pretty = (), ("html_text"|"permalink_url"|"project"|"project.name"|"text"|"title")[]? opt_fields = ()) returns Inline_response_200_21|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The project brief to create 
+    # + return - Successfully created a new project brief 
+    resource isolated function post projects/[string project_gid]/project_briefs(ProjectGidProjectBriefsBody payload, map<string|string[]> headers = {}, *CreateProjectBriefQueries queries) returns InlineResponse2016|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/project_briefs`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_21 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a project membership
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested project membership. 
-    resource isolated function get project_memberships/[string project_membership_gid](boolean? opt_pretty = (), ("access_level"|"member"|"member.name"|"parent"|"parent.name"|"project"|"project.name"|"user"|"user.name"|"write_access")[]? opt_fields = ()) returns Inline_response_200_22|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested project membership 
+    resource isolated function get project_memberships/[string project_membership_gid](map<string|string[]> headers = {}, *GetProjectMembershipQueries queries) returns InlineResponse20052|error {
         string resourcePath = string `/project_memberships/${getEncodedUri(project_membership_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_22 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get memberships from a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + user - A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested project's memberships. 
-    resource isolated function get projects/[string project_gid]/project_memberships(string? user = (), boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("access_level"|"member"|"member.name"|"offset"|"parent"|"parent.name"|"path"|"uri")[]? opt_fields = ()) returns Inline_response_200_23|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested project's memberships 
+    resource isolated function get projects/[string project_gid]/project_memberships(map<string|string[]> headers = {}, *GetProjectMembershipsForProjectQueries queries) returns InlineResponse20053|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/project_memberships`;
-        map<anydata> queryParam = {"user": user, "opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_23 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a project status
     #
-    # + project_status_gid - The project status update to get.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified project's status updates. 
-    resource isolated function get project_statuses/[string project_status_gid](boolean? opt_pretty = (), ("author"|"author.name"|"color"|"created_at"|"created_by"|"created_by.name"|"html_text"|"modified_at"|"text"|"title")[]? opt_fields = ()) returns Inline_response_200_24|error {
+    # + project_status_gid - The project status update to get
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified project's status updates 
+    resource isolated function get project_statuses/[string project_status_gid](map<string|string[]> headers = {}, *GetProjectStatusQueries queries) returns InlineResponse20054|error {
         string resourcePath = string `/project_statuses/${getEncodedUri(project_status_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_24 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Delete a project status
     #
-    # + project_status_gid - The project status update to get.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified project status. 
-    resource isolated function delete project_statuses/[string project_status_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + project_status_gid - The project status update to get
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified project status 
+    resource isolated function delete project_statuses/[string project_status_gid](map<string|string[]> headers = {}, *DeleteProjectStatusQueries queries) returns InlineResponse20055|error {
         string resourcePath = string `/project_statuses/${getEncodedUri(project_status_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get statuses from a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified project's status updates. 
-    resource isolated function get projects/[string project_gid]/project_statuses(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("author"|"author.name"|"color"|"created_at"|"created_by"|"created_by.name"|"html_text"|"modified_at"|"offset"|"path"|"text"|"title"|"uri")[]? opt_fields = ()) returns Inline_response_200_25|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified project's status updates 
+    resource isolated function get projects/[string project_gid]/project_statuses(map<string|string[]> headers = {}, *GetProjectStatusesForProjectQueries queries) returns InlineResponse20056|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/project_statuses`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_25 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a project status
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The project status to create.
-    # + return - Successfully created a new story. 
-    resource isolated function post projects/[string project_gid]/project_statuses(Project_gid_project_statuses_body payload, boolean? opt_pretty = (), ("author"|"author.name"|"color"|"created_at"|"created_by"|"created_by.name"|"html_text"|"modified_at"|"text"|"title")[]? opt_fields = ()) returns Inline_response_200_24|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The project status to create 
+    # + return - Successfully created a new story 
+    resource isolated function post projects/[string project_gid]/project_statuses(ProjectGidProjectStatusesBody payload, map<string|string[]> headers = {}, *CreateProjectStatusForProjectQueries queries) returns InlineResponse2017|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/project_statuses`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_24 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a project template
     #
-    # + project_template_gid - Globally unique identifier for the project template.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested project template. 
-    resource isolated function get project_templates/[string project_template_gid](boolean? opt_pretty = (), ("color"|"description"|"html_description"|"name"|"owner"|"public"|"requested_dates"|"requested_dates.description"|"requested_dates.name"|"requested_roles"|"requested_roles.name"|"team"|"team.name")[]? opt_fields = ()) returns Inline_response_200_26|error {
+    # + project_template_gid - Globally unique identifier for the project template
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested project template 
+    resource isolated function get project_templates/[string project_template_gid](map<string|string[]> headers = {}, *GetProjectTemplateQueries queries) returns InlineResponse20057|error {
         string resourcePath = string `/project_templates/${getEncodedUri(project_template_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_26 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Delete a project template
     #
-    # + project_template_gid - Globally unique identifier for the project template.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified project template. 
-    resource isolated function delete project_templates/[string project_template_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + project_template_gid - Globally unique identifier for the project template
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified project template 
+    resource isolated function delete project_templates/[string project_template_gid](map<string|string[]> headers = {}, *DeleteProjectTemplateQueries queries) returns InlineResponse20058|error {
         string resourcePath = string `/project_templates/${getEncodedUri(project_template_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get multiple project templates
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + workspace - The workspace to filter results on.
-    # + team - The team to filter projects on.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested team's or workspace's project templates. 
-    resource isolated function get project_templates(boolean? opt_pretty = (), string? workspace = (), string? team = (), int? 'limit = (), string? offset = (), ("color"|"description"|"html_description"|"name"|"offset"|"owner"|"path"|"public"|"requested_dates"|"requested_dates.description"|"requested_dates.name"|"requested_roles"|"requested_roles.name"|"team"|"team.name"|"uri")[]? opt_fields = ()) returns Inline_response_200_27|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested team's or workspace's project templates 
+    resource isolated function get project_templates(map<string|string[]> headers = {}, *GetProjectTemplatesQueries queries) returns InlineResponse20059|error {
         string resourcePath = string `/project_templates`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "workspace": workspace, "team": team, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_27 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a team's project templates
     #
-    # + team_gid - Globally unique identifier for the team.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested team's project templates. 
-    resource isolated function get teams/[string team_gid]/project_templates(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("color"|"description"|"html_description"|"name"|"offset"|"owner"|"path"|"public"|"requested_dates"|"requested_dates.description"|"requested_dates.name"|"requested_roles"|"requested_roles.name"|"team"|"team.name"|"uri")[]? opt_fields = ()) returns Inline_response_200_27|error {
+    # + team_gid - Globally unique identifier for the team
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested team's project templates 
+    resource isolated function get teams/[string team_gid]/project_templates(map<string|string[]> headers = {}, *GetProjectTemplatesForTeamQueries queries) returns InlineResponse20060|error {
         string resourcePath = string `/teams/${getEncodedUri(team_gid)}/project_templates`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_27 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Instantiate a project from a project template
     #
-    # + project_template_gid - Globally unique identifier for the project template.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Describes the inputs used for instantiating a project, such as the resulting project's name, which team it should be created in, and values for date variables.
-    # + return - Successfully created the job to handle project instantiation. 
-    resource isolated function post project_templates/[string project_template_gid]/instantiateProject(Project_template_gid_instantiateProject_body payload, boolean? opt_pretty = (), ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[]? opt_fields = ()) returns Inline_response_200_13|error {
+    # + project_template_gid - Globally unique identifier for the project template
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Describes the inputs used for instantiating a project, such as the resulting project's name, which team it should be created in, and values for date variables 
+    # + return - Successfully created the job to handle project instantiation 
+    resource isolated function post project_templates/[string project_template_gid]/instantiateProject(ProjectTemplateGidInstantiateProjectBody payload, map<string|string[]> headers = {}, *InstantiateProjectQueries queries) returns InlineResponse2018|error {
         string resourcePath = string `/project_templates/${getEncodedUri(project_template_gid)}/instantiateProject`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_13 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get multiple projects
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + workspace - The workspace or organization to filter projects on.
-    # + team - The team to filter projects on.
-    # + archived - Only return projects whose `archived` field takes on the value of this parameter.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved projects. 
-    resource isolated function get projects(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), string? workspace = (), string? team = (), boolean? archived = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"offset"|"owner"|"path"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_19|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved projects 
+    resource isolated function get projects(map<string|string[]> headers = {}, *GetProjectsQueries queries) returns InlineResponse20061|error {
         string resourcePath = string `/projects`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "workspace": workspace, "team": team, "archived": archived, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_19 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a project
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The project to create.
-    # + return - Successfully retrieved projects. 
-    resource isolated function post projects(Projects_body payload, boolean? opt_pretty = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_5|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The project to create 
+    # + return - Successfully retrieved projects 
+    resource isolated function post projects(ProjectsBody payload, map<string|string[]> headers = {}, *CreateProjectQueries queries) returns InlineResponse2019|error {
         string resourcePath = string `/projects`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_5 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested project. 
-    resource isolated function get projects/[string project_gid](boolean? opt_pretty = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_5|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested project 
+    resource isolated function get projects/[string project_gid](map<string|string[]> headers = {}, *GetProjectQueries queries) returns InlineResponse20062|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_201_5 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The updated fields for the project.
-    # + return - Successfully updated the project. 
-    resource isolated function put projects/[string project_gid](Projects_project_gid_body payload, boolean? opt_pretty = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_5|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The updated fields for the project 
+    # + return - Successfully updated the project 
+    resource isolated function put projects/[string project_gid](ProjectsprojectGidBody payload, map<string|string[]> headers = {}, *UpdateProjectQueries queries) returns InlineResponse20063|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_5 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified project. 
-    resource isolated function delete projects/[string project_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified project 
+    resource isolated function delete projects/[string project_gid](map<string|string[]> headers = {}, *DeleteProjectQueries queries) returns InlineResponse20064|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Duplicate a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Describes the duplicate's name and the elements that will be duplicated.
-    # + return - Successfully created the job to handle duplication. 
-    resource isolated function post projects/[string project_gid]/duplicate(Project_gid_duplicate_body payload, boolean? opt_pretty = (), ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[]? opt_fields = ()) returns Inline_response_200_13|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Describes the duplicate's name and the elements that will be duplicated 
+    # + return - Successfully created the job to handle duplication 
+    resource isolated function post projects/[string project_gid]/duplicate(ProjectGidDuplicateBody payload, map<string|string[]> headers = {}, *DuplicateProjectQueries queries) returns InlineResponse20110|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/duplicate`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_13 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get projects a task is in
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the projects for the given task. 
-    resource isolated function get tasks/[string task_gid]/projects(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"offset"|"owner"|"path"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_19|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the projects for the given task 
+    resource isolated function get tasks/[string task_gid]/projects(map<string|string[]> headers = {}, *GetProjectsForTaskQueries queries) returns InlineResponse20065|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/projects`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_19 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a team's projects
     #
-    # + team_gid - Globally unique identifier for the team.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + archived - Only return projects whose `archived` field takes on the value of this parameter.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested team's projects. 
-    resource isolated function get teams/[string team_gid]/projects(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), boolean? archived = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"offset"|"owner"|"path"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_19|error {
+    # + team_gid - Globally unique identifier for the team
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested team's projects 
+    resource isolated function get teams/[string team_gid]/projects(map<string|string[]> headers = {}, *GetProjectsForTeamQueries queries) returns InlineResponse20066|error {
         string resourcePath = string `/teams/${getEncodedUri(team_gid)}/projects`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "archived": archived, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_19 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a project in a team
     #
-    # + team_gid - Globally unique identifier for the team.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The new project to create.
-    # + return - Successfully created the specified project. 
-    resource isolated function post teams/[string team_gid]/projects(Team_gid_projects_body payload, boolean? opt_pretty = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_5|error {
+    # + team_gid - Globally unique identifier for the team
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The new project to create 
+    # + return - Successfully created the specified project 
+    resource isolated function post teams/[string team_gid]/projects(TeamGidProjectsBody payload, map<string|string[]> headers = {}, *CreateProjectForTeamQueries queries) returns InlineResponse20111|error {
         string resourcePath = string `/teams/${getEncodedUri(team_gid)}/projects`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_5 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get all projects in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + archived - Only return projects whose `archived` field takes on the value of this parameter.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested workspace's projects. 
-    resource isolated function get workspaces/[string workspace_gid]/projects(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), boolean? archived = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"offset"|"owner"|"path"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_19|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested workspace's projects 
+    resource isolated function get workspaces/[string workspace_gid]/projects(map<string|string[]> headers = {}, *GetProjectsForWorkspaceQueries queries) returns InlineResponse20067|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/projects`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "archived": archived, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_19 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a project in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The new project to create.
-    # + return - Successfully created a new project in the specified workspace. 
-    resource isolated function post workspaces/[string workspace_gid]/projects(Workspace_gid_projects_body payload, boolean? opt_pretty = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_5|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The new project to create 
+    # + return - Successfully created a new project in the specified workspace 
+    resource isolated function post workspaces/[string workspace_gid]/projects(WorkspaceGidProjectsBody payload, map<string|string[]> headers = {}, *CreateProjectForWorkspaceQueries queries) returns InlineResponse20112|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/projects`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_5 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Add a custom field to a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Information about the custom field setting.
-    # + return - Successfully added the custom field to the project. 
-    resource isolated function post projects/[string project_gid]/addCustomFieldSetting(Project_gid_addCustomFieldSetting_body payload, boolean? opt_pretty = (), ("custom_field"|"custom_field.asana_created_field"|"custom_field.created_by"|"custom_field.created_by.name"|"custom_field.currency_code"|"custom_field.custom_label"|"custom_field.custom_label_position"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.description"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.format"|"custom_field.has_notifications_enabled"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.is_global_to_workspace"|"custom_field.is_value_read_only"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.people_value"|"custom_field.people_value.name"|"custom_field.precision"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"is_important"|"parent"|"parent.name"|"project"|"project.name")[]? opt_fields = ()) returns Inline_response_200_20|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the custom field setting 
+    # + return - Successfully added the custom field to the project 
+    resource isolated function post projects/[string project_gid]/addCustomFieldSetting(ProjectGidAddCustomFieldSettingBody payload, map<string|string[]> headers = {}, *AddCustomFieldSettingForProjectQueries queries) returns InlineResponse20068|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/addCustomFieldSetting`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_20 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove a custom field from a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - Information about the custom field setting being removed.
-    # + return - Successfully removed the custom field from the project. 
-    resource isolated function post projects/[string project_gid]/removeCustomFieldSetting(Project_gid_removeCustomFieldSetting_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the custom field setting being removed 
+    # + return - Successfully removed the custom field from the project 
+    resource isolated function post projects/[string project_gid]/removeCustomFieldSetting(ProjectGidRemoveCustomFieldSettingBody payload, map<string|string[]> headers = {}, *RemoveCustomFieldSettingForProjectQueries queries) returns InlineResponse20069|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/removeCustomFieldSetting`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get task count of a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested project's task counts. 
-    resource isolated function get projects/[string project_gid]/task_counts(boolean? opt_pretty = (), ("num_completed_milestones"|"num_completed_tasks"|"num_incomplete_milestones"|"num_incomplete_tasks"|"num_milestones"|"num_tasks")[]? opt_fields = ()) returns Inline_response_200_28|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested project's task counts 
+    resource isolated function get projects/[string project_gid]/task_counts(map<string|string[]> headers = {}, *GetTaskCountsForProjectQueries queries) returns InlineResponse20070|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/task_counts`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_28 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Add users to a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Information about the members being added.
-    # + return - Successfully added members to the project. 
-    resource isolated function post projects/[string project_gid]/addMembers(Project_gid_addMembers_body payload, boolean? opt_pretty = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_5|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the members being added 
+    # + return - Successfully added members to the project 
+    resource isolated function post projects/[string project_gid]/addMembers(ProjectGidAddMembersBody payload, map<string|string[]> headers = {}, *AddMembersForProjectQueries queries) returns InlineResponse20071|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/addMembers`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_5 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove users from a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Information about the members being removed.
-    # + return - Successfully removed the members from the project. 
-    resource isolated function post projects/[string project_gid]/removeMembers(Project_gid_removeMembers_body payload, boolean? opt_pretty = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_5|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the members being removed 
+    # + return - Successfully removed the members from the project 
+    resource isolated function post projects/[string project_gid]/removeMembers(ProjectGidRemoveMembersBody payload, map<string|string[]> headers = {}, *RemoveMembersForProjectQueries queries) returns InlineResponse20072|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/removeMembers`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_5 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Add followers to a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Information about the followers being added.
-    # + return - Successfully added followers to the project. 
-    resource isolated function post projects/[string project_gid]/addFollowers(Project_gid_addFollowers_body payload, boolean? opt_pretty = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_5|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the followers being added 
+    # + return - Successfully added followers to the project 
+    resource isolated function post projects/[string project_gid]/addFollowers(ProjectGidAddFollowersBody payload, map<string|string[]> headers = {}, *AddFollowersForProjectQueries queries) returns InlineResponse20073|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/addFollowers`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_5 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove followers from a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Information about the followers being removed.
-    # + return - Successfully removed followers from the project. 
-    resource isolated function post projects/[string project_gid]/removeFollowers(Project_gid_removeFollowers_body payload, boolean? opt_pretty = (), ("archived"|"color"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_from_template"|"created_from_template.name"|"current_status"|"current_status.author"|"current_status.author.name"|"current_status.color"|"current_status.created_at"|"current_status.created_by"|"current_status.created_by.name"|"current_status.html_text"|"current_status.modified_at"|"current_status.text"|"current_status.title"|"current_status_update"|"current_status_update.resource_subtype"|"current_status_update.title"|"custom_field_settings"|"custom_field_settings.custom_field"|"custom_field_settings.custom_field.asana_created_field"|"custom_field_settings.custom_field.created_by"|"custom_field_settings.custom_field.created_by.name"|"custom_field_settings.custom_field.currency_code"|"custom_field_settings.custom_field.custom_label"|"custom_field_settings.custom_field.custom_label_position"|"custom_field_settings.custom_field.date_value"|"custom_field_settings.custom_field.date_value.date"|"custom_field_settings.custom_field.date_value.date_time"|"custom_field_settings.custom_field.description"|"custom_field_settings.custom_field.display_value"|"custom_field_settings.custom_field.enabled"|"custom_field_settings.custom_field.enum_options"|"custom_field_settings.custom_field.enum_options.color"|"custom_field_settings.custom_field.enum_options.enabled"|"custom_field_settings.custom_field.enum_options.name"|"custom_field_settings.custom_field.enum_value"|"custom_field_settings.custom_field.enum_value.color"|"custom_field_settings.custom_field.enum_value.enabled"|"custom_field_settings.custom_field.enum_value.name"|"custom_field_settings.custom_field.format"|"custom_field_settings.custom_field.has_notifications_enabled"|"custom_field_settings.custom_field.id_prefix"|"custom_field_settings.custom_field.is_formula_field"|"custom_field_settings.custom_field.is_global_to_workspace"|"custom_field_settings.custom_field.is_value_read_only"|"custom_field_settings.custom_field.multi_enum_values"|"custom_field_settings.custom_field.multi_enum_values.color"|"custom_field_settings.custom_field.multi_enum_values.enabled"|"custom_field_settings.custom_field.multi_enum_values.name"|"custom_field_settings.custom_field.name"|"custom_field_settings.custom_field.number_value"|"custom_field_settings.custom_field.people_value"|"custom_field_settings.custom_field.people_value.name"|"custom_field_settings.custom_field.precision"|"custom_field_settings.custom_field.representation_type"|"custom_field_settings.custom_field.resource_subtype"|"custom_field_settings.custom_field.text_value"|"custom_field_settings.custom_field.type"|"custom_field_settings.is_important"|"custom_field_settings.parent"|"custom_field_settings.parent.name"|"custom_field_settings.project"|"custom_field_settings.project.name"|"custom_fields"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"default_access_level"|"default_view"|"due_date"|"due_on"|"followers"|"followers.name"|"html_notes"|"icon"|"members"|"members.name"|"minimum_access_level_for_customization"|"minimum_access_level_for_sharing"|"modified_at"|"name"|"notes"|"owner"|"permalink_url"|"privacy_setting"|"project_brief"|"public"|"start_on"|"team"|"team.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_5|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the followers being removed 
+    # + return - Successfully removed followers from the project 
+    resource isolated function post projects/[string project_gid]/removeFollowers(ProjectGidRemoveFollowersBody payload, map<string|string[]> headers = {}, *RemoveFollowersForProjectQueries queries) returns InlineResponse20074|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/removeFollowers`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_5 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Create a project template from a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Describes the inputs used for creating a project template, such as the resulting project template's name, which team it should be created in.
-    # + return - Successfully created the job to handle project template creation. 
-    resource isolated function post projects/[string project_gid]/saveAsTemplate(Project_gid_saveAsTemplate_body payload, boolean? opt_pretty = (), ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[]? opt_fields = ()) returns Inline_response_200_13|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Describes the inputs used for creating a project template, such as the resulting project template's name, which team it should be created in 
+    # + return - Successfully created the job to handle project template creation 
+    resource isolated function post projects/[string project_gid]/saveAsTemplate(ProjectGidSaveAsTemplateBody payload, map<string|string[]> headers = {}, *ProjectSaveAsTemplateQueries queries) returns InlineResponse20113|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/saveAsTemplate`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_13 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Trigger a rule
     #
-    # + rule_trigger_gid - The ID of the incoming web request trigger. This value is a path parameter that is automatically generated for the API endpoint.
-    # + payload - A dictionary of variables accessible from within the rule.
-    # + return - Successfully triggered a rule. 
-    resource isolated function post rule_triggers/[string rule_trigger_gid]/run(Rule_trigger_gid_run_body payload) returns Inline_response_200_29|error {
+    # + rule_trigger_gid - The ID of the incoming web request trigger. This value is a path parameter that is automatically generated for the API endpoint
+    # + headers - Headers to be sent with the request 
+    # + payload - A dictionary of variables accessible from within the rule 
+    # + return - Successfully triggered a rule 
+    resource isolated function post rule_triggers/[string rule_trigger_gid]/run(RuleTriggerGidRunBody payload, map<string|string[]> headers = {}) returns InlineResponse20075|error {
         string resourcePath = string `/rule_triggers/${getEncodedUri(rule_trigger_gid)}/run`;
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_29 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a section
     #
-    # + section_gid - The globally unique identifier for the section.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved section. 
-    resource isolated function get sections/[string section_gid](boolean? opt_pretty = (), ("created_at"|"name"|"project"|"project.name"|"projects"|"projects.name")[]? opt_fields = ()) returns Inline_response_200_30|error {
+    # + section_gid - The globally unique identifier for the section
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved section 
+    resource isolated function get sections/[string section_gid](map<string|string[]> headers = {}, *GetSectionQueries queries) returns InlineResponse20076|error {
         string resourcePath = string `/sections/${getEncodedUri(section_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_30 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a section
     #
-    # + section_gid - The globally unique identifier for the section.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The section to create.
-    # + return - Successfully updated the specified section. 
-    resource isolated function put sections/[string section_gid](Sections_section_gid_body payload, boolean? opt_pretty = (), ("created_at"|"name"|"project"|"project.name"|"projects"|"projects.name")[]? opt_fields = ()) returns Inline_response_200_30|error {
+    # + section_gid - The globally unique identifier for the section
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The section to create 
+    # + return - Successfully updated the specified section 
+    resource isolated function put sections/[string section_gid](SectionssectionGidBody payload, map<string|string[]> headers = {}, *UpdateSectionQueries queries) returns InlineResponse20077|error {
         string resourcePath = string `/sections/${getEncodedUri(section_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_30 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a section
     #
-    # + section_gid - The globally unique identifier for the section.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified section. 
-    resource isolated function delete sections/[string section_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + section_gid - The globally unique identifier for the section
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified section 
+    resource isolated function delete sections/[string section_gid](map<string|string[]> headers = {}, *DeleteSectionQueries queries) returns InlineResponse20078|error {
         string resourcePath = string `/sections/${getEncodedUri(section_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get sections in a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved sections in project. 
-    resource isolated function get projects/[string project_gid]/sections(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("created_at"|"name"|"offset"|"path"|"project"|"project.name"|"projects"|"projects.name"|"uri")[]? opt_fields = ()) returns Inline_response_200_31|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved sections in project 
+    resource isolated function get projects/[string project_gid]/sections(map<string|string[]> headers = {}, *GetSectionsForProjectQueries queries) returns InlineResponse20079|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/sections`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_31 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a section in a project
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The section to create.
-    # + return - Successfully created the specified section. 
-    resource isolated function post projects/[string project_gid]/sections(Project_gid_sections_body payload, boolean? opt_pretty = (), ("created_at"|"name"|"project"|"project.name"|"projects"|"projects.name")[]? opt_fields = ()) returns Inline_response_200_30|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The section to create 
+    # + return - Successfully created the specified section 
+    resource isolated function post projects/[string project_gid]/sections(ProjectGidSectionsBody payload, map<string|string[]> headers = {}, *CreateSectionForProjectQueries queries) returns InlineResponse20114|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/sections`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_30 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Add task to section
     #
-    # + section_gid - The globally unique identifier for the section.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The task and optionally the insert location.
-    # + return - Successfully added the task. 
-    resource isolated function post sections/[string section_gid]/addTask(Section_gid_addTask_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + section_gid - The globally unique identifier for the section
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The task and optionally the insert location 
+    # + return - Successfully added the task 
+    resource isolated function post sections/[string section_gid]/addTask(SectionGidAddTaskBody payload, map<string|string[]> headers = {}, *AddTaskForSectionQueries queries) returns InlineResponse20080|error {
         string resourcePath = string `/sections/${getEncodedUri(section_gid)}/addTask`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Move or Insert sections
     #
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The section's move action.
-    # + return - Successfully moved the specified section. 
-    resource isolated function post projects/[string project_gid]/sections/insert(Sections_insert_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The section's move action 
+    # + return - Successfully moved the specified section 
+    resource isolated function post projects/[string project_gid]/sections/insert(SectionsInsertBody payload, map<string|string[]> headers = {}, *InsertSectionForProjectQueries queries) returns InlineResponse20081|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/sections/insert`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a status update
     #
-    # + status_update_gid - The status update to get.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified object's status updates. 
-    resource isolated function get status_updates/[string status_update_gid](boolean? opt_pretty = (), ("author"|"author.name"|"created_at"|"created_by"|"created_by.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"liked"|"likes"|"likes.user"|"likes.user.name"|"modified_at"|"num_hearts"|"num_likes"|"parent"|"parent.name"|"resource_subtype"|"status_type"|"text"|"title")[]? opt_fields = ()) returns Inline_response_200_32|error {
+    # + status_update_gid - The status update to get
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified object's status updates 
+    resource isolated function get status_updates/[string status_update_gid](map<string|string[]> headers = {}, *GetStatusQueries queries) returns InlineResponse20082|error {
         string resourcePath = string `/status_updates/${getEncodedUri(status_update_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_32 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Delete a status update
     #
-    # + status_update_gid - The status update to get.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified status. 
-    resource isolated function delete status_updates/[string status_update_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + status_update_gid - The status update to get
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified status 
+    resource isolated function delete status_updates/[string status_update_gid](map<string|string[]> headers = {}, *DeleteStatusQueries queries) returns InlineResponse20083|error {
         string resourcePath = string `/status_updates/${getEncodedUri(status_update_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get status updates from an object
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + parent - Globally unique identifier for object to fetch statuses from. Must be a GID for a project, portfolio, or goal.
-    # + created_since - Only return statuses that have been created since the given time.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified object's status updates. 
-    resource isolated function get status_updates(string parent, boolean? opt_pretty = (), int? 'limit = (), string? offset = (), string? created_since = (), ("author"|"author.name"|"created_at"|"created_by"|"created_by.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"liked"|"likes"|"likes.user"|"likes.user.name"|"modified_at"|"num_hearts"|"num_likes"|"offset"|"parent"|"parent.name"|"path"|"resource_subtype"|"status_type"|"text"|"title"|"uri")[]? opt_fields = ()) returns Inline_response_200_33|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified object's status updates 
+    resource isolated function get status_updates(map<string|string[]> headers = {}, *GetStatusesForObjectQueries queries) returns InlineResponse20084|error {
         string resourcePath = string `/status_updates`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "parent": parent, "created_since": created_since, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_33 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a status update
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The status update to create.
-    # + return - Successfully created a new status update. 
-    resource isolated function post status_updates(Status_updates_body payload, boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("author"|"author.name"|"created_at"|"created_by"|"created_by.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"liked"|"likes"|"likes.user"|"likes.user.name"|"modified_at"|"num_hearts"|"num_likes"|"parent"|"parent.name"|"resource_subtype"|"status_type"|"text"|"title")[]? opt_fields = ()) returns Inline_response_200_32|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The status update to create 
+    # + return - Successfully created a new status update 
+    resource isolated function post status_updates(StatusUpdatesBody payload, map<string|string[]> headers = {}, *CreateStatusForObjectQueries queries) returns InlineResponse20115|error {
         string resourcePath = string `/status_updates`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_32 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a story
     #
-    # + story_gid - Globally unique identifier for the story.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified story. 
-    resource isolated function get stories/[string story_gid](boolean? opt_pretty = (), ("assignee"|"assignee.name"|"created_at"|"created_by"|"created_by.name"|"custom_field"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"dependency"|"dependency.created_by"|"dependency.name"|"dependency.resource_subtype"|"duplicate_of"|"duplicate_of.created_by"|"duplicate_of.name"|"duplicate_of.resource_subtype"|"duplicated_from"|"duplicated_from.created_by"|"duplicated_from.name"|"duplicated_from.resource_subtype"|"follower"|"follower.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"is_editable"|"is_edited"|"is_pinned"|"liked"|"likes"|"likes.user"|"likes.user.name"|"new_approval_status"|"new_date_value"|"new_dates"|"new_dates.due_at"|"new_dates.due_on"|"new_dates.start_on"|"new_enum_value"|"new_enum_value.color"|"new_enum_value.enabled"|"new_enum_value.name"|"new_multi_enum_values"|"new_multi_enum_values.color"|"new_multi_enum_values.enabled"|"new_multi_enum_values.name"|"new_name"|"new_number_value"|"new_people_value"|"new_people_value.name"|"new_resource_subtype"|"new_section"|"new_section.name"|"new_text_value"|"num_hearts"|"num_likes"|"old_approval_status"|"old_date_value"|"old_dates"|"old_dates.due_at"|"old_dates.due_on"|"old_dates.start_on"|"old_enum_value"|"old_enum_value.color"|"old_enum_value.enabled"|"old_enum_value.name"|"old_multi_enum_values"|"old_multi_enum_values.color"|"old_multi_enum_values.enabled"|"old_multi_enum_values.name"|"old_name"|"old_number_value"|"old_people_value"|"old_people_value.name"|"old_resource_subtype"|"old_section"|"old_section.name"|"old_text_value"|"previews"|"previews.fallback"|"previews.footer"|"previews.header"|"previews.header_link"|"previews.html_text"|"previews.text"|"previews.title"|"previews.title_link"|"project"|"project.name"|"resource_subtype"|"source"|"sticker_name"|"story"|"story.created_at"|"story.created_by"|"story.created_by.name"|"story.resource_subtype"|"story.text"|"tag"|"tag.name"|"target"|"target.created_by"|"target.name"|"target.resource_subtype"|"task"|"task.created_by"|"task.name"|"task.resource_subtype"|"text"|"type")[]? opt_fields = ()) returns Inline_response_200_34|error {
+    # + story_gid - Globally unique identifier for the story
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified story 
+    resource isolated function get stories/[string story_gid](map<string|string[]> headers = {}, *GetStoryQueries queries) returns InlineResponse20085|error {
         string resourcePath = string `/stories/${getEncodedUri(story_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_34 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a story
     #
-    # + story_gid - Globally unique identifier for the story.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The comment story to update.
-    # + return - Successfully retrieved the specified story. 
-    resource isolated function put stories/[string story_gid](Stories_story_gid_body payload, boolean? opt_pretty = (), ("assignee"|"assignee.name"|"created_at"|"created_by"|"created_by.name"|"custom_field"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"dependency"|"dependency.created_by"|"dependency.name"|"dependency.resource_subtype"|"duplicate_of"|"duplicate_of.created_by"|"duplicate_of.name"|"duplicate_of.resource_subtype"|"duplicated_from"|"duplicated_from.created_by"|"duplicated_from.name"|"duplicated_from.resource_subtype"|"follower"|"follower.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"is_editable"|"is_edited"|"is_pinned"|"liked"|"likes"|"likes.user"|"likes.user.name"|"new_approval_status"|"new_date_value"|"new_dates"|"new_dates.due_at"|"new_dates.due_on"|"new_dates.start_on"|"new_enum_value"|"new_enum_value.color"|"new_enum_value.enabled"|"new_enum_value.name"|"new_multi_enum_values"|"new_multi_enum_values.color"|"new_multi_enum_values.enabled"|"new_multi_enum_values.name"|"new_name"|"new_number_value"|"new_people_value"|"new_people_value.name"|"new_resource_subtype"|"new_section"|"new_section.name"|"new_text_value"|"num_hearts"|"num_likes"|"old_approval_status"|"old_date_value"|"old_dates"|"old_dates.due_at"|"old_dates.due_on"|"old_dates.start_on"|"old_enum_value"|"old_enum_value.color"|"old_enum_value.enabled"|"old_enum_value.name"|"old_multi_enum_values"|"old_multi_enum_values.color"|"old_multi_enum_values.enabled"|"old_multi_enum_values.name"|"old_name"|"old_number_value"|"old_people_value"|"old_people_value.name"|"old_resource_subtype"|"old_section"|"old_section.name"|"old_text_value"|"previews"|"previews.fallback"|"previews.footer"|"previews.header"|"previews.header_link"|"previews.html_text"|"previews.text"|"previews.title"|"previews.title_link"|"project"|"project.name"|"resource_subtype"|"source"|"sticker_name"|"story"|"story.created_at"|"story.created_by"|"story.created_by.name"|"story.resource_subtype"|"story.text"|"tag"|"tag.name"|"target"|"target.created_by"|"target.name"|"target.resource_subtype"|"task"|"task.created_by"|"task.name"|"task.resource_subtype"|"text"|"type")[]? opt_fields = ()) returns Inline_response_200_34|error {
+    # + story_gid - Globally unique identifier for the story
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The comment story to update 
+    # + return - Successfully retrieved the specified story 
+    resource isolated function put stories/[string story_gid](StoriesstoryGidBody payload, map<string|string[]> headers = {}, *UpdateStoryQueries queries) returns InlineResponse20086|error {
         string resourcePath = string `/stories/${getEncodedUri(story_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_34 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a story
     #
-    # + story_gid - Globally unique identifier for the story.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified story. 
-    resource isolated function delete stories/[string story_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + story_gid - Globally unique identifier for the story
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified story 
+    resource isolated function delete stories/[string story_gid](map<string|string[]> headers = {}, *DeleteStoryQueries queries) returns InlineResponse20087|error {
         string resourcePath = string `/stories/${getEncodedUri(story_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get stories from a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified task's stories. 
-    resource isolated function get tasks/[string task_gid]/stories(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("assignee"|"assignee.name"|"created_at"|"created_by"|"created_by.name"|"custom_field"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"dependency"|"dependency.created_by"|"dependency.name"|"dependency.resource_subtype"|"duplicate_of"|"duplicate_of.created_by"|"duplicate_of.name"|"duplicate_of.resource_subtype"|"duplicated_from"|"duplicated_from.created_by"|"duplicated_from.name"|"duplicated_from.resource_subtype"|"follower"|"follower.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"is_editable"|"is_edited"|"is_pinned"|"liked"|"likes"|"likes.user"|"likes.user.name"|"new_approval_status"|"new_date_value"|"new_dates"|"new_dates.due_at"|"new_dates.due_on"|"new_dates.start_on"|"new_enum_value"|"new_enum_value.color"|"new_enum_value.enabled"|"new_enum_value.name"|"new_multi_enum_values"|"new_multi_enum_values.color"|"new_multi_enum_values.enabled"|"new_multi_enum_values.name"|"new_name"|"new_number_value"|"new_people_value"|"new_people_value.name"|"new_resource_subtype"|"new_section"|"new_section.name"|"new_text_value"|"num_hearts"|"num_likes"|"offset"|"old_approval_status"|"old_date_value"|"old_dates"|"old_dates.due_at"|"old_dates.due_on"|"old_dates.start_on"|"old_enum_value"|"old_enum_value.color"|"old_enum_value.enabled"|"old_enum_value.name"|"old_multi_enum_values"|"old_multi_enum_values.color"|"old_multi_enum_values.enabled"|"old_multi_enum_values.name"|"old_name"|"old_number_value"|"old_people_value"|"old_people_value.name"|"old_resource_subtype"|"old_section"|"old_section.name"|"old_text_value"|"path"|"previews"|"previews.fallback"|"previews.footer"|"previews.header"|"previews.header_link"|"previews.html_text"|"previews.text"|"previews.title"|"previews.title_link"|"project"|"project.name"|"resource_subtype"|"source"|"sticker_name"|"story"|"story.created_at"|"story.created_by"|"story.created_by.name"|"story.resource_subtype"|"story.text"|"tag"|"tag.name"|"target"|"target.created_by"|"target.name"|"target.resource_subtype"|"task"|"task.created_by"|"task.name"|"task.resource_subtype"|"text"|"type"|"uri")[]? opt_fields = ()) returns Inline_response_200_35|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified task's stories 
+    resource isolated function get tasks/[string task_gid]/stories(map<string|string[]> headers = {}, *GetStoriesForTaskQueries queries) returns InlineResponse20088|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/stories`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_35 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a story on a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The story to create.
-    # + return - Successfully created a new story. 
-    resource isolated function post tasks/[string task_gid]/stories(Task_gid_stories_body payload, boolean? opt_pretty = (), ("assignee"|"assignee.name"|"created_at"|"created_by"|"created_by.name"|"custom_field"|"custom_field.date_value"|"custom_field.date_value.date"|"custom_field.date_value.date_time"|"custom_field.display_value"|"custom_field.enabled"|"custom_field.enum_options"|"custom_field.enum_options.color"|"custom_field.enum_options.enabled"|"custom_field.enum_options.name"|"custom_field.enum_value"|"custom_field.enum_value.color"|"custom_field.enum_value.enabled"|"custom_field.enum_value.name"|"custom_field.id_prefix"|"custom_field.is_formula_field"|"custom_field.multi_enum_values"|"custom_field.multi_enum_values.color"|"custom_field.multi_enum_values.enabled"|"custom_field.multi_enum_values.name"|"custom_field.name"|"custom_field.number_value"|"custom_field.representation_type"|"custom_field.resource_subtype"|"custom_field.text_value"|"custom_field.type"|"dependency"|"dependency.created_by"|"dependency.name"|"dependency.resource_subtype"|"duplicate_of"|"duplicate_of.created_by"|"duplicate_of.name"|"duplicate_of.resource_subtype"|"duplicated_from"|"duplicated_from.created_by"|"duplicated_from.name"|"duplicated_from.resource_subtype"|"follower"|"follower.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_text"|"is_editable"|"is_edited"|"is_pinned"|"liked"|"likes"|"likes.user"|"likes.user.name"|"new_approval_status"|"new_date_value"|"new_dates"|"new_dates.due_at"|"new_dates.due_on"|"new_dates.start_on"|"new_enum_value"|"new_enum_value.color"|"new_enum_value.enabled"|"new_enum_value.name"|"new_multi_enum_values"|"new_multi_enum_values.color"|"new_multi_enum_values.enabled"|"new_multi_enum_values.name"|"new_name"|"new_number_value"|"new_people_value"|"new_people_value.name"|"new_resource_subtype"|"new_section"|"new_section.name"|"new_text_value"|"num_hearts"|"num_likes"|"old_approval_status"|"old_date_value"|"old_dates"|"old_dates.due_at"|"old_dates.due_on"|"old_dates.start_on"|"old_enum_value"|"old_enum_value.color"|"old_enum_value.enabled"|"old_enum_value.name"|"old_multi_enum_values"|"old_multi_enum_values.color"|"old_multi_enum_values.enabled"|"old_multi_enum_values.name"|"old_name"|"old_number_value"|"old_people_value"|"old_people_value.name"|"old_resource_subtype"|"old_section"|"old_section.name"|"old_text_value"|"previews"|"previews.fallback"|"previews.footer"|"previews.header"|"previews.header_link"|"previews.html_text"|"previews.text"|"previews.title"|"previews.title_link"|"project"|"project.name"|"resource_subtype"|"source"|"sticker_name"|"story"|"story.created_at"|"story.created_by"|"story.created_by.name"|"story.resource_subtype"|"story.text"|"tag"|"tag.name"|"target"|"target.created_by"|"target.name"|"target.resource_subtype"|"task"|"task.created_by"|"task.name"|"task.resource_subtype"|"text"|"type")[]? opt_fields = ()) returns Inline_response_200_34|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The story to create 
+    # + return - Successfully created a new story 
+    resource isolated function post tasks/[string task_gid]/stories(TaskGidStoriesBody payload, map<string|string[]> headers = {}, *CreateStoryForTaskQueries queries) returns InlineResponse20116|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/stories`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_34 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get multiple tags
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + workspace - The workspace to filter tags on.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified set of tags. 
-    resource isolated function get tags(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), string? workspace = (), ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"offset"|"path"|"permalink_url"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_36|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified set of tags 
+    resource isolated function get tags(map<string|string[]> headers = {}, *GetTagsQueries queries) returns InlineResponse20089|error {
         string resourcePath = string `/tags`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "workspace": workspace, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_36 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a tag
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The tag to create.
-    # + return - Successfully created the newly specified tag. 
-    resource isolated function post tags(Tags_body payload, boolean? opt_pretty = (), ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"permalink_url"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_6|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The tag to create 
+    # + return - Successfully created the newly specified tag 
+    resource isolated function post tags(TagsBody payload, map<string|string[]> headers = {}, *CreateTagQueries queries) returns InlineResponse20117|error {
         string resourcePath = string `/tags`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_6 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a tag
     #
-    # + tag_gid - Globally unique identifier for the tag.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified tag. 
-    resource isolated function get tags/[string tag_gid](boolean? opt_pretty = (), ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"permalink_url"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_6|error {
+    # + tag_gid - Globally unique identifier for the tag
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified tag 
+    resource isolated function get tags/[string tag_gid](map<string|string[]> headers = {}, *GetTagQueries queries) returns InlineResponse20090|error {
         string resourcePath = string `/tags/${getEncodedUri(tag_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_201_6 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a tag
     #
-    # + tag_gid - Globally unique identifier for the tag.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully updated the specified tag. 
-    resource isolated function put tags/[string tag_gid](boolean? opt_pretty = (), ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"permalink_url"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_6|error {
+    # + tag_gid - Globally unique identifier for the tag
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully updated the specified tag 
+    resource isolated function put tags/[string tag_gid](map<string|string[]> headers = {}, *UpdateTagQueries queries) returns InlineResponse20091|error {
         string resourcePath = string `/tags/${getEncodedUri(tag_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
-        Inline_response_201_6 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a tag
     #
-    # + tag_gid - Globally unique identifier for the tag.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified tag. 
-    resource isolated function delete tags/[string tag_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + tag_gid - Globally unique identifier for the tag
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified tag 
+    resource isolated function delete tags/[string tag_gid](map<string|string[]> headers = {}, *DeleteTagQueries queries) returns InlineResponse20092|error {
         string resourcePath = string `/tags/${getEncodedUri(tag_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get a task's tags
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the tags for the given task. 
-    resource isolated function get tasks/[string task_gid]/tags(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"offset"|"path"|"permalink_url"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_36|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the tags for the given task 
+    resource isolated function get tasks/[string task_gid]/tags(map<string|string[]> headers = {}, *GetTagsForTaskQueries queries) returns InlineResponse20093|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/tags`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_36 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get tags in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified set of tags. 
-    resource isolated function get workspaces/[string workspace_gid]/tags(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"offset"|"path"|"permalink_url"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_36|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified set of tags 
+    resource isolated function get workspaces/[string workspace_gid]/tags(map<string|string[]> headers = {}, *GetTagsForWorkspaceQueries queries) returns InlineResponse20094|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/tags`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_36 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a tag in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The tag to create.
-    # + return - Successfully created the newly specified tag. 
-    resource isolated function post workspaces/[string workspace_gid]/tags(Workspace_gid_tags_body payload, boolean? opt_pretty = (), ("color"|"created_at"|"followers"|"followers.name"|"name"|"notes"|"permalink_url"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_6|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The tag to create 
+    # + return - Successfully created the newly specified tag 
+    resource isolated function post workspaces/[string workspace_gid]/tags(WorkspaceGidTagsBody payload, map<string|string[]> headers = {}, *CreateTagForWorkspaceQueries queries) returns InlineResponse20118|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/tags`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_6 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get multiple task templates
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + project - The project to filter task templates on.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved requested task templates 
-    resource isolated function get task_templates(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), string? project = (), ("created_at"|"created_by"|"name"|"project"|"template")[]? opt_fields = ()) returns Inline_response_200_37|error {
+    resource isolated function get task_templates(map<string|string[]> headers = {}, *GetTaskTemplatesQueries queries) returns InlineResponse20095|error {
         string resourcePath = string `/task_templates`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "project": project, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_37 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a task template
     #
-    # + task_template_gid - Globally unique identifier for the task template.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
+    # + task_template_gid - Globally unique identifier for the task template
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
     # + return - Successfully retrieved requested task template 
-    resource isolated function get task_templates/[string task_template_gid](boolean? opt_pretty = (), ("created_at"|"created_by"|"name"|"project"|"template")[]? opt_fields = ()) returns Inline_response_200_38|error {
+    resource isolated function get task_templates/[string task_template_gid](map<string|string[]> headers = {}, *GetTaskTemplateQueries queries) returns InlineResponse20096|error {
         string resourcePath = string `/task_templates/${getEncodedUri(task_template_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_38 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Delete a task template
     #
-    # + task_template_gid - Globally unique identifier for the task template.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified task template. 
-    resource isolated function delete task_templates/[string task_template_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + task_template_gid - Globally unique identifier for the task template
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified task template 
+    resource isolated function delete task_templates/[string task_template_gid](map<string|string[]> headers = {}, *DeleteTaskTemplateQueries queries) returns InlineResponse20097|error {
         string resourcePath = string `/task_templates/${getEncodedUri(task_template_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Instantiate a task from a task template
     #
-    # + task_template_gid - Globally unique identifier for the task template.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Describes the inputs used for instantiating a task - the task's name.
-    # + return - Successfully created the job to handle task instantiation. 
-    resource isolated function post task_templates/[string task_template_gid]/instantiateTask(Task_template_gid_instantiateTask_body payload, boolean? opt_pretty = (), ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[]? opt_fields = ()) returns Inline_response_200_13|error {
+    # + task_template_gid - Globally unique identifier for the task template
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Describes the inputs used for instantiating a task - the task's name 
+    # + return - Successfully created the job to handle task instantiation 
+    resource isolated function post task_templates/[string task_template_gid]/instantiateTask(TaskTemplateGidInstantiateTaskBody payload, map<string|string[]> headers = {}, *InstantiateTaskQueries queries) returns InlineResponse20119|error {
         string resourcePath = string `/task_templates/${getEncodedUri(task_template_gid)}/instantiateTask`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_13 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get multiple tasks
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + assignee - The assignee to filter tasks on. If searching for unassigned tasks, assignee.any = null can be specified.
-    # *Note: If you specify `assignee`, you must also specify the `workspace` to filter on.*
-    # + project - The project to filter tasks on.
-    # + section - The section to filter tasks on.
-    # + workspace - The workspace to filter tasks on.
-    # *Note: If you specify `workspace`, you must also specify the `assignee` to filter on.*
-    # + completed_since - Only return tasks that are either incomplete or that have been completed since this time.
-    # + modified_since - Only return tasks that have been modified since the given time.
-    # *Note: A task is considered “modified” if any of its properties
-    # change, or associations between it and other objects are modified
-    # (e.g.  a task being added to a project). A task is not considered
-    # modified just because another object it is associated with (e.g. a
-    # subtask) is modified. Actions that count as modifying the task
-    # include assigning, renaming, completing, and adding stories.*
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved requested tasks. 
-    resource isolated function get tasks(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), string? assignee = (), string? project = (), string? section = (), string? workspace = (), string? completed_since = (), string? modified_since = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_39|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved requested tasks 
+    resource isolated function get tasks(map<string|string[]> headers = {}, *GetTasksQueries queries) returns InlineResponse20098|error {
         string resourcePath = string `/tasks`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "assignee": assignee, "project": project, "section": section, "workspace": workspace, "completed_since": completed_since, "modified_since": modified_since, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_39 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a task
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The task to create.
-    # + return - Successfully created a new task. 
-    resource isolated function post tasks(Tasks_body payload, boolean? opt_pretty = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_7|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The task to create 
+    # + return - Successfully created a new task 
+    resource isolated function post tasks(TasksBody payload, map<string|string[]> headers = {}, *CreateTaskQueries queries) returns InlineResponse20120|error {
         string resourcePath = string `/tasks`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_7 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified task. 
-    resource isolated function get tasks/[string task_gid](boolean? opt_pretty = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_7|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified task 
+    resource isolated function get tasks/[string task_gid](map<string|string[]> headers = {}, *GetTaskQueries queries) returns InlineResponse20099|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_201_7 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The task to update.
-    # + return - Successfully updated the specified task. 
-    resource isolated function put tasks/[string task_gid](Tasks_task_gid_body payload, boolean? opt_pretty = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_7|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The task to update 
+    # + return - Successfully updated the specified task 
+    resource isolated function put tasks/[string task_gid](TaskstaskGidBody payload, map<string|string[]> headers = {}, *UpdateTaskQueries queries) returns InlineResponse200100|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_7 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified task. 
-    resource isolated function delete tasks/[string task_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified task 
+    resource isolated function delete tasks/[string task_gid](map<string|string[]> headers = {}, *DeleteTaskQueries queries) returns InlineResponse200101|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Duplicate a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Describes the duplicate's name and the fields that will be duplicated.
-    # + return - Successfully created the job to handle duplication. 
-    resource isolated function post tasks/[string task_gid]/duplicate(Task_gid_duplicate_body payload, boolean? opt_pretty = (), ("new_project"|"new_project.name"|"new_project_template"|"new_project_template.name"|"new_task"|"new_task.created_by"|"new_task.name"|"new_task.resource_subtype"|"new_task_template"|"new_task_template.name"|"resource_subtype"|"status")[]? opt_fields = ()) returns Inline_response_200_13|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Describes the duplicate's name and the fields that will be duplicated 
+    # + return - Successfully created the job to handle duplication 
+    resource isolated function post tasks/[string task_gid]/duplicate(TaskGidDuplicateBody payload, map<string|string[]> headers = {}, *DuplicateTaskQueries queries) returns InlineResponse20121|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/duplicate`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_13 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get tasks from a project
     #
-    # + completed_since - Only return tasks that are either incomplete or that have been completed since this time. Accepts a date-time string or the keyword *now*.
-    # + project_gid - Globally unique identifier for the project.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested project's tasks. 
-    resource isolated function get projects/[string project_gid]/tasks(string? completed_since = (), boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_39|error {
+    # + project_gid - Globally unique identifier for the project
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested project's tasks 
+    resource isolated function get projects/[string project_gid]/tasks(map<string|string[]> headers = {}, *GetTasksForProjectQueries queries) returns InlineResponse200102|error {
         string resourcePath = string `/projects/${getEncodedUri(project_gid)}/tasks`;
-        map<anydata> queryParam = {"completed_since": completed_since, "opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_39 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get tasks from a section
     #
-    # + section_gid - The globally unique identifier for the section.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + completed_since - Only return tasks that are either incomplete or that have been completed since this time. Accepts a date-time string or the keyword *now*.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the section's tasks. 
-    resource isolated function get sections/[string section_gid]/tasks(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), string? completed_since = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_39|error {
+    # + section_gid - The globally unique identifier for the section
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the section's tasks 
+    resource isolated function get sections/[string section_gid]/tasks(map<string|string[]> headers = {}, *GetTasksForSectionQueries queries) returns InlineResponse200103|error {
         string resourcePath = string `/sections/${getEncodedUri(section_gid)}/tasks`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "completed_since": completed_since, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_39 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get tasks from a tag
     #
-    # + tag_gid - Globally unique identifier for the tag.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the tasks associated with the specified tag. 
-    resource isolated function get tags/[string tag_gid]/tasks(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_39|error {
+    # + tag_gid - Globally unique identifier for the tag
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the tasks associated with the specified tag 
+    resource isolated function get tags/[string tag_gid]/tasks(map<string|string[]> headers = {}, *GetTasksForTagQueries queries) returns InlineResponse200104|error {
         string resourcePath = string `/tags/${getEncodedUri(tag_gid)}/tasks`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_39 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get tasks from a user task list
     #
-    # + completed_since - Only return tasks that are either incomplete or that have been completed since this time. Accepts a date-time string or the keyword *now*.
-    # + user_task_list_gid - Globally unique identifier for the user task list.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the user task list's tasks. 
-    resource isolated function get user_task_lists/[string user_task_list_gid]/tasks(string? completed_since = (), boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_39|error {
+    # + user_task_list_gid - Globally unique identifier for the user task list
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the user task list's tasks 
+    resource isolated function get user_task_lists/[string user_task_list_gid]/tasks(map<string|string[]> headers = {}, *GetTasksForUserTaskListQueries queries) returns InlineResponse200105|error {
         string resourcePath = string `/user_task_lists/${getEncodedUri(user_task_list_gid)}/tasks`;
-        map<anydata> queryParam = {"completed_since": completed_since, "opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_39 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get subtasks from a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified task's subtasks. 
-    resource isolated function get tasks/[string task_gid]/subtasks(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_39|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified task's subtasks 
+    resource isolated function get tasks/[string task_gid]/subtasks(map<string|string[]> headers = {}, *GetSubtasksForTaskQueries queries) returns InlineResponse200106|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/subtasks`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_39 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a subtask
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The new subtask to create.
-    # + return - Successfully created the specified subtask. 
-    resource isolated function post tasks/[string task_gid]/subtasks(Task_gid_subtasks_body payload, boolean? opt_pretty = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_7|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The new subtask to create 
+    # + return - Successfully created the specified subtask 
+    resource isolated function post tasks/[string task_gid]/subtasks(TaskGidSubtasksBody payload, map<string|string[]> headers = {}, *CreateSubtaskForTaskQueries queries) returns InlineResponse20122|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/subtasks`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_7 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Set the parent of a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The new parent of the subtask.
-    # + return - Successfully changed the parent of the specified subtask. 
-    resource isolated function post tasks/[string task_gid]/setParent(Task_gid_setParent_body payload, boolean? opt_pretty = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_7|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The new parent of the subtask 
+    # + return - Successfully changed the parent of the specified subtask 
+    resource isolated function post tasks/[string task_gid]/setParent(TaskGidSetParentBody payload, map<string|string[]> headers = {}, *SetParentForTaskQueries queries) returns InlineResponse200107|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/setParent`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_7 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get dependencies from a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified task's dependencies. 
-    resource isolated function get tasks/[string task_gid]/dependencies(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_39|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified task's dependencies 
+    resource isolated function get tasks/[string task_gid]/dependencies(map<string|string[]> headers = {}, *GetDependenciesForTaskQueries queries) returns InlineResponse200108|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/dependencies`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_39 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Set dependencies for a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The list of tasks to set as dependencies.
-    # + return - Successfully set the specified dependencies on the task. 
-    resource isolated function post tasks/[string task_gid]/addDependencies(Task_gid_addDependencies_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The list of tasks to set as dependencies 
+    # + return - Successfully set the specified dependencies on the task 
+    resource isolated function post tasks/[string task_gid]/addDependencies(TaskGidAddDependenciesBody payload, map<string|string[]> headers = {}, *AddDependenciesForTaskQueries queries) returns InlineResponse200109|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/addDependencies`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Unlink dependencies from a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The list of tasks to unlink as dependencies.
-    # + return - Successfully unlinked the dependencies from the specified task. 
-    resource isolated function post tasks/[string task_gid]/removeDependencies(Task_gid_removeDependencies_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The list of tasks to unlink as dependencies 
+    # + return - Successfully unlinked the dependencies from the specified task 
+    resource isolated function post tasks/[string task_gid]/removeDependencies(TaskGidRemoveDependenciesBody payload, map<string|string[]> headers = {}, *RemoveDependenciesForTaskQueries queries) returns InlineResponse200110|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/removeDependencies`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get dependents from a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the specified dependents of the task. 
-    resource isolated function get tasks/[string task_gid]/dependents(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"offset"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"path"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"uri"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_39|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the specified dependents of the task 
+    resource isolated function get tasks/[string task_gid]/dependents(map<string|string[]> headers = {}, *GetDependentsForTaskQueries queries) returns InlineResponse200111|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/dependents`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_39 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Set dependents for a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The list of tasks to add as dependents.
-    # + return - Successfully set the specified dependents on the given task. 
-    resource isolated function post tasks/[string task_gid]/addDependents(Task_gid_addDependents_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The list of tasks to add as dependents 
+    # + return - Successfully set the specified dependents on the given task 
+    resource isolated function post tasks/[string task_gid]/addDependents(TaskGidAddDependentsBody payload, map<string|string[]> headers = {}, *AddDependentsForTaskQueries queries) returns InlineResponse200112|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/addDependents`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Unlink dependents from a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The list of tasks to remove as dependents.
-    # + return - Successfully unlinked the specified tasks as dependents. 
-    resource isolated function post tasks/[string task_gid]/removeDependents(Task_gid_removeDependents_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The list of tasks to remove as dependents 
+    # + return - Successfully unlinked the specified tasks as dependents 
+    resource isolated function post tasks/[string task_gid]/removeDependents(TaskGidRemoveDependentsBody payload, map<string|string[]> headers = {}, *RemoveDependentsForTaskQueries queries) returns InlineResponse200113|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/removeDependents`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Add a project to a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The project to add the task to.
-    # + return - Successfully added the specified project to the task. 
-    resource isolated function post tasks/[string task_gid]/addProject(Task_gid_addProject_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The project to add the task to 
+    # + return - Successfully added the specified project to the task 
+    resource isolated function post tasks/[string task_gid]/addProject(TaskGidAddProjectBody payload, map<string|string[]> headers = {}, *AddProjectForTaskQueries queries) returns InlineResponse200114|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/addProject`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove a project from a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The project to remove the task from.
-    # + return - Successfully removed the specified project from the task. 
-    resource isolated function post tasks/[string task_gid]/removeProject(Task_gid_removeProject_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The project to remove the task from 
+    # + return - Successfully removed the specified project from the task 
+    resource isolated function post tasks/[string task_gid]/removeProject(TaskGidRemoveProjectBody payload, map<string|string[]> headers = {}, *RemoveProjectForTaskQueries queries) returns InlineResponse200115|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/removeProject`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Add a tag to a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The tag to add to the task.
-    # + return - Successfully added the specified tag to the task. 
-    resource isolated function post tasks/[string task_gid]/addTag(Task_gid_addTag_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The tag to add to the task 
+    # + return - Successfully added the specified tag to the task 
+    resource isolated function post tasks/[string task_gid]/addTag(TaskGidAddTagBody payload, map<string|string[]> headers = {}, *AddTagForTaskQueries queries) returns InlineResponse200116|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/addTag`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove a tag from a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The tag to remove from the task.
-    # + return - Successfully removed the specified tag from the task. 
-    resource isolated function post tasks/[string task_gid]/removeTag(Task_gid_removeTag_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The tag to remove from the task 
+    # + return - Successfully removed the specified tag from the task 
+    resource isolated function post tasks/[string task_gid]/removeTag(TaskGidRemoveTagBody payload, map<string|string[]> headers = {}, *RemoveTagForTaskQueries queries) returns InlineResponse200117|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/removeTag`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Add followers to a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The followers to add to the task.
-    # + return - Successfully added the specified followers to the task. 
-    resource isolated function post tasks/[string task_gid]/addFollowers(Task_gid_addFollowers_body payload, boolean? opt_pretty = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_7|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The followers to add to the task 
+    # + return - Successfully added the specified followers to the task 
+    resource isolated function post tasks/[string task_gid]/addFollowers(TaskGidAddFollowersBody payload, map<string|string[]> headers = {}, *AddFollowersForTaskQueries queries) returns InlineResponse200118|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/addFollowers`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_7 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove followers from a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The followers to remove from the task.
-    # + return - Successfully removed the specified followers from the task. 
-    resource isolated function post tasks/[string task_gid]/removeFollowers(Task_gid_removeFollowers_body payload, boolean? opt_pretty = (), ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_201_7|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The followers to remove from the task 
+    # + return - Successfully removed the specified followers from the task 
+    resource isolated function post tasks/[string task_gid]/removeFollowers(TaskGidRemoveFollowersBody payload, map<string|string[]> headers = {}, *RemoveFollowerForTaskQueries queries) returns InlineResponse200119|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/removeFollowers`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_7 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a task for a given custom ID
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + custom_id - Generated custom ID for a task.
-    # + return - Successfully retrieved task for given custom ID. 
-    resource isolated function get workspaces/[string workspace_gid]/tasks/custom_id/[string custom_id]() returns Inline_response_201_7|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + custom_id - Generated custom ID for a task
+    # + headers - Headers to be sent with the request 
+    # + return - Successfully retrieved task for given custom ID 
+    resource isolated function get workspaces/[string workspace_gid]/tasks/custom_id/[string custom_id](map<string|string[]> headers = {}) returns InlineResponse200120|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/tasks/custom_id/${getEncodedUri(custom_id)}`;
-        Inline_response_201_7 response = check self.clientEp->get(resourcePath);
-        return response;
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Search tasks in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + text - Performs full-text search on both task name and description
-    # + resource_subtype - Filters results by the task's resource_subtype
-    # + assigneeAny - Comma-separated list of user identifiers
-    # + assigneeNot - Comma-separated list of user identifiers
-    # + portfoliosAny - Comma-separated list of portfolio IDs
-    # + projectsAny - Comma-separated list of project IDs
-    # + projectsNot - Comma-separated list of project IDs
-    # + projectsAll - Comma-separated list of project IDs
-    # + sectionsAny - Comma-separated list of section or column IDs
-    # + sectionsNot - Comma-separated list of section or column IDs
-    # + sectionsAll - Comma-separated list of section or column IDs
-    # + tagsAny - Comma-separated list of tag IDs
-    # + tagsNot - Comma-separated list of tag IDs
-    # + tagsAll - Comma-separated list of tag IDs
-    # + teamsAny - Comma-separated list of team IDs
-    # + followersNot - Comma-separated list of user identifiers
-    # + created_byAny - Comma-separated list of user identifiers
-    # + created_byNot - Comma-separated list of user identifiers
-    # + assigned_byAny - Comma-separated list of user identifiers
-    # + assigned_byNot - Comma-separated list of user identifiers
-    # + liked_byNot - Comma-separated list of user identifiers
-    # + commented_on_byNot - Comma-separated list of user identifiers
-    # + due_onBefore - ISO 8601 date string
-    # + due_onAfter - ISO 8601 date string
-    # + due_on - ISO 8601 date string or `null`
-    # + due_atBefore - ISO 8601 datetime string
-    # + due_atAfter - ISO 8601 datetime string
-    # + start_onBefore - ISO 8601 date string
-    # + start_onAfter - ISO 8601 date string
-    # + start_on - ISO 8601 date string or `null`
-    # + created_onBefore - ISO 8601 date string
-    # + created_onAfter - ISO 8601 date string
-    # + created_on - ISO 8601 date string or `null`
-    # + created_atBefore - ISO 8601 datetime string
-    # + created_atAfter - ISO 8601 datetime string
-    # + completed_onBefore - ISO 8601 date string
-    # + completed_onAfter - ISO 8601 date string
-    # + completed_on - ISO 8601 date string or `null`
-    # + completed_atBefore - ISO 8601 datetime string
-    # + completed_atAfter - ISO 8601 datetime string
-    # + modified_onBefore - ISO 8601 date string
-    # + modified_onAfter - ISO 8601 date string
-    # + modified_on - ISO 8601 date string or `null`
-    # + modified_atBefore - ISO 8601 datetime string
-    # + modified_atAfter - ISO 8601 datetime string
-    # + is_blocking - Filter to incomplete tasks with dependents
-    # + is_blocked - Filter to tasks with incomplete dependencies
-    # + has_attachment - Filter to tasks with attachments
-    # + completed - Filter to completed tasks
-    # + is_subtask - Filter to subtasks
-    # + sort_by - One of `due_date`, `created_at`, `completed_at`, `likes`, or `modified_at`, defaults to `modified_at`
-    # + sort_ascending - Default `false`
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the section's tasks. 
-    resource isolated function get workspaces/[string workspace_gid]/tasks/search(boolean? opt_pretty = (), string? text = (), "default_task"|"milestone" resource_subtype = "milestone", string? assigneeAny = (), string? assigneeNot = (), string? portfoliosAny = (), string? projectsAny = (), string? projectsNot = (), string? projectsAll = (), string? sectionsAny = (), string? sectionsNot = (), string? sectionsAll = (), string? tagsAny = (), string? tagsNot = (), string? tagsAll = (), string? teamsAny = (), string? followersNot = (), string? created_byAny = (), string? created_byNot = (), string? assigned_byAny = (), string? assigned_byNot = (), string? liked_byNot = (), string? commented_on_byNot = (), string? due_onBefore = (), string? due_onAfter = (), string? due_on = (), string? due_atBefore = (), string? due_atAfter = (), string? start_onBefore = (), string? start_onAfter = (), string? start_on = (), string? created_onBefore = (), string? created_onAfter = (), string? created_on = (), string? created_atBefore = (), string? created_atAfter = (), string? completed_onBefore = (), string? completed_onAfter = (), string? completed_on = (), string? completed_atBefore = (), string? completed_atAfter = (), string? modified_onBefore = (), string? modified_onAfter = (), string? modified_on = (), string? modified_atBefore = (), string? modified_atAfter = (), boolean? is_blocking = (), boolean? is_blocked = (), boolean? has_attachment = (), boolean? completed = (), boolean? is_subtask = (), "due_date"|"created_at"|"completed_at"|"likes"|"modified_at" sort_by = "modified_at", boolean sort_ascending = false, ("actual_time_minutes"|"approval_status"|"assignee"|"assignee.name"|"assignee_section"|"assignee_section.name"|"assignee_status"|"completed"|"completed_at"|"completed_by"|"completed_by.name"|"created_at"|"created_by"|"custom_fields"|"custom_fields.asana_created_field"|"custom_fields.created_by"|"custom_fields.created_by.name"|"custom_fields.currency_code"|"custom_fields.custom_label"|"custom_fields.custom_label_position"|"custom_fields.date_value"|"custom_fields.date_value.date"|"custom_fields.date_value.date_time"|"custom_fields.description"|"custom_fields.display_value"|"custom_fields.enabled"|"custom_fields.enum_options"|"custom_fields.enum_options.color"|"custom_fields.enum_options.enabled"|"custom_fields.enum_options.name"|"custom_fields.enum_value"|"custom_fields.enum_value.color"|"custom_fields.enum_value.enabled"|"custom_fields.enum_value.name"|"custom_fields.format"|"custom_fields.has_notifications_enabled"|"custom_fields.id_prefix"|"custom_fields.is_formula_field"|"custom_fields.is_global_to_workspace"|"custom_fields.is_value_read_only"|"custom_fields.multi_enum_values"|"custom_fields.multi_enum_values.color"|"custom_fields.multi_enum_values.enabled"|"custom_fields.multi_enum_values.name"|"custom_fields.name"|"custom_fields.number_value"|"custom_fields.people_value"|"custom_fields.people_value.name"|"custom_fields.precision"|"custom_fields.representation_type"|"custom_fields.resource_subtype"|"custom_fields.text_value"|"custom_fields.type"|"dependencies"|"dependents"|"due_at"|"due_on"|"external"|"external.data"|"followers"|"followers.name"|"hearted"|"hearts"|"hearts.user"|"hearts.user.name"|"html_notes"|"is_rendered_as_separator"|"liked"|"likes"|"likes.user"|"likes.user.name"|"memberships"|"memberships.project"|"memberships.project.name"|"memberships.section"|"memberships.section.name"|"modified_at"|"name"|"notes"|"num_hearts"|"num_likes"|"num_subtasks"|"parent"|"parent.created_by"|"parent.name"|"parent.resource_subtype"|"permalink_url"|"projects"|"projects.name"|"resource_subtype"|"start_at"|"start_on"|"tags"|"tags.name"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_40|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the section's tasks 
+    resource isolated function get workspaces/[string workspace_gid]/tasks/search(map<string|string[]> headers = {}, *SearchTasksForWorkspaceQueries queries) returns InlineResponse200121|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/tasks/search`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "text": text, "resource_subtype": resource_subtype, "assignee.any": assigneeAny, "assignee.not": assigneeNot, "portfolios.any": portfoliosAny, "projects.any": projectsAny, "projects.not": projectsNot, "projects.all": projectsAll, "sections.any": sectionsAny, "sections.not": sectionsNot, "sections.all": sectionsAll, "tags.any": tagsAny, "tags.not": tagsNot, "tags.all": tagsAll, "teams.any": teamsAny, "followers.not": followersNot, "created_by.any": created_byAny, "created_by.not": created_byNot, "assigned_by.any": assigned_byAny, "assigned_by.not": assigned_byNot, "liked_by.not": liked_byNot, "commented_on_by.not": commented_on_byNot, "due_on.before": due_onBefore, "due_on.after": due_onAfter, "due_on": due_on, "due_at.before": due_atBefore, "due_at.after": due_atAfter, "start_on.before": start_onBefore, "start_on.after": start_onAfter, "start_on": start_on, "created_on.before": created_onBefore, "created_on.after": created_onAfter, "created_on": created_on, "created_at.before": created_atBefore, "created_at.after": created_atAfter, "completed_on.before": completed_onBefore, "completed_on.after": completed_onAfter, "completed_on": completed_on, "completed_at.before": completed_atBefore, "completed_at.after": completed_atAfter, "modified_on.before": modified_onBefore, "modified_on.after": modified_onAfter, "modified_on": modified_on, "modified_at.before": modified_atBefore, "modified_at.after": modified_atAfter, "is_blocking": is_blocking, "is_blocked": is_blocked, "has_attachment": has_attachment, "completed": completed, "is_subtask": is_subtask, "sort_by": sort_by, "sort_ascending": sort_ascending, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_40 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a team membership
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested team membership. 
-    resource isolated function get team_memberships/[string team_membership_gid](boolean? opt_pretty = (), ("is_admin"|"is_guest"|"is_limited_access"|"team"|"team.name"|"user"|"user.name")[]? opt_fields = ()) returns Inline_response_200_41|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested team membership 
+    resource isolated function get team_memberships/[string team_membership_gid](map<string|string[]> headers = {}, *GetTeamMembershipQueries queries) returns InlineResponse200122|error {
         string resourcePath = string `/team_memberships/${getEncodedUri(team_membership_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_41 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get team memberships
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + team - Globally unique identifier for the team.
-    # + user - A string identifying a user. This can either be the string "me", an email, or the gid of a user. This parameter must be used with the workspace parameter.
-    # + workspace - Globally unique identifier for the workspace. This parameter must be used with the user parameter.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested team memberships. 
-    resource isolated function get team_memberships(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), string? team = (), string? user = (), string? workspace = (), ("is_admin"|"is_guest"|"is_limited_access"|"offset"|"path"|"team"|"team.name"|"uri"|"user"|"user.name")[]? opt_fields = ()) returns Inline_response_200_42|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested team memberships 
+    resource isolated function get team_memberships(map<string|string[]> headers = {}, *GetTeamMembershipsQueries queries) returns InlineResponse200123|error {
         string resourcePath = string `/team_memberships`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "team": team, "user": user, "workspace": workspace, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_42 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get memberships from a team
     #
-    # + team_gid - Globally unique identifier for the team.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested team's memberships. 
-    resource isolated function get teams/[string team_gid]/team_memberships(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("is_admin"|"is_guest"|"is_limited_access"|"offset"|"path"|"team"|"team.name"|"uri"|"user"|"user.name")[]? opt_fields = ()) returns Inline_response_200_42|error {
+    # + team_gid - Globally unique identifier for the team
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested team's memberships 
+    resource isolated function get teams/[string team_gid]/team_memberships(map<string|string[]> headers = {}, *GetTeamMembershipsForTeamQueries queries) returns InlineResponse200124|error {
         string resourcePath = string `/teams/${getEncodedUri(team_gid)}/team_memberships`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_42 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get memberships from a user
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + workspace - Globally unique identifier for the workspace.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested users's memberships. 
-    resource isolated function get users/[string user_gid]/team_memberships(string workspace, boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("is_admin"|"is_guest"|"is_limited_access"|"offset"|"path"|"team"|"team.name"|"uri"|"user"|"user.name")[]? opt_fields = ()) returns Inline_response_200_42|error {
+    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested users's memberships 
+    resource isolated function get users/[string user_gid]/team_memberships(map<string|string[]> headers = {}, *GetTeamMembershipsForUserQueries queries) returns InlineResponse200125|error {
         string resourcePath = string `/users/${getEncodedUri(user_gid)}/team_memberships`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "workspace": workspace, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_42 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a team
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The team to create.
-    # + return - Successfully created a new team. 
-    resource isolated function post teams(Teams_body payload, boolean? opt_pretty = (), ("description"|"edit_team_name_or_description_access_level"|"edit_team_visibility_or_trash_team_access_level"|"guest_invite_management_access_level"|"html_description"|"join_request_management_access_level"|"member_invite_management_access_level"|"name"|"organization"|"organization.name"|"permalink_url"|"team_member_removal_access_level"|"visibility")[]? opt_fields = ()) returns Inline_response_201_8|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The team to create 
+    # + return - Successfully created a new team 
+    resource isolated function post teams(TeamsBody payload, map<string|string[]> headers = {}, *CreateTeamQueries queries) returns InlineResponse20123|error {
         string resourcePath = string `/teams`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_8 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a team
     #
-    # + team_gid - Globally unique identifier for the team.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the record for a single team. 
-    resource isolated function get teams/[string team_gid](boolean? opt_pretty = (), ("description"|"edit_team_name_or_description_access_level"|"edit_team_visibility_or_trash_team_access_level"|"guest_invite_management_access_level"|"html_description"|"join_request_management_access_level"|"member_invite_management_access_level"|"name"|"organization"|"organization.name"|"permalink_url"|"team_member_removal_access_level"|"visibility")[]? opt_fields = ()) returns Inline_response_201_8|error {
+    # + team_gid - Globally unique identifier for the team
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the record for a single team 
+    resource isolated function get teams/[string team_gid](map<string|string[]> headers = {}, *GetTeamQueries queries) returns InlineResponse200126|error {
         string resourcePath = string `/teams/${getEncodedUri(team_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_201_8 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a team
     #
-    # + team_gid - Globally unique identifier for the team.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The team to update.
-    # + return - Successfully updated the team. 
-    resource isolated function put teams/[string team_gid](Teams_team_gid_body payload, boolean? opt_pretty = (), ("description"|"edit_team_name_or_description_access_level"|"edit_team_visibility_or_trash_team_access_level"|"guest_invite_management_access_level"|"html_description"|"join_request_management_access_level"|"member_invite_management_access_level"|"name"|"organization"|"organization.name"|"permalink_url"|"team_member_removal_access_level"|"visibility")[]? opt_fields = ()) returns Inline_response_201_8|error {
+    # + team_gid - Globally unique identifier for the team
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The team to update 
+    # + return - Successfully updated the team 
+    resource isolated function put teams/[string team_gid](TeamsteamGidBody payload, map<string|string[]> headers = {}, *UpdateTeamQueries queries) returns InlineResponse200127|error {
         string resourcePath = string `/teams/${getEncodedUri(team_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_8 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Get teams in a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Returns the team records for all teams in the organization or workspace accessible to the authenticated user. 
-    resource isolated function get workspaces/[string workspace_gid]/teams(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("description"|"edit_team_name_or_description_access_level"|"edit_team_visibility_or_trash_team_access_level"|"guest_invite_management_access_level"|"html_description"|"join_request_management_access_level"|"member_invite_management_access_level"|"name"|"offset"|"organization"|"organization.name"|"path"|"permalink_url"|"team_member_removal_access_level"|"uri"|"visibility")[]? opt_fields = ()) returns Inline_response_200_43|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Returns the team records for all teams in the organization or workspace accessible to the authenticated user 
+    resource isolated function get workspaces/[string workspace_gid]/teams(map<string|string[]> headers = {}, *GetTeamsForWorkspaceQueries queries) returns InlineResponse200128|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/teams`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_43 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get teams for a user
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + organization - The workspace or organization to filter teams on.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Returns the team records for all teams in the organization or workspace to which the given user is assigned. 
-    resource isolated function get users/[string user_gid]/teams(string organization, boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("description"|"edit_team_name_or_description_access_level"|"edit_team_visibility_or_trash_team_access_level"|"guest_invite_management_access_level"|"html_description"|"join_request_management_access_level"|"member_invite_management_access_level"|"name"|"offset"|"organization"|"organization.name"|"path"|"permalink_url"|"team_member_removal_access_level"|"uri"|"visibility")[]? opt_fields = ()) returns Inline_response_200_43|error {
+    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Returns the team records for all teams in the organization or workspace to which the given user is assigned 
+    resource isolated function get users/[string user_gid]/teams(map<string|string[]> headers = {}, *GetTeamsForUserQueries queries) returns InlineResponse200129|error {
         string resourcePath = string `/users/${getEncodedUri(user_gid)}/teams`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "organization": organization, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_43 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Add a user to a team
     #
-    # + team_gid - Globally unique identifier for the team.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The user to add to the team.
-    # + return - Successfully added user to the team. 
-    resource isolated function post teams/[string team_gid]/addUser(Team_gid_addUser_body payload, boolean? opt_pretty = (), ("is_admin"|"is_guest"|"is_limited_access"|"team"|"team.name"|"user"|"user.name")[]? opt_fields = ()) returns Inline_response_200_41|error {
+    # + team_gid - Globally unique identifier for the team
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The user to add to the team 
+    # + return - Successfully added user to the team 
+    resource isolated function post teams/[string team_gid]/addUser(TeamGidAddUserBody payload, map<string|string[]> headers = {}, *AddUserForTeamQueries queries) returns InlineResponse200130|error {
         string resourcePath = string `/teams/${getEncodedUri(team_gid)}/addUser`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_41 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove a user from a team
     #
-    # + team_gid - Globally unique identifier for the team.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The user to remove from the team.
+    # + team_gid - Globally unique identifier for the team
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The user to remove from the team 
     # + return - Returns an empty data record 
-    resource isolated function post teams/[string team_gid]/removeUser(Team_gid_removeUser_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    resource isolated function post teams/[string team_gid]/removeUser(TeamGidRemoveUserBody payload, map<string|string[]> headers = {}, *RemoveUserForTeamQueries queries) returns InlineResponse204|error {
         string resourcePath = string `/teams/${getEncodedUri(team_gid)}/removeUser`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a time period
     #
-    # + time_period_gid - Globally unique identifier for the time period.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the record for a single time period. 
-    resource isolated function get time_periods/[string time_period_gid](boolean? opt_pretty = (), ("display_name"|"end_on"|"parent"|"parent.display_name"|"parent.end_on"|"parent.period"|"parent.start_on"|"period"|"start_on")[]? opt_fields = ()) returns Inline_response_200_44|error {
+    # + time_period_gid - Globally unique identifier for the time period
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the record for a single time period 
+    resource isolated function get time_periods/[string time_period_gid](map<string|string[]> headers = {}, *GetTimePeriodQueries queries) returns InlineResponse200131|error {
         string resourcePath = string `/time_periods/${getEncodedUri(time_period_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_44 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get time periods
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + start_on - ISO 8601 date string
-    # + end_on - ISO 8601 date string
-    # + workspace - Globally unique identifier for the workspace.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested time periods. 
-    resource isolated function get time_periods(string workspace, boolean? opt_pretty = (), int? 'limit = (), string? offset = (), string? start_on = (), string? end_on = (), ("display_name"|"end_on"|"offset"|"parent"|"parent.display_name"|"parent.end_on"|"parent.period"|"parent.start_on"|"path"|"period"|"start_on"|"uri")[]? opt_fields = ()) returns Inline_response_200_45|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested time periods 
+    resource isolated function get time_periods(map<string|string[]> headers = {}, *GetTimePeriodsQueries queries) returns InlineResponse200132|error {
         string resourcePath = string `/time_periods`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "start_on": start_on, "end_on": end_on, "workspace": workspace, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_45 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get time tracking entries for a task
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested time tracking entries. 
-    resource isolated function get tasks/[string task_gid]/time_tracking_entries(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("created_by"|"created_by.name"|"duration_minutes"|"entered_on"|"offset"|"path"|"uri")[]? opt_fields = ()) returns Inline_response_200_46|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested time tracking entries 
+    resource isolated function get tasks/[string task_gid]/time_tracking_entries(map<string|string[]> headers = {}, *GetTimeTrackingEntriesForTaskQueries queries) returns InlineResponse200133|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/time_tracking_entries`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_46 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Create a time tracking entry
     #
-    # + task_gid - The task to operate on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - Information about the time tracking entry.
-    # + return - Successfully created a time tracking entry for the task. 
-    resource isolated function post tasks/[string task_gid]/time_tracking_entries(Task_gid_time_tracking_entries_body payload, boolean? opt_pretty = (), ("created_at"|"created_by"|"created_by.name"|"duration_minutes"|"entered_on"|"task"|"task.created_by"|"task.name"|"task.resource_subtype")[]? opt_fields = ()) returns Inline_response_201_9|error {
+    # + task_gid - The task to operate on
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Information about the time tracking entry 
+    # + return - Successfully created a time tracking entry for the task 
+    resource isolated function post tasks/[string task_gid]/time_tracking_entries(TaskGidTimeTrackingEntriesBody payload, map<string|string[]> headers = {}, *CreateTimeTrackingEntryQueries queries) returns InlineResponse20124|error {
         string resourcePath = string `/tasks/${getEncodedUri(task_gid)}/time_tracking_entries`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_9 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a time tracking entry
     #
-    # + time_tracking_entry_gid - Globally unique identifier for the time tracking entry.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested time tracking entry. 
-    resource isolated function get time_tracking_entries/[string time_tracking_entry_gid](boolean? opt_pretty = (), ("created_at"|"created_by"|"created_by.name"|"duration_minutes"|"entered_on"|"task"|"task.created_by"|"task.name"|"task.resource_subtype")[]? opt_fields = ()) returns Inline_response_201_9|error {
+    # + time_tracking_entry_gid - Globally unique identifier for the time tracking entry
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested time tracking entry 
+    resource isolated function get time_tracking_entries/[string time_tracking_entry_gid](map<string|string[]> headers = {}, *GetTimeTrackingEntryQueries queries) returns InlineResponse200134|error {
         string resourcePath = string `/time_tracking_entries/${getEncodedUri(time_tracking_entry_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_201_9 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a time tracking entry
     #
-    # + time_tracking_entry_gid - Globally unique identifier for the time tracking entry.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The updated fields for the time tracking entry.
-    # + return - Successfully updated the time tracking entry. 
-    resource isolated function put time_tracking_entries/[string time_tracking_entry_gid](Time_tracking_entries_time_tracking_entry_gid_body payload, boolean? opt_pretty = (), ("created_at"|"created_by"|"created_by.name"|"duration_minutes"|"entered_on"|"task"|"task.created_by"|"task.name"|"task.resource_subtype")[]? opt_fields = ()) returns Inline_response_201_9|error {
+    # + time_tracking_entry_gid - Globally unique identifier for the time tracking entry
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The updated fields for the time tracking entry 
+    # + return - Successfully updated the time tracking entry 
+    resource isolated function put time_tracking_entries/[string time_tracking_entry_gid](TimeTrackingEntriestimeTrackingEntryGidBody payload, map<string|string[]> headers = {}, *UpdateTimeTrackingEntryQueries queries) returns InlineResponse200135|error {
         string resourcePath = string `/time_tracking_entries/${getEncodedUri(time_tracking_entry_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_9 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a time tracking entry
     #
-    # + time_tracking_entry_gid - Globally unique identifier for the time tracking entry.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully deleted the specified time tracking entry. 
-    resource isolated function delete time_tracking_entries/[string time_tracking_entry_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + time_tracking_entry_gid - Globally unique identifier for the time tracking entry
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully deleted the specified time tracking entry 
+    resource isolated function delete time_tracking_entries/[string time_tracking_entry_gid](map<string|string[]> headers = {}, *DeleteTimeTrackingEntryQueries queries) returns InlineResponse200136|error {
         string resourcePath = string `/time_tracking_entries/${getEncodedUri(time_tracking_entry_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get objects via typeahead
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + resource_type - The type of values the typeahead should return. You can choose from one of the following: `custom_field`, `goal`, `project`, `project_template`, `portfolio`, `tag`, `task`, `team`, and `user`. Note that unlike in the names of endpoints, the types listed here are in singular form (e.g. `task`). Using multiple types is not yet supported.
-    # + 'type - *Deprecated: new integrations should prefer the resource_type field.*
-    # + query - The string that will be used to search for relevant objects. If an empty string is passed in, the API will return results.
-    # + count - The number of results to return. The default is 20 if this parameter is omitted, with a minimum of 1 and a maximum of 100. If there are fewer results found than requested, all will be returned.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved objects via a typeahead search algorithm. 
-    resource isolated function get workspaces/[string workspace_gid]/typeahead("custom_field"|"goal"|"project"|"project_template"|"portfolio"|"tag"|"task"|"team"|"user" resource_type, "custom_field"|"portfolio"|"project"|"tag"|"task"|"user" 'type = "user", string? query = (), int? count = (), boolean? opt_pretty = (), ("name")[]? opt_fields = ()) returns Inline_response_200_47|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved objects via a typeahead search algorithm 
+    resource isolated function get workspaces/[string workspace_gid]/typeahead(map<string|string[]> headers = {}, *TypeaheadForWorkspaceQueries queries) returns InlineResponse200137|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/typeahead`;
-        map<anydata> queryParam = {"resource_type": resource_type, "type": 'type, "query": query, "count": count, "opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_47 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a user task list
     #
-    # + user_task_list_gid - Globally unique identifier for the user task list.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the user task list. 
-    resource isolated function get user_task_lists/[string user_task_list_gid](boolean? opt_pretty = (), ("name"|"owner"|"workspace")[]? opt_fields = ()) returns Inline_response_200_48|error {
+    # + user_task_list_gid - Globally unique identifier for the user task list
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the user task list 
+    resource isolated function get user_task_lists/[string user_task_list_gid](map<string|string[]> headers = {}, *GetUserTaskListQueries queries) returns InlineResponse200138|error {
         string resourcePath = string `/user_task_lists/${getEncodedUri(user_task_list_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_48 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a user's task list
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + workspace - The workspace in which to get the user task list.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the user's task list. 
-    resource isolated function get users/[string user_gid]/user_task_list(string workspace, boolean? opt_pretty = (), ("name"|"owner"|"workspace")[]? opt_fields = ()) returns Inline_response_200_48|error {
+    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the user's task list 
+    resource isolated function get users/[string user_gid]/user_task_list(map<string|string[]> headers = {}, *GetUserTaskListForUserQueries queries) returns InlineResponse200139|error {
         string resourcePath = string `/users/${getEncodedUri(user_gid)}/user_task_list`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "workspace": workspace, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_48 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get multiple users
     #
-    # + workspace - The workspace or organization ID to filter users on.
-    # + team - The team ID to filter users on.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested user records. 
-    resource isolated function get users(string? workspace = (), string? team = (), boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("email"|"name"|"offset"|"path"|"photo"|"photo.image_1024x1024"|"photo.image_128x128"|"photo.image_21x21"|"photo.image_27x27"|"photo.image_36x36"|"photo.image_60x60"|"uri"|"workspaces"|"workspaces.name")[]? opt_fields = ()) returns Inline_response_200_49|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested user records 
+    resource isolated function get users(map<string|string[]> headers = {}, *GetUsersQueries queries) returns InlineResponse200140|error {
         string resourcePath = string `/users`;
-        map<anydata> queryParam = {"workspace": workspace, "team": team, "opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_49 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a user
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Returns the user specified. 
-    resource isolated function get users/[string user_gid](boolean? opt_pretty = (), ("email"|"name"|"photo"|"photo.image_1024x1024"|"photo.image_128x128"|"photo.image_21x21"|"photo.image_27x27"|"photo.image_36x36"|"photo.image_60x60"|"workspaces"|"workspaces.name")[]? opt_fields = ()) returns Inline_response_200_50|error {
+    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Returns the user specified 
+    resource isolated function get users/[string user_gid](map<string|string[]> headers = {}, *GetUserQueries queries) returns InlineResponse200141|error {
         string resourcePath = string `/users/${getEncodedUri(user_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_50 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a user's favorites
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + resource_type - The resource type of favorites to be returned.
-    # + workspace - The workspace in which to get favorites.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Returns the specified user's favorites. 
-    resource isolated function get users/[string user_gid]/favorites("portfolio"|"project"|"tag"|"task"|"user"|"project_template" resource_type, string workspace, boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("name"|"offset"|"path"|"uri")[]? opt_fields = ()) returns Inline_response_200_51|error {
+    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Returns the specified user's favorites 
+    resource isolated function get users/[string user_gid]/favorites(map<string|string[]> headers = {}, *GetFavoritesForUserQueries queries) returns InlineResponse200142|error {
         string resourcePath = string `/users/${getEncodedUri(user_gid)}/favorites`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "resource_type": resource_type, "workspace": workspace, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_51 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get users in a team
     #
-    # + team_gid - Globally unique identifier for the team.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
+    # + team_gid - Globally unique identifier for the team
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
     # + return - Returns the user records for all the members of the team, including guests and limited access users 
-    resource isolated function get teams/[string team_gid]/users(boolean? opt_pretty = (), string? offset = (), ("email"|"name"|"photo"|"photo.image_1024x1024"|"photo.image_128x128"|"photo.image_21x21"|"photo.image_27x27"|"photo.image_36x36"|"photo.image_60x60"|"workspaces"|"workspaces.name")[]? opt_fields = ()) returns Inline_response_200_52|error {
+    resource isolated function get teams/[string team_gid]/users(map<string|string[]> headers = {}, *GetUsersForTeamQueries queries) returns InlineResponse200143|error {
         string resourcePath = string `/teams/${getEncodedUri(team_gid)}/users`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_52 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get users in a workspace or organization
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Return the users in the specified workspace or org. 
-    resource isolated function get workspaces/[string workspace_gid]/users(boolean? opt_pretty = (), string? offset = (), ("email"|"name"|"photo"|"photo.image_1024x1024"|"photo.image_128x128"|"photo.image_21x21"|"photo.image_27x27"|"photo.image_36x36"|"photo.image_60x60"|"workspaces"|"workspaces.name")[]? opt_fields = ()) returns Inline_response_200_52|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Return the users in the specified workspace or org 
+    resource isolated function get workspaces/[string workspace_gid]/users(map<string|string[]> headers = {}, *GetUsersForWorkspaceQueries queries) returns InlineResponse200144|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/users`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_52 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get multiple webhooks
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + workspace - The workspace to query for webhooks in.
-    # + 'resource - Only return webhooks for the given resource.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested webhooks. 
-    resource isolated function get webhooks(string workspace, boolean? opt_pretty = (), int? 'limit = (), string? offset = (), string? 'resource = (), ("active"|"created_at"|"filters"|"filters.action"|"filters.fields"|"filters.resource_subtype"|"last_failure_at"|"last_failure_content"|"last_success_at"|"offset"|"path"|"resource"|"resource.name"|"target"|"uri")[]? opt_fields = ()) returns Inline_response_200_53|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested webhooks 
+    resource isolated function get webhooks(map<string|string[]> headers = {}, *GetWebhooksQueries queries) returns InlineResponse200145|error {
         string resourcePath = string `/webhooks`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "workspace": workspace, "resource": 'resource, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_53 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Establish a webhook
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The webhook workspace and target.
-    # + return - Successfully created the requested webhook. 
-    resource isolated function post webhooks(Webhooks_body payload, boolean? opt_pretty = (), ("active"|"created_at"|"filters"|"filters.action"|"filters.fields"|"filters.resource_subtype"|"last_failure_at"|"last_failure_content"|"last_success_at"|"resource"|"resource.name"|"target")[]? opt_fields = ()) returns Inline_response_201_10|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The webhook workspace and target 
+    # + return - Successfully created the requested webhook 
+    resource isolated function post webhooks(WebhooksBody payload, map<string|string[]> headers = {}, *CreateWebhookQueries queries) returns InlineResponse20125|error {
         string resourcePath = string `/webhooks`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_10 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Get a webhook
     #
-    # + webhook_gid - Globally unique identifier for the webhook.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested webhook. 
-    resource isolated function get webhooks/[string webhook_gid](boolean? opt_pretty = (), ("active"|"created_at"|"filters"|"filters.action"|"filters.fields"|"filters.resource_subtype"|"last_failure_at"|"last_failure_content"|"last_success_at"|"resource"|"resource.name"|"target")[]? opt_fields = ()) returns Inline_response_201_10|error {
+    # + webhook_gid - Globally unique identifier for the webhook
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested webhook 
+    resource isolated function get webhooks/[string webhook_gid](map<string|string[]> headers = {}, *GetWebhookQueries queries) returns InlineResponse200146|error {
         string resourcePath = string `/webhooks/${getEncodedUri(webhook_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_201_10 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a webhook
     #
-    # + webhook_gid - Globally unique identifier for the webhook.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The updated filters for the webhook.
-    # + return - Successfully updated the webhook. 
-    resource isolated function put webhooks/[string webhook_gid](Webhooks_webhook_gid_body payload, boolean? opt_pretty = (), ("active"|"created_at"|"filters"|"filters.action"|"filters.fields"|"filters.resource_subtype"|"last_failure_at"|"last_failure_content"|"last_success_at"|"resource"|"resource.name"|"target")[]? opt_fields = ()) returns Inline_response_201_10|error {
+    # + webhook_gid - Globally unique identifier for the webhook
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The updated filters for the webhook 
+    # + return - Successfully updated the webhook 
+    resource isolated function put webhooks/[string webhook_gid](WebhookswebhookGidBody payload, map<string|string[]> headers = {}, *UpdateWebhookQueries queries) returns InlineResponse200147|error {
         string resourcePath = string `/webhooks/${getEncodedUri(webhook_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_201_10 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Delete a webhook
     #
-    # + webhook_gid - Globally unique identifier for the webhook.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + return - Successfully retrieved the requested webhook. 
-    resource isolated function delete webhooks/[string webhook_gid](boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + webhook_gid - Globally unique identifier for the webhook
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested webhook 
+    resource isolated function delete webhooks/[string webhook_gid](map<string|string[]> headers = {}, *DeleteWebhookQueries queries) returns InlineResponse200148|error {
         string resourcePath = string `/webhooks/${getEncodedUri(webhook_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        Inline_response_200_1 response = check self.clientEp->delete(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
     }
+
     # Get a workspace membership
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested workspace membership. 
-    resource isolated function get workspace_memberships/[string workspace_membership_gid](boolean? opt_pretty = (), ("created_at"|"is_active"|"is_admin"|"is_guest"|"user"|"user.name"|"user_task_list"|"user_task_list.name"|"user_task_list.owner"|"user_task_list.workspace"|"vacation_dates"|"vacation_dates.end_on"|"vacation_dates.start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_54|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested workspace membership 
+    resource isolated function get workspace_memberships/[string workspace_membership_gid](map<string|string[]> headers = {}, *GetWorkspaceMembershipQueries queries) returns InlineResponse200149|error {
         string resourcePath = string `/workspace_memberships/${getEncodedUri(workspace_membership_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_54 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get workspace memberships for a user
     #
-    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested user's workspace memberships. 
-    resource isolated function get users/[string user_gid]/workspace_memberships(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("created_at"|"is_active"|"is_admin"|"is_guest"|"offset"|"path"|"uri"|"user"|"user.name"|"user_task_list"|"user_task_list.name"|"user_task_list.owner"|"user_task_list.workspace"|"vacation_dates"|"vacation_dates.end_on"|"vacation_dates.start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_55|error {
+    # + user_gid - A string identifying a user. This can either be the string "me", an email, or the gid of a user
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested user's workspace memberships 
+    resource isolated function get users/[string user_gid]/workspace_memberships(map<string|string[]> headers = {}, *GetWorkspaceMembershipsForUserQueries queries) returns InlineResponse200150|error {
         string resourcePath = string `/users/${getEncodedUri(user_gid)}/workspace_memberships`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_55 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get the workspace memberships for a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + user - A string identifying a user. This can either be the string "me", an email, or the gid of a user.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Successfully retrieved the requested workspace's memberships. 
-    resource isolated function get workspaces/[string workspace_gid]/workspace_memberships(string? user = (), boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("created_at"|"is_active"|"is_admin"|"is_guest"|"offset"|"path"|"uri"|"user"|"user.name"|"user_task_list"|"user_task_list.name"|"user_task_list.owner"|"user_task_list.workspace"|"vacation_dates"|"vacation_dates.end_on"|"vacation_dates.start_on"|"workspace"|"workspace.name")[]? opt_fields = ()) returns Inline_response_200_55|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully retrieved the requested workspace's memberships 
+    resource isolated function get workspaces/[string workspace_gid]/workspace_memberships(map<string|string[]> headers = {}, *GetWorkspaceMembershipsForWorkspaceQueries queries) returns InlineResponse200151|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/workspace_memberships`;
-        map<anydata> queryParam = {"user": user, "opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_55 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get multiple workspaces
     #
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + 'limit - Results per page.
-    # The number of objects to return per page. The value must be between 1 and 100.
-    # + offset - Offset token.
-    # An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results.
-    # 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Return all workspaces visible to the authorized user. 
-    resource isolated function get workspaces(boolean? opt_pretty = (), int? 'limit = (), string? offset = (), ("email_domains"|"is_organization"|"name"|"offset"|"path"|"uri")[]? opt_fields = ()) returns Inline_response_200_56|error {
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Return all workspaces visible to the authorized user 
+    resource isolated function get workspaces(map<string|string[]> headers = {}, *GetWorkspacesQueries queries) returns InlineResponse200152|error {
         string resourcePath = string `/workspaces`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "limit": 'limit, "offset": offset, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_56 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Get a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + return - Return the full workspace record. 
-    resource isolated function get workspaces/[string workspace_gid](boolean? opt_pretty = (), ("email_domains"|"is_organization"|"name")[]? opt_fields = ()) returns Inline_response_200_57|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Return the full workspace record 
+    resource isolated function get workspaces/[string workspace_gid](map<string|string[]> headers = {}, *GetWorkspaceQueries queries) returns InlineResponse200153|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
-        Inline_response_200_57 response = check self.clientEp->get(resourcePath);
-        return response;
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
+        return self.clientEp->get(resourcePath, headers);
     }
+
     # Update a workspace
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The workspace object with all updated properties.
-    # + return - Update for the workspace was successful. 
-    resource isolated function put workspaces/[string workspace_gid](Workspaces_workspace_gid_body payload, boolean? opt_pretty = (), ("email_domains"|"is_organization"|"name")[]? opt_fields = ()) returns Inline_response_200_57|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The workspace object with all updated properties 
+    # + return - Update for the workspace was successful 
+    resource isolated function put workspaces/[string workspace_gid](WorkspacesworkspaceGidBody payload, map<string|string[]> headers = {}, *UpdateWorkspaceQueries queries) returns InlineResponse200154|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_57 response = check self.clientEp->put(resourcePath, request);
-        return response;
+        return self.clientEp->put(resourcePath, request, headers);
     }
+
     # Add a user to a workspace or organization
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + opt_fields - This endpoint returns a compact resource, which excludes some properties by default. To include those optional properties, set this query parameter to a comma-separated list of the properties you wish to include.
-    # + payload - The user to add to the workspace.
-    # + return - The user was added successfully to the workspace or organization. 
-    resource isolated function post workspaces/[string workspace_gid]/addUser(Workspace_gid_addUser_body payload, boolean? opt_pretty = (), ("email"|"name"|"photo"|"photo.image_1024x1024"|"photo.image_128x128"|"photo.image_21x21"|"photo.image_27x27"|"photo.image_36x36"|"photo.image_60x60")[]? opt_fields = ()) returns Inline_response_200_58|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The user to add to the workspace 
+    # + return - The user was added successfully to the workspace or organization 
+    resource isolated function post workspaces/[string workspace_gid]/addUser(WorkspaceGidAddUserBody payload, map<string|string[]> headers = {}, *AddUserForWorkspaceQueries queries) returns InlineResponse200155|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/addUser`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty, "opt_fields": opt_fields};
         map<Encoding> queryParamEncoding = {"opt_fields": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam, queryParamEncoding);
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_58 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
+
     # Remove a user from a workspace or organization
     #
-    # + workspace_gid - Globally unique identifier for the workspace or organization.
-    # + opt_pretty - Provides “pretty” output.
-    # Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-    # + payload - The user to remove from the workspace.
-    # + return - The user was removed successfully to the workspace or organization. 
-    resource isolated function post workspaces/[string workspace_gid]/removeUser(Workspace_gid_removeUser_body payload, boolean? opt_pretty = ()) returns Inline_response_200_1|error {
+    # + workspace_gid - Globally unique identifier for the workspace or organization
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The user to remove from the workspace 
+    # + return - The user was removed successfully to the workspace or organization 
+    resource isolated function post workspaces/[string workspace_gid]/removeUser(WorkspaceGidRemoveUserBody payload, map<string|string[]> headers = {}, *RemoveUserForWorkspaceQueries queries) returns InlineResponse2041|error {
         string resourcePath = string `/workspaces/${getEncodedUri(workspace_gid)}/removeUser`;
-        map<anydata> queryParam = {"opt_pretty": opt_pretty};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Inline_response_200_1 response = check self.clientEp->post(resourcePath, request);
-        return response;
+        return self.clientEp->post(resourcePath, request, headers);
     }
 }
