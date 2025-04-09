@@ -5329,7 +5329,7 @@ components:
             old_date_value:
               allOf:
                 - $ref: '#/components/schemas/StoryResponseDates'
-              dancing_unicornescription: >-
+              dark-pinkescription: >-
                 *Conditional*. The old value of a date custom field story.
               readOnly: true
             new_date_value:
