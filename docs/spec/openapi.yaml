@@ -476,7 +476,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse200'
+                $ref: '#/components/schemas/AttachmentOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -601,7 +601,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -787,7 +787,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2002'
+                $ref: '#/components/schemas/AttachmentCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -979,7 +979,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse200'
+                $ref: '#/components/schemas/AttachmentOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1092,7 +1092,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2003'
+                $ref: '#/components/schemas/AuditLogEventResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1257,7 +1257,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2004'
+                $ref: '#/components/schemas/BatchesResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1494,7 +1494,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2005'
+                $ref: '#/components/schemas/CustomFieldSettingsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1731,7 +1731,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2005'
+                $ref: '#/components/schemas/CustomFieldSettingsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1965,7 +1965,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse201'
+                $ref: '#/components/schemas/CustomFieldCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -2187,7 +2187,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse201'
+                $ref: '#/components/schemas/CustomFieldCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -2406,7 +2406,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse201'
+                $ref: '#/components/schemas/CustomFieldCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -2525,7 +2525,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -2747,7 +2747,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2006'
+                $ref: '#/components/schemas/CustomFieldsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -2901,7 +2901,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2011'
+                $ref: '#/components/schemas/EnumOptions'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -3052,7 +3052,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2011'
+                $ref: '#/components/schemas/EnumOptions'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -3204,7 +3204,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2011'
+                $ref: '#/components/schemas/EnumOptions'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -3393,7 +3393,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2007'
+                $ref: '#/components/schemas/EventsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -3407,7 +3407,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse412'
+                $ref: '#/components/schemas/PreconditionFailedResponse'
         "500":
           $ref: '#/components/responses/InternalServerError'
       x-readme:
@@ -3572,7 +3572,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2008'
+                $ref: '#/components/schemas/GoalRelationshipOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -3717,7 +3717,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2008'
+                $ref: '#/components/schemas/GoalRelationshipOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -3889,7 +3889,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2009'
+                $ref: '#/components/schemas/GoalRelationshipCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -4039,7 +4039,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2008'
+                $ref: '#/components/schemas/GoalRelationshipOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -4155,7 +4155,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -4362,7 +4362,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20010'
+                $ref: '#/components/schemas/GoalOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -4583,7 +4583,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20010'
+                $ref: '#/components/schemas/GoalOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -4703,7 +4703,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -4996,7 +4996,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20011'
+                $ref: '#/components/schemas/GoalCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -5227,7 +5227,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20010'
+                $ref: '#/components/schemas/GoalOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -5449,7 +5449,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20010'
+                $ref: '#/components/schemas/GoalOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -5678,7 +5678,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20010'
+                $ref: '#/components/schemas/GoalOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -5906,7 +5906,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20010'
+                $ref: '#/components/schemas/GoalOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -6134,7 +6134,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20010'
+                $ref: '#/components/schemas/GoalOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -6353,7 +6353,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20012'
+                $ref: '#/components/schemas/GoalCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -6513,7 +6513,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20013'
+                $ref: '#/components/schemas/JobOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -6675,7 +6675,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20014'
+                $ref: '#/components/schemas/MembershipCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -6780,7 +6780,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2012'
+                $ref: '#/components/schemas/MembershipCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -6902,7 +6902,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20015'
+                $ref: '#/components/schemas/ProjectMembershipCompactOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -6976,7 +6976,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2012'
+                $ref: '#/components/schemas/MembershipCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -7033,7 +7033,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -7166,7 +7166,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2013'
+                $ref: '#/components/schemas/OrganizationExportCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -7311,7 +7311,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2013'
+                $ref: '#/components/schemas/OrganizationExportCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -7460,7 +7460,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20016'
+                $ref: '#/components/schemas/PortfolioMembershipCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -7611,7 +7611,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20017'
+                $ref: '#/components/schemas/PortfolioMembershipOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -7749,7 +7749,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20016'
+                $ref: '#/components/schemas/PortfolioMembershipCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -8106,7 +8106,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20018'
+                $ref: '#/components/schemas/PortfolioCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -8438,7 +8438,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2014'
+                $ref: '#/components/schemas/PortfolioCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -8757,7 +8757,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2014'
+                $ref: '#/components/schemas/PortfolioCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -9082,7 +9082,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2014'
+                $ref: '#/components/schemas/PortfolioCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -9203,7 +9203,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -9586,7 +9586,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20019'
+                $ref: '#/components/schemas/ProjectCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -9717,7 +9717,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -9850,7 +9850,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -9982,7 +9982,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20020'
+                $ref: '#/components/schemas/CustomFieldSettingOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -10113,7 +10113,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -10447,7 +10447,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2014'
+                $ref: '#/components/schemas/PortfolioCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -10778,7 +10778,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2014'
+                $ref: '#/components/schemas/PortfolioCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -10928,7 +10928,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20021'
+                $ref: '#/components/schemas/ProjectBriefOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -11091,7 +11091,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20021'
+                $ref: '#/components/schemas/ProjectBriefOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -11211,7 +11211,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -11370,7 +11370,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20021'
+                $ref: '#/components/schemas/ProjectBriefOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -11530,7 +11530,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20022'
+                $ref: '#/components/schemas/ProjectMembershipNormalOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -11671,7 +11671,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20023'
+                $ref: '#/components/schemas/ProjectMembershipCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -11836,7 +11836,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20024'
+                $ref: '#/components/schemas/ProjectStatusOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -11953,7 +11953,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -12123,7 +12123,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20025'
+                $ref: '#/components/schemas/ProjectStatusCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -12288,7 +12288,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20024'
+                $ref: '#/components/schemas/ProjectStatusOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -12453,7 +12453,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20026'
+                $ref: '#/components/schemas/ProjectTemplateOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -12568,7 +12568,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -12695,7 +12695,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20027'
+                $ref: '#/components/schemas/ProjectTemplateCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -12867,7 +12867,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20027'
+                $ref: '#/components/schemas/ProjectTemplateCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -13041,7 +13041,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20013'
+                $ref: '#/components/schemas/JobOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -13448,7 +13448,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20019'
+                $ref: '#/components/schemas/ProjectCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -13841,7 +13841,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2015'
+                $ref: '#/components/schemas/ProjectCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -14215,7 +14215,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2015'
+                $ref: '#/components/schemas/ProjectCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -14600,7 +14600,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2015'
+                $ref: '#/components/schemas/ProjectCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -14721,7 +14721,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -14889,7 +14889,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20013'
+                $ref: '#/components/schemas/JobOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -15273,7 +15273,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20019'
+                $ref: '#/components/schemas/ProjectCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -15661,7 +15661,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20019'
+                $ref: '#/components/schemas/ProjectCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -16045,7 +16045,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2015'
+                $ref: '#/components/schemas/ProjectCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -16434,7 +16434,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20019'
+                $ref: '#/components/schemas/ProjectCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -16822,7 +16822,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2015'
+                $ref: '#/components/schemas/ProjectCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -17058,7 +17058,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20020'
+                $ref: '#/components/schemas/CustomFieldSettingOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -17186,7 +17186,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -17344,7 +17344,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20028'
+                $ref: '#/components/schemas/TaskCountOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -17726,7 +17726,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2015'
+                $ref: '#/components/schemas/ProjectCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -18113,7 +18113,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2015'
+                $ref: '#/components/schemas/ProjectCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -18500,7 +18500,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2015'
+                $ref: '#/components/schemas/ProjectCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -18887,7 +18887,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2015'
+                $ref: '#/components/schemas/ProjectCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -19061,7 +19061,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20013'
+                $ref: '#/components/schemas/JobOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -19191,7 +19191,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20029'
+                $ref: '#/components/schemas/RuleTriggerOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -19293,7 +19293,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20030'
+                $ref: '#/components/schemas/SectionOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -19450,7 +19450,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20030'
+                $ref: '#/components/schemas/SectionOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -19574,7 +19574,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -19731,7 +19731,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20031'
+                $ref: '#/components/schemas/SectionCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -19884,7 +19884,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20030'
+                $ref: '#/components/schemas/SectionOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -20015,7 +20015,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -20145,7 +20145,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -20326,7 +20326,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20032'
+                $ref: '#/components/schemas/StatusUpdateOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -20441,7 +20441,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -20652,7 +20652,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20033'
+                $ref: '#/components/schemas/StatusUpdateCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -20843,7 +20843,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20032'
+                $ref: '#/components/schemas/StatusUpdateOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -21253,7 +21253,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20034'
+                $ref: '#/components/schemas/StoryOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -21662,7 +21662,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20034'
+                $ref: '#/components/schemas/StoryOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -21782,7 +21782,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -22197,7 +22197,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20035'
+                $ref: '#/components/schemas/StoryCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -22612,7 +22612,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20034'
+                $ref: '#/components/schemas/StoryOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -22785,7 +22785,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20036'
+                $ref: '#/components/schemas/TagCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -22950,7 +22950,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2016'
+                $ref: '#/components/schemas/TagCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -23102,7 +23102,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2016'
+                $ref: '#/components/schemas/TagCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -23257,7 +23257,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2016'
+                $ref: '#/components/schemas/TagCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -23375,7 +23375,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -23536,7 +23536,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20036'
+                $ref: '#/components/schemas/TagCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -23702,7 +23702,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20036'
+                $ref: '#/components/schemas/TagCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -23868,7 +23868,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2016'
+                $ref: '#/components/schemas/TagCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -24029,7 +24029,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20037'
+                $ref: '#/components/schemas/TaskTemplateCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -24124,7 +24124,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20038'
+                $ref: '#/components/schemas/TaskTemplateOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -24188,7 +24188,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -24291,7 +24291,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20013'
+                $ref: '#/components/schemas/JobOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -24654,7 +24654,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20039'
+                $ref: '#/components/schemas/TaskCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -25000,7 +25000,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2017'
+                $ref: '#/components/schemas/TaskCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -25326,7 +25326,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2017'
+                $ref: '#/components/schemas/TaskCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -25663,7 +25663,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2017'
+                $ref: '#/components/schemas/TaskCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -25785,7 +25785,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -25953,7 +25953,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20013'
+                $ref: '#/components/schemas/JobOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -26291,7 +26291,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20039'
+                $ref: '#/components/schemas/TaskCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -26630,7 +26630,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20039'
+                $ref: '#/components/schemas/TaskCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -26970,7 +26970,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20039'
+                $ref: '#/components/schemas/TaskCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -27310,7 +27310,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20039'
+                $ref: '#/components/schemas/TaskCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -27650,7 +27650,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20039'
+                $ref: '#/components/schemas/TaskCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -27983,7 +27983,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2017'
+                $ref: '#/components/schemas/TaskCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -28321,7 +28321,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2017'
+                $ref: '#/components/schemas/TaskCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -28657,7 +28657,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20039'
+                $ref: '#/components/schemas/TaskCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -28790,7 +28790,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -28923,7 +28923,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -29265,7 +29265,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20039'
+                $ref: '#/components/schemas/TaskCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -29398,7 +29398,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -29531,7 +29531,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -29678,7 +29678,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -29813,7 +29813,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -29944,7 +29944,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -30075,7 +30075,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -30418,7 +30418,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2017'
+                $ref: '#/components/schemas/TaskCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -30755,7 +30755,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2017'
+                $ref: '#/components/schemas/TaskCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -30876,7 +30876,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2017'
+                $ref: '#/components/schemas/TaskCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -31144,7 +31144,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20040'
+                $ref: '#/components/schemas/TaskCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -31909,7 +31909,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20041'
+                $ref: '#/components/schemas/TeamMembershipOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -32084,7 +32084,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20042'
+                $ref: '#/components/schemas/TeamMembershipCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -32244,7 +32244,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20042'
+                $ref: '#/components/schemas/TeamMembershipCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -32412,7 +32412,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20042'
+                $ref: '#/components/schemas/TeamMembershipCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -32587,7 +32587,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2018'
+                $ref: '#/components/schemas/TeamCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -32747,7 +32747,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2018'
+                $ref: '#/components/schemas/TeamCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -32909,7 +32909,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2018'
+                $ref: '#/components/schemas/TeamCreatedResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -33069,7 +33069,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20043'
+                $ref: '#/components/schemas/TeamCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -33242,7 +33242,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20043'
+                $ref: '#/components/schemas/TeamCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -33417,7 +33417,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20041'
+                $ref: '#/components/schemas/TeamMembershipOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -33546,7 +33546,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -33705,7 +33705,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20044'
+                $ref: '#/components/schemas/TimePeriodOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -33893,7 +33893,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20045'
+                $ref: '#/components/schemas/TimePeriodCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -34050,7 +34050,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20046'
+                $ref: '#/components/schemas/TimeTrackingEntryCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -34161,7 +34161,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2019'
+                $ref: '#/components/schemas/TimeTrackingEntryBases'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -34266,7 +34266,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2019'
+                $ref: '#/components/schemas/TimeTrackingEntryBases'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -34380,7 +34380,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2019'
+                $ref: '#/components/schemas/TimeTrackingEntryBases'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -34450,7 +34450,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -34575,7 +34575,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20047'
+                $ref: '#/components/schemas/AsanaNamedResources'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -34786,7 +34786,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20048'
+                $ref: '#/components/schemas/UserTaskListOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -34925,7 +34925,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20048'
+                $ref: '#/components/schemas/UserTaskListOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -35100,7 +35100,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20049'
+                $ref: '#/components/schemas/UserCompactsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -35279,7 +35279,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20050'
+                $ref: '#/components/schemas/UserOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -35423,7 +35423,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20051'
+                $ref: '#/components/schemas/AsanaNamedResourceResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -35617,7 +35617,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20052'
+                $ref: '#/components/schemas/UserCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -35778,7 +35778,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20052'
+                $ref: '#/components/schemas/UserCompacts'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -35966,7 +35966,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20053'
+                $ref: '#/components/schemas/WebhookOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -36188,7 +36188,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20110'
+                $ref: '#/components/schemas/EnumOptions0'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -36347,7 +36347,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20110'
+                $ref: '#/components/schemas/EnumOptions0'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -36509,7 +36509,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20110'
+                $ref: '#/components/schemas/EnumOptions0'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -36628,7 +36628,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -36795,7 +36795,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20054'
+                $ref: '#/components/schemas/WorkspaceMembershipOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -36956,7 +36956,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20055'
+                $ref: '#/components/schemas/WorkspaceMembershipCompactResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -37132,7 +37132,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20055'
+                $ref: '#/components/schemas/WorkspaceMembershipCompactResponse'
       x-readme:
         code-samples:
         - language: java
@@ -37277,7 +37277,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20056'
+                $ref: '#/components/schemas/WorkspaceCompactResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -37419,7 +37419,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20057'
+                $ref: '#/components/schemas/WorkspaceOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -37564,7 +37564,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20057'
+                $ref: '#/components/schemas/WorkspaceOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -37729,7 +37729,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse20058'
+                $ref: '#/components/schemas/UserBaseOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -37860,7 +37860,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InlineResponse2001'
+                $ref: '#/components/schemas/EmptyOkResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -38391,7 +38391,7 @@ components:
       allOf:
       - $ref: '#/components/schemas/WorkspaceBase'
       - $ref: '#/components/schemas/WorkspaceResponseAllOf2'
-    InlineResponse2009:
+    GoalRelationshipCompacts:
       type: object
       properties:
         next_page:
@@ -38402,7 +38402,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GoalRelationshipCompact'
-    InlineResponse2008:
+    GoalRelationshipOkResponse:
       type: object
       properties:
         data:
@@ -38443,7 +38443,7 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/ProjectStatusRequest'
-    InlineResponse2012:
+    MembershipCreatedResponse:
       type: object
       properties:
         data:
@@ -38525,12 +38525,12 @@ components:
       allOf:
       - $ref: '#/components/schemas/WebhookFilter'
       - $ref: '#/components/schemas/FiltersAllOf22'
-    InlineResponse2011:
+    EnumOptions:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/EnumOption'
-    InlineResponse2014:
+    PortfolioCreatedResponse:
       type: object
       properties:
         data:
@@ -38542,7 +38542,7 @@ components:
           $ref: '#/components/schemas/RemoveFollowersRequest'
     FiltersAllOf22:
       type: object
-    InlineResponse2013:
+    OrganizationExportCreatedResponse:
       type: object
       properties:
         data:
@@ -38554,12 +38554,12 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/AddCustomFieldSettingRequest'
-    InlineResponse2016:
+    TagCreatedResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/TagResponse'
-    InlineResponse2015:
+    ProjectCreatedResponse:
       type: object
       properties:
         data:
@@ -38631,12 +38631,12 @@ components:
           items:
             $ref: '#/components/schemas/TemplateRole'
           x-ballerina-name: requestedRoles
-    InlineResponse2018:
+    TeamCreatedResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/TeamResponse'
-    InlineResponse2017:
+    TaskCreatedResponse:
       type: object
       properties:
         data:
@@ -38671,7 +38671,7 @@ components:
       description: This object represents a user's connection to a team
       x-docs-overrides:
         properties.resource_type.example: team_membership
-    InlineResponse412:
+    PreconditionFailedResponse:
       type: object
       properties:
         sync:
@@ -38682,7 +38682,7 @@ components:
         errors:
           type: array
           items:
-            $ref: '#/components/schemas/InlineResponse412Errors'
+            $ref: '#/components/schemas/PreconditionFailedErrors'
     TaskRequest:
       allOf:
       - $ref: '#/components/schemas/TaskBase'
@@ -38743,12 +38743,12 @@ components:
         a team
       x-docs-overrides:
         properties.resource_type.example: team
-    InlineResponse2001:
+    EmptyOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/EmptyResponse'
-    InlineResponse2003:
+    AuditLogEventResponse:
       type: object
       properties:
         next_page:
@@ -38759,7 +38759,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AuditLogEvent'
-    InlineResponse2002:
+    AttachmentCompacts:
       type: object
       properties:
         next_page:
@@ -38778,7 +38778,7 @@ components:
           description: The role given to the member. Can be `editor` or `commenter`
           example: editor
           x-ballerina-name: accessLevel
-    InlineResponse2005:
+    CustomFieldSettingsResponse:
       type: object
       properties:
         next_page:
@@ -38821,7 +38821,7 @@ components:
         \ between a goal and another goal, a project, a task, or a portfolio"
       x-docs-overrides:
         properties.resource_type.example: goal_relationship
-    InlineResponse2004:
+    BatchesResponse:
       type: object
       properties:
         data:
@@ -38833,7 +38833,7 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/CustomFieldRequest'
-    InlineResponse2007:
+    EventsResponse:
       type: object
       properties:
         data:
@@ -38851,7 +38851,7 @@ components:
           example: de4774f6915eae04714ca93bb2f5ee81
       description: The full record for all events that have occurred since the sync
         token was created
-    InlineResponse2006:
+    CustomFieldsResponse:
       type: object
       properties:
         next_page:
@@ -41001,7 +41001,7 @@ components:
           readOnly: true
           items:
             $ref: '#/components/schemas/WorkspaceCompact'
-    InlineResponse412Errors:
+    PreconditionFailedErrors:
       type: object
       properties:
         message:
@@ -41210,12 +41210,12 @@ components:
         with a predefined setup
       x-docs-overrides:
         properties.resource_type.example: task_template
-    InlineResponse201:
+    CustomFieldCreatedResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/CustomFieldResponse'
-    InlineResponse200:
+    AttachmentOkResponse:
       type: object
       properties:
         data:
@@ -42669,7 +42669,7 @@ components:
           description: The subtype of the allocation
           example: project_allocation
           x-ballerina-name: resourceSubtype
-    InlineResponse20019:
+    ProjectCompacts:
       type: object
       properties:
         next_page:
@@ -42709,12 +42709,12 @@ components:
           type: string
           description: The user id that should be assigned to the template role
           example: "123"
-    InlineResponse20021:
+    ProjectBriefOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/ProjectBriefResponse'
-    InlineResponse20020:
+    CustomFieldSettingOkResponse:
       type: object
       properties:
         data:
@@ -42764,7 +42764,7 @@ components:
         the complete data of an Organization in JSON format
       x-docs-overrides:
         properties.resource_type.example: organization_export
-    InlineResponse20023:
+    ProjectMembershipCompacts:
       type: object
       properties:
         next_page:
@@ -42775,7 +42775,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProjectMembershipCompact'
-    InlineResponse20022:
+    ProjectMembershipNormalOkResponse:
       type: object
       properties:
         data:
@@ -42802,7 +42802,7 @@ components:
         \ object will be null"
       nullable: true
       readOnly: true
-    InlineResponse20025:
+    ProjectStatusCompacts:
       type: object
       properties:
         next_page:
@@ -42854,12 +42854,12 @@ components:
           type: string
           description: |
             The URL of the external resource being attached. Required for attachments of type `external`
-    InlineResponse20024:
+    ProjectStatusOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/ProjectStatusResponse'
-    InlineResponse20027:
+    ProjectTemplateCompacts:
       type: object
       properties:
         next_page:
@@ -42874,17 +42874,17 @@ components:
       allOf:
       - $ref: '#/components/schemas/TaskBase'
       - $ref: '#/components/schemas/TaskResponseAllOf2'
-    InlineResponse20026:
+    ProjectTemplateOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/ProjectTemplateResponse'
-    InlineResponse20029:
+    RuleTriggerOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/RuleTriggerResponse'
-    InlineResponse20028:
+    TaskCountOkResponse:
       type: object
       properties:
         data:
@@ -43100,12 +43100,12 @@ components:
         \ is only present when the value of the property `action`, describing the\
         \ action taken on the **resource**, is `changed`"
       readOnly: true
-    InlineResponse20030:
+    SectionOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/SectionResponse'
-    InlineResponse20032:
+    StatusUpdateOkResponse:
       type: object
       properties:
         data:
@@ -43114,7 +43114,7 @@ components:
       allOf:
       - $ref: '#/components/schemas/ProjectBase'
       - $ref: '#/components/schemas/ProjectRequestAllOf2'
-    InlineResponse20031:
+    SectionCompacts:
       type: object
       properties:
         next_page:
@@ -43125,12 +43125,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SectionCompact'
-    InlineResponse20034:
+    StoryOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/StoryResponse'
-    InlineResponse20033:
+    StatusUpdateCompacts:
       type: object
       properties:
         next_page:
@@ -43141,7 +43141,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/StatusUpdateCompact'
-    InlineResponse20036:
+    TagCompacts:
       type: object
       properties:
         next_page:
@@ -43152,7 +43152,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TagCompact'
-    InlineResponse20035:
+    StoryCompacts:
       type: object
       properties:
         next_page:
@@ -43395,7 +43395,7 @@ components:
             nullable: true
             example: EUR
             x-ballerina-name: currencyCode
-    InlineResponse20038:
+    TaskTemplateOkResponse:
       type: object
       properties:
         data:
@@ -43653,7 +43653,7 @@ components:
           x-ballerina-name: newTextValue
         story:
           $ref: '#/components/schemas/StoryCompact'
-    InlineResponse20037:
+    TaskTemplateCompacts:
       type: object
       properties:
         data:
@@ -43671,7 +43671,7 @@ components:
           format: email
           readOnly: true
           example: gsanchez@example.com
-    InlineResponse20039:
+    TaskCompactsResponse:
       type: object
       properties:
         next_page:
@@ -43746,19 +43746,19 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/AddMembersRequest'
-    InlineResponse20041:
+    TeamMembershipOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/TeamMembershipResponse'
-    InlineResponse20040:
+    TaskCompacts:
       type: object
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/TaskCompact'
-    InlineResponse20043:
+    TeamCompactsResponse:
       type: object
       properties:
         next_page:
@@ -43781,7 +43781,7 @@ components:
         dependencies:
         - "133713"
         - "184253"
-    InlineResponse20042:
+    TeamMembershipCompactsResponse:
       type: object
       properties:
         next_page:
@@ -43792,7 +43792,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TeamMembershipCompact'
-    InlineResponse20045:
+    TimePeriodCompactsResponse:
       type: object
       properties:
         next_page:
@@ -43824,12 +43824,12 @@ components:
           type: string
           description: The section to reorder
           example: "321654"
-    InlineResponse20044:
+    TimePeriodOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/TimePeriodResponse'
-    InlineResponse20047:
+    AsanaNamedResources:
       type: object
       properties:
         data:
@@ -43848,7 +43848,7 @@ components:
           example: "12345"
       description: A user identification object for specification with the addUser/removeUser
         endpoints
-    InlineResponse20046:
+    TimeTrackingEntryCompactsResponse:
       type: object
       properties:
         next_page:
@@ -43859,7 +43859,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TimeTrackingEntryCompact'
-    InlineResponse20049:
+    UserCompactsResponse:
       type: object
       properties:
         next_page:
@@ -43870,7 +43870,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserCompact'
-    InlineResponse20048:
+    UserTaskListOkResponse:
       type: object
       properties:
         data:
@@ -43983,7 +43983,7 @@ components:
       allOf:
       - $ref: '#/components/schemas/AllocationBase'
       - $ref: '#/components/schemas/AllocationCompactAllOf2'
-    InlineResponse20050:
+    UserOkResponse:
       type: object
       properties:
         data:
@@ -43992,14 +43992,14 @@ components:
       allOf:
       - $ref: '#/components/schemas/MembershipRequest'
       - $ref: '#/components/schemas/CreateMembershipRequestAllOf2'
-    InlineResponse20052:
+    UserCompacts:
       type: object
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/UserCompact'
-    InlineResponse20051:
+    AsanaNamedResourceResponse:
       type: object
       properties:
         next_page:
@@ -44010,12 +44010,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AsanaNamedResource'
-    InlineResponse20054:
+    WorkspaceMembershipOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/WorkspaceMembershipResponse'
-    InlineResponse20053:
+    WebhookOkResponse:
       type: object
       properties:
         next_page:
@@ -44026,7 +44026,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WebhookResponse'
-    InlineResponse20056:
+    WorkspaceCompactResponse:
       type: object
       properties:
         next_page:
@@ -44041,7 +44041,7 @@ components:
       allOf:
       - $ref: '#/components/schemas/AllocationBase'
       - $ref: '#/components/schemas/AllocationRequestAllOf2'
-    InlineResponse20055:
+    WorkspaceMembershipCompactResponse:
       type: object
       properties:
         next_page:
@@ -44052,12 +44052,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WorkspaceMembershipCompact'
-    InlineResponse20058:
+    UserBaseOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/UserBaseResponse'
-    InlineResponse20057:
+    WorkspaceOkResponse:
       type: object
       properties:
         data:
@@ -44153,7 +44153,7 @@ components:
       - $ref: '#/components/schemas/AttachmentResponseAllOf2'
     WorkspaceRequest:
       $ref: '#/components/schemas/WorkspaceBase'
-    InlineResponse2019:
+    TimeTrackingEntryBases:
       type: object
       properties:
         data:
@@ -44255,7 +44255,7 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/TeamRemoveUserRequest'
-    InlineResponse20110:
+    EnumOptions0:
       type: object
       properties:
         data:
@@ -44527,7 +44527,7 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/RemoveCustomFieldSettingRequest'
-    InlineResponse20010:
+    GoalOkResponse:
       type: object
       properties:
         data:
@@ -44536,14 +44536,14 @@ components:
       allOf:
       - $ref: '#/components/schemas/AsanaResource'
       - $ref: '#/components/schemas/WorkspaceCompactAllOf2'
-    InlineResponse20012:
+    GoalCompacts:
       type: object
       properties:
         data:
           type: array
           items:
             $ref: '#/components/schemas/GoalCompact'
-    InlineResponse20011:
+    GoalCompactsResponse:
       type: object
       properties:
         next_page:
@@ -44568,7 +44568,7 @@ components:
           - "321654"
           items:
             type: string
-    InlineResponse20014:
+    MembershipCompacts:
       type: object
       properties:
         next_page:
@@ -44579,12 +44579,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MembershipCompact'
-    InlineResponse20013:
+    JobOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/JobResponse'
-    InlineResponse20016:
+    PortfolioMembershipCompacts:
       type: object
       properties:
         next_page:
@@ -44595,12 +44595,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PortfolioMembershipCompact'
-    InlineResponse20015:
+    ProjectMembershipCompactOkResponse:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/ProjectMembershipCompactResponse'
-    InlineResponse20018:
+    PortfolioCompacts:
       type: object
       properties:
         next_page:
@@ -44618,7 +44618,7 @@ components:
         to that particular pairing
       x-docs-overrides:
         properties.resource_type.example: custom_field_setting
-    InlineResponse20017:
+    PortfolioMembershipOkResponse:
       type: object
       properties:
         data:
