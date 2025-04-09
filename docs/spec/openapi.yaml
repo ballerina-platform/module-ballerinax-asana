@@ -420,7 +420,7 @@ tags:
 - name: Workspace memberships
   description: This object determines if a user is a member of a workspace.
 paths:
-  /attachments/{attachment_gid}:
+  /attachments/{attachmentGid}:
     get:
       tags:
       - Attachments
@@ -1068,7 +1068,7 @@ paths:
             result = client.attachments.create_attachment_for_object(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /workspaces/{workspace_gid}/audit_log_events:
+  /workspaces/{workspaceGid}/audit_log_events:
     get:
       tags:
       - Audit log API
@@ -1362,7 +1362,7 @@ paths:
             result = client.batch_api.create_batch_request(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/custom_field_settings:
+  /projects/{projectGid}/custom_field_settings:
     get:
       tags:
       - Custom field settings
@@ -1603,7 +1603,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /portfolios/{portfolio_gid}/custom_field_settings:
+  /portfolios/{portfolioGid}/custom_field_settings:
     get:
       tags:
       - Custom field settings
@@ -2070,7 +2070,7 @@ paths:
             result = client.custom_fields.create_custom_field(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /custom_fields/{custom_field_gid}:
+  /custom_fields/{customFieldGid}:
     get:
       tags:
       - Custom fields
@@ -2632,7 +2632,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/custom_field_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /workspaces/{workspace_gid}/custom_fields:
+  /workspaces/{workspaceGid}/custom_fields:
     get:
       tags:
       - Custom fields
@@ -2856,7 +2856,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /custom_fields/{custom_field_gid}/enum_options:
+  /custom_fields/{customFieldGid}/enum_options:
     post:
       tags:
       - Custom fields
@@ -3008,7 +3008,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/custom_field_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /custom_fields/{custom_field_gid}/enum_options/insert:
+  /custom_fields/{customFieldGid}/enum_options/insert:
     post:
       tags:
       - Custom fields
@@ -3159,7 +3159,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/custom_field_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /enum_options/{enum_option_gid}:
+  /enum_options/{enumOptionGid}:
     put:
       tags:
       - Custom fields
@@ -3309,7 +3309,7 @@ paths:
 
             result = client.custom_fields.update_enum_option(enum_option_gid: 'enum_option_gid', field: "value", field: "value", options: {pretty: true})
     parameters:
-    - name: enum_option_gid
+    - name: enumOptionGid
       in: path
       description: Globally unique identifier for the enum option
       required: true
@@ -3525,7 +3525,7 @@ paths:
         type: string
       example: de4774f6915eae04714ca93bb2f5ee81
     - $ref: '#/components/parameters/pretty'
-  /goal_relationships/{goal_relationship_gid}:
+  /goal_relationships/{goalRelationshipGid}:
     get:
       tags:
       - Goal relationships
@@ -3983,7 +3983,7 @@ paths:
             end
 
             result = client.goal_relationships.get_goal_relationships(supported_goal: '&#x27;supported_goal_example&#x27;', param: "value", param: "value", options: {pretty: true})
-  /goals/{goal_gid}/addSupportingRelationship:
+  /goals/{goalGid}/addSupportingRelationship:
     post:
       tags:
       - Goal relationships
@@ -4135,7 +4135,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/goal_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /goals/{goal_gid}/removeSupportingRelationship:
+  /goals/{goalGid}/removeSupportingRelationship:
     post:
       tags:
       - Goal relationships
@@ -4254,7 +4254,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/goal_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /goals/{goal_gid}:
+  /goals/{goalGid}:
     get:
       tags:
       - Goals
@@ -5333,7 +5333,7 @@ paths:
             result = client.goals.create_goal(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /goals/{goal_gid}/setMetric:
+  /goals/{goalGid}/setMetric:
     post:
       tags:
       - Goals
@@ -5559,7 +5559,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/goal_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /goals/{goal_gid}/setMetricCurrentValue:
+  /goals/{goalGid}/setMetricCurrentValue:
     post:
       tags:
       - Goals
@@ -5788,7 +5788,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/goal_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /goals/{goal_gid}/addFollowers:
+  /goals/{goalGid}/addFollowers:
     post:
       tags:
       - Goals
@@ -6016,7 +6016,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/goal_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /goals/{goal_gid}/removeFollowers:
+  /goals/{goalGid}/removeFollowers:
     post:
       tags:
       - Goals
@@ -6244,7 +6244,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/goal_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /goals/{goal_gid}/parentGoals:
+  /goals/{goalGid}/parentGoals:
     get:
       tags:
       - Goals
@@ -6459,7 +6459,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/goal_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /jobs/{job_gid}:
+  /jobs/{jobGid}:
     get:
       tags:
       - Jobs
@@ -6859,7 +6859,7 @@ paths:
             result = client.memberships.create_membership(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /memberships/{membership_gid}:
+  /memberships/{membershipGid}:
     get:
       tags:
       - Memberships
@@ -7271,7 +7271,7 @@ paths:
             result = client.organization_exports.create_organization_export(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /organization_exports/{organization_export_gid}:
+  /organization_exports/{organizationExportGid}:
     get:
       tags:
       - Organization exports
@@ -7573,7 +7573,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /portfolio_memberships/{portfolio_membership_gid}:
+  /portfolio_memberships/{portfolioMembershipGid}:
     get:
       tags:
       - Portfolio memberships
@@ -7705,7 +7705,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/portfolio_membership_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /portfolios/{portfolio_gid}/portfolio_memberships:
+  /portfolios/{portfolioGid}/portfolio_memberships:
     get:
       tags:
       - Portfolio memberships
@@ -8543,7 +8543,7 @@ paths:
             result = client.portfolios.create_portfolio(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /portfolios/{portfolio_gid}:
+  /portfolios/{portfolioGid}:
     get:
       tags:
       - Portfolios
@@ -9310,7 +9310,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/portfolio_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /portfolios/{portfolio_gid}/items:
+  /portfolios/{portfolioGid}/items:
     get:
       tags:
       - Portfolios
@@ -9695,7 +9695,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /portfolios/{portfolio_gid}/addItem:
+  /portfolios/{portfolioGid}/addItem:
     post:
       tags:
       - Portfolios
@@ -9828,7 +9828,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/portfolio_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /portfolios/{portfolio_gid}/removeItem:
+  /portfolios/{portfolioGid}/removeItem:
     post:
       tags:
       - Portfolios
@@ -9961,7 +9961,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/portfolio_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /portfolios/{portfolio_gid}/addCustomFieldSetting:
+  /portfolios/{portfolioGid}/addCustomFieldSetting:
     post:
       tags:
       - Portfolios
@@ -10093,7 +10093,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/portfolio_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /portfolios/{portfolio_gid}/removeCustomFieldSetting:
+  /portfolios/{portfolioGid}/removeCustomFieldSetting:
     post:
       tags:
       - Portfolios
@@ -10224,7 +10224,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/portfolio_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /portfolios/{portfolio_gid}/addMembers:
+  /portfolios/{portfolioGid}/addMembers:
     post:
       tags:
       - Portfolios
@@ -10555,7 +10555,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/portfolio_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /portfolios/{portfolio_gid}/removeMembers:
+  /portfolios/{portfolioGid}/removeMembers:
     post:
       tags:
       - Portfolios
@@ -10886,7 +10886,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/portfolio_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /project_briefs/{project_brief_gid}:
+  /project_briefs/{projectBriefGid}:
     get:
       tags:
       - Project briefs
@@ -11318,7 +11318,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_brief_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/project_briefs:
+  /projects/{projectGid}/project_briefs:
     post:
       tags:
       - Project briefs
@@ -11480,7 +11480,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /project_memberships/{project_membership_gid}:
+  /project_memberships/{projectMembershipGid}:
     get:
       tags:
       - Project memberships
@@ -11625,7 +11625,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_membership_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/project_memberships:
+  /projects/{projectGid}/project_memberships:
     get:
       tags:
       - Project memberships
@@ -11783,7 +11783,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /project_statuses/{project_status_gid}:
+  /project_statuses/{projectStatusGid}:
     get:
       tags:
       - Project statuses
@@ -12060,7 +12060,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_status_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/project_statuses:
+  /projects/{projectGid}/project_statuses:
     get:
       tags:
       - Project statuses
@@ -12396,7 +12396,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /project_templates/{project_template_gid}:
+  /project_templates/{projectTemplateGid}:
     get:
       tags:
       - Project templates
@@ -12802,7 +12802,7 @@ paths:
             result = client.project_templates.get_project_templates(param: "value", param: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /teams/{team_gid}/project_templates:
+  /teams/{teamGid}/project_templates:
     get:
       tags:
       - Project templates
@@ -12974,7 +12974,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/team_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /project_templates/{project_template_gid}/instantiateProject:
+  /project_templates/{projectTemplateGid}/instantiateProject:
     post:
       tags:
       - Project templates
@@ -13945,7 +13945,7 @@ paths:
             result = client.projects.create_project(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}:
+  /projects/{projectGid}:
     get:
       tags:
       - Projects
@@ -14828,7 +14828,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/duplicate:
+  /projects/{projectGid}/duplicate:
     post:
       tags:
       - Projects
@@ -14996,7 +14996,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/projects:
+  /tasks/{taskGid}/projects:
     get:
       tags:
       - Projects
@@ -15382,7 +15382,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /teams/{team_gid}/projects:
+  /teams/{teamGid}/projects:
     get:
       tags:
       - Projects
@@ -16153,7 +16153,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/team_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /workspaces/{workspace_gid}/projects:
+  /workspaces/{workspaceGid}/projects:
     get:
       tags:
       - Projects
@@ -16930,7 +16930,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/workspace_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/addCustomFieldSetting:
+  /projects/{projectGid}/addCustomFieldSetting:
     post:
       tags:
       - Projects
@@ -17166,7 +17166,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/removeCustomFieldSetting:
+  /projects/{projectGid}/removeCustomFieldSetting:
     post:
       tags:
       - Projects
@@ -17297,7 +17297,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/task_counts:
+  /projects/{projectGid}/task_counts:
     get:
       tags:
       - Projects
@@ -17447,7 +17447,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/addMembers:
+  /projects/{projectGid}/addMembers:
     post:
       tags:
       - Projects
@@ -17834,7 +17834,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/removeMembers:
+  /projects/{projectGid}/removeMembers:
     post:
       tags:
       - Projects
@@ -18221,7 +18221,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/addFollowers:
+  /projects/{projectGid}/addFollowers:
     post:
       tags:
       - Projects
@@ -18608,7 +18608,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/removeFollowers:
+  /projects/{projectGid}/removeFollowers:
     post:
       tags:
       - Projects
@@ -18995,7 +18995,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/saveAsTemplate:
+  /projects/{projectGid}/saveAsTemplate:
     post:
       tags:
       - Projects
@@ -19170,7 +19170,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /rule_triggers/{rule_trigger_gid}/run:
+  /rule_triggers/{ruleTriggerGid}/run:
     post:
       tags:
       - Rules
@@ -19251,7 +19251,7 @@ paths:
           name: python-sdk-v5
     parameters:
     - $ref: '#/components/parameters/rule_trigger_path_gid'
-  /sections/{section_gid}:
+  /sections/{sectionGid}:
     get:
       tags:
       - Sections
@@ -19681,7 +19681,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/section_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/sections:
+  /projects/{projectGid}/sections:
     get:
       tags:
       - Sections
@@ -19991,7 +19991,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /sections/{section_gid}/addTask:
+  /sections/{sectionGid}/addTask:
     post:
       tags:
       - Sections
@@ -20120,7 +20120,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/section_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/sections/insert:
+  /projects/{projectGid}/sections/insert:
     post:
       tags:
       - Sections
@@ -20250,7 +20250,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/project_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /status_updates/{status_update_gid}:
+  /status_updates/{statusUpdateGid}:
     get:
       tags:
       - Status updates
@@ -20953,7 +20953,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /stories/{story_gid}:
+  /stories/{storyGid}:
     get:
       tags:
       - Stories
@@ -21889,7 +21889,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/story_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/stories:
+  /tasks/{taskGid}/stories:
     get:
       tags:
       - Stories
@@ -23054,7 +23054,7 @@ paths:
             result = client.tags.create_tag(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /tags/{tag_gid}:
+  /tags/{tagGid}:
     get:
       tags:
       - Tags
@@ -23482,7 +23482,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/tag_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/tags:
+  /tasks/{taskGid}/tags:
     get:
       tags:
       - Tags
@@ -23645,7 +23645,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /workspaces/{workspace_gid}/tags:
+  /workspaces/{workspaceGid}/tags:
     get:
       tags:
       - Tags
@@ -24084,7 +24084,7 @@ paths:
           name: python-sdk-v5
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /task_templates/{task_template_gid}:
+  /task_templates/{taskTemplateGid}:
     get:
       tags:
       - Task templates
@@ -24229,7 +24229,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_template_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /task_templates/{task_template_gid}/instantiateTask:
+  /task_templates/{taskTemplateGid}/instantiateTask:
     post:
       tags:
       - Task templates
@@ -25104,7 +25104,7 @@ paths:
             result = client.tasks.create_task(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}:
+  /tasks/{taskGid}:
     get:
       tags:
       - Tasks
@@ -25892,7 +25892,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/duplicate:
+  /tasks/{taskGid}/duplicate:
     post:
       tags:
       - Tasks
@@ -26061,7 +26061,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /projects/{project_gid}/tasks:
+  /projects/{projectGid}/tasks:
     get:
       tags:
       - Tasks
@@ -26401,7 +26401,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /sections/{section_gid}/tasks:
+  /sections/{sectionGid}/tasks:
     get:
       tags:
       - Tasks
@@ -26740,7 +26740,7 @@ paths:
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
     - $ref: '#/components/parameters/completed_since'
-  /tags/{tag_gid}/tasks:
+  /tags/{tagGid}/tasks:
     get:
       tags:
       - Tasks
@@ -27079,7 +27079,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /user_task_lists/{user_task_list_gid}/tasks:
+  /user_task_lists/{userTaskListGid}/tasks:
     get:
       tags:
       - Tasks
@@ -27420,7 +27420,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /tasks/{task_gid}/subtasks:
+  /tasks/{taskGid}/subtasks:
     get:
       tags:
       - Tasks
@@ -28090,7 +28090,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/setParent:
+  /tasks/{taskGid}/setParent:
     post:
       tags:
       - Tasks
@@ -28428,7 +28428,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/dependencies:
+  /tasks/{taskGid}/dependencies:
     get:
       tags:
       - Tasks
@@ -28768,7 +28768,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /tasks/{task_gid}/addDependencies:
+  /tasks/{taskGid}/addDependencies:
     post:
       tags:
       - Tasks
@@ -28903,7 +28903,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/removeDependencies:
+  /tasks/{taskGid}/removeDependencies:
     post:
       tags:
       - Tasks
@@ -29036,7 +29036,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/dependents:
+  /tasks/{taskGid}/dependents:
     get:
       tags:
       - Tasks
@@ -29376,7 +29376,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /tasks/{task_gid}/addDependents:
+  /tasks/{taskGid}/addDependents:
     post:
       tags:
       - Tasks
@@ -29511,7 +29511,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/removeDependents:
+  /tasks/{taskGid}/removeDependents:
     post:
       tags:
       - Tasks
@@ -29644,7 +29644,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/addProject:
+  /tasks/{taskGid}/addProject:
     post:
       tags:
       - Tasks
@@ -29789,7 +29789,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/removeProject:
+  /tasks/{taskGid}/removeProject:
     post:
       tags:
       - Tasks
@@ -29924,7 +29924,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/addTag:
+  /tasks/{taskGid}/addTag:
     post:
       tags:
       - Tasks
@@ -30055,7 +30055,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/removeTag:
+  /tasks/{taskGid}/removeTag:
     post:
       tags:
       - Tasks
@@ -30186,7 +30186,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/addFollowers:
+  /tasks/{taskGid}/addFollowers:
     post:
       tags:
       - Tasks
@@ -30525,7 +30525,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /tasks/{task_gid}/removeFollowers:
+  /tasks/{taskGid}/removeFollowers:
     post:
       tags:
       - Tasks
@@ -30863,7 +30863,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /workspaces/{workspace_gid}/tasks/custom_id/{custom_id}:
+  /workspaces/{workspaceGid}/tasks/custom_id/{customId}:
     get:
       tags:
       - Tasks
@@ -30890,7 +30890,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/workspace_path_gid'
     - $ref: '#/components/parameters/custom_id'
-  /workspaces/{workspace_gid}/tasks/search:
+  /workspaces/{workspaceGid}/tasks/search:
     get:
       tags:
       - Tasks
@@ -31374,10 +31374,11 @@ paths:
       explode: true
       schema:
         type: string
-        default: milestone
         enum:
         - default_task
         - milestone
+        default: milestone
+      x-ballerina-name: resourceSubtype
     - name: assignee.any
       in: query
       description: Comma-separated list of user identifiers
@@ -31387,6 +31388,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: assigneeAny
     - name: assignee.not
       in: query
       description: Comma-separated list of user identifiers
@@ -31396,6 +31398,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: assigneeNot
     - name: portfolios.any
       in: query
       description: Comma-separated list of portfolio IDs
@@ -31405,6 +31408,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: portfoliosAny
     - name: projects.any
       in: query
       description: Comma-separated list of project IDs
@@ -31414,6 +31418,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: projectsAny
     - name: projects.not
       in: query
       description: Comma-separated list of project IDs
@@ -31423,6 +31428,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: projectsNot
     - name: projects.all
       in: query
       description: Comma-separated list of project IDs
@@ -31432,6 +31438,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: projectsAll
     - name: sections.any
       in: query
       description: Comma-separated list of section or column IDs
@@ -31441,6 +31448,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: sectionsAny
     - name: sections.not
       in: query
       description: Comma-separated list of section or column IDs
@@ -31450,6 +31458,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: sectionsNot
     - name: sections.all
       in: query
       description: Comma-separated list of section or column IDs
@@ -31459,6 +31468,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: sectionsAll
     - name: tags.any
       in: query
       description: Comma-separated list of tag IDs
@@ -31468,6 +31478,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: tagsAny
     - name: tags.not
       in: query
       description: Comma-separated list of tag IDs
@@ -31477,6 +31488,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: tagsNot
     - name: tags.all
       in: query
       description: Comma-separated list of tag IDs
@@ -31486,6 +31498,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: tagsAll
     - name: teams.any
       in: query
       description: Comma-separated list of team IDs
@@ -31495,6 +31508,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: teamsAny
     - name: followers.not
       in: query
       description: Comma-separated list of user identifiers
@@ -31504,6 +31518,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: followersNot
     - name: created_by.any
       in: query
       description: Comma-separated list of user identifiers
@@ -31513,6 +31528,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: createdByAny
     - name: created_by.not
       in: query
       description: Comma-separated list of user identifiers
@@ -31522,6 +31538,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: createdByNot
     - name: assigned_by.any
       in: query
       description: Comma-separated list of user identifiers
@@ -31531,6 +31548,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: assignedByAny
     - name: assigned_by.not
       in: query
       description: Comma-separated list of user identifiers
@@ -31540,6 +31558,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: assignedByNot
     - name: liked_by.not
       in: query
       description: Comma-separated list of user identifiers
@@ -31549,6 +31568,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: likedByNot
     - name: commented_on_by.not
       in: query
       description: Comma-separated list of user identifiers
@@ -31558,6 +31578,7 @@ paths:
       schema:
         type: string
       example: "12345,23456,34567"
+      x-ballerina-name: commentedOnByNot
     - name: due_on.before
       in: query
       description: ISO 8601 date string
@@ -31568,6 +31589,7 @@ paths:
         type: string
         format: date
       example: 2019-09-15
+      x-ballerina-name: dueOnBefore
     - name: due_on.after
       in: query
       description: ISO 8601 date string
@@ -31578,6 +31600,7 @@ paths:
         type: string
         format: date
       example: 2019-09-15
+      x-ballerina-name: dueOnAfter
     - name: due_on
       in: query
       description: ISO 8601 date string or `null`
@@ -31589,6 +31612,7 @@ paths:
         format: date
         nullable: true
       example: 2019-09-15
+      x-ballerina-name: dueOn
     - name: due_at.before
       in: query
       description: ISO 8601 datetime string
@@ -31599,6 +31623,7 @@ paths:
         type: string
         format: date-time
       example: 2019-04-15T01:01:46.055Z
+      x-ballerina-name: dueAtBefore
     - name: due_at.after
       in: query
       description: ISO 8601 datetime string
@@ -31609,6 +31634,7 @@ paths:
         type: string
         format: date-time
       example: 2019-04-15T01:01:46.055Z
+      x-ballerina-name: dueAtAfter
     - name: start_on.before
       in: query
       description: ISO 8601 date string
@@ -31619,6 +31645,7 @@ paths:
         type: string
         format: date
       example: 2019-09-15
+      x-ballerina-name: startOnBefore
     - name: start_on.after
       in: query
       description: ISO 8601 date string
@@ -31629,6 +31656,7 @@ paths:
         type: string
         format: date
       example: 2019-09-15
+      x-ballerina-name: startOnAfter
     - name: start_on
       in: query
       description: ISO 8601 date string or `null`
@@ -31640,6 +31668,7 @@ paths:
         format: date
         nullable: true
       example: 2019-09-15
+      x-ballerina-name: startOn
     - name: created_on.before
       in: query
       description: ISO 8601 date string
@@ -31650,6 +31679,7 @@ paths:
         type: string
         format: date
       example: 2019-09-15
+      x-ballerina-name: createdOnBefore
     - name: created_on.after
       in: query
       description: ISO 8601 date string
@@ -31660,6 +31690,7 @@ paths:
         type: string
         format: date
       example: 2019-09-15
+      x-ballerina-name: createdOnAfter
     - name: created_on
       in: query
       description: ISO 8601 date string or `null`
@@ -31671,6 +31702,7 @@ paths:
         format: date
         nullable: true
       example: 2019-09-15
+      x-ballerina-name: createdOn
     - name: created_at.before
       in: query
       description: ISO 8601 datetime string
@@ -31681,6 +31713,7 @@ paths:
         type: string
         format: date-time
       example: 2019-04-15T01:01:46.055Z
+      x-ballerina-name: createdAtBefore
     - name: created_at.after
       in: query
       description: ISO 8601 datetime string
@@ -31691,6 +31724,7 @@ paths:
         type: string
         format: date-time
       example: 2019-04-15T01:01:46.055Z
+      x-ballerina-name: createdAtAfter
     - name: completed_on.before
       in: query
       description: ISO 8601 date string
@@ -31701,6 +31735,7 @@ paths:
         type: string
         format: date
       example: 2019-09-15
+      x-ballerina-name: completedOnBefore
     - name: completed_on.after
       in: query
       description: ISO 8601 date string
@@ -31711,6 +31746,7 @@ paths:
         type: string
         format: date
       example: 2019-09-15
+      x-ballerina-name: completedOnAfter
     - name: completed_on
       in: query
       description: ISO 8601 date string or `null`
@@ -31722,6 +31758,7 @@ paths:
         format: date
         nullable: true
       example: 2019-09-15
+      x-ballerina-name: completedOn
     - name: completed_at.before
       in: query
       description: ISO 8601 datetime string
@@ -31732,6 +31769,7 @@ paths:
         type: string
         format: date-time
       example: 2019-04-15T01:01:46.055Z
+      x-ballerina-name: completedAtBefore
     - name: completed_at.after
       in: query
       description: ISO 8601 datetime string
@@ -31742,6 +31780,7 @@ paths:
         type: string
         format: date-time
       example: 2019-04-15T01:01:46.055Z
+      x-ballerina-name: completedAtAfter
     - name: modified_on.before
       in: query
       description: ISO 8601 date string
@@ -31752,6 +31791,7 @@ paths:
         type: string
         format: date
       example: 2019-09-15
+      x-ballerina-name: modifiedOnBefore
     - name: modified_on.after
       in: query
       description: ISO 8601 date string
@@ -31762,6 +31802,7 @@ paths:
         type: string
         format: date
       example: 2019-09-15
+      x-ballerina-name: modifiedOnAfter
     - name: modified_on
       in: query
       description: ISO 8601 date string or `null`
@@ -31773,6 +31814,7 @@ paths:
         format: date
         nullable: true
       example: 2019-09-15
+      x-ballerina-name: modifiedOn
     - name: modified_at.before
       in: query
       description: ISO 8601 datetime string
@@ -31783,6 +31825,7 @@ paths:
         type: string
         format: date-time
       example: 2019-04-15T01:01:46.055Z
+      x-ballerina-name: modifiedAtBefore
     - name: modified_at.after
       in: query
       description: ISO 8601 datetime string
@@ -31793,6 +31836,7 @@ paths:
         type: string
         format: date-time
       example: 2019-04-15T01:01:46.055Z
+      x-ballerina-name: modifiedAtAfter
     - name: is_blocking
       in: query
       description: Filter to incomplete tasks with dependents
@@ -31802,6 +31846,7 @@ paths:
       schema:
         type: boolean
       example: false
+      x-ballerina-name: isBlocking
     - name: is_blocked
       in: query
       description: Filter to tasks with incomplete dependencies
@@ -31811,6 +31856,7 @@ paths:
       schema:
         type: boolean
       example: false
+      x-ballerina-name: isBlocked
     - name: has_attachment
       in: query
       description: Filter to tasks with attachments
@@ -31820,6 +31866,7 @@ paths:
       schema:
         type: boolean
       example: false
+      x-ballerina-name: hasAttachment
     - name: completed
       in: query
       description: Filter to completed tasks
@@ -31838,6 +31885,7 @@ paths:
       schema:
         type: boolean
       example: false
+      x-ballerina-name: isSubtask
     - name: sort_by
       in: query
       description: "One of `due_date`, `created_at`, `completed_at`, `likes`, or `modified_at`,\
@@ -31847,14 +31895,15 @@ paths:
       explode: true
       schema:
         type: string
-        default: modified_at
         enum:
         - due_date
         - created_at
         - completed_at
         - likes
         - modified_at
+        default: modified_at
       example: likes
+      x-ballerina-name: sortBy
     - name: sort_ascending
       in: query
       description: Default `false`
@@ -31865,7 +31914,8 @@ paths:
         type: boolean
         default: false
       example: true
-  /team_memberships/{team_membership_gid}:
+      x-ballerina-name: sortAscending
+  /team_memberships/{teamMembershipGid}:
     get:
       tags:
       - Team memberships
@@ -32194,7 +32244,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /teams/{team_gid}/team_memberships:
+  /teams/{teamGid}/team_memberships:
     get:
       tags:
       - Team memberships
@@ -32353,7 +32403,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /users/{user_gid}/team_memberships:
+  /users/{userGid}/team_memberships:
     get:
       tags:
       - Team memberships
@@ -32691,7 +32741,7 @@ paths:
             result = client.teams.create_team(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /teams/{team_gid}:
+  /teams/{teamGid}:
     get:
       tags:
       - Teams
@@ -33005,7 +33055,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/team_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /workspaces/{workspace_gid}/teams:
+  /workspaces/{workspaceGid}/teams:
     get:
       tags:
       - Teams
@@ -33178,7 +33228,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /users/{user_gid}/teams:
+  /users/{userGid}/teams:
     get:
       tags:
       - Teams
@@ -33363,7 +33413,7 @@ paths:
       schema:
         type: string
       example: "1331"
-  /teams/{team_gid}/addUser:
+  /teams/{teamGid}/addUser:
     post:
       tags:
       - Teams
@@ -33525,7 +33575,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/team_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /teams/{team_gid}/removeUser:
+  /teams/{teamGid}/removeUser:
     post:
       tags:
       - Teams
@@ -33657,7 +33707,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/team_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /time_periods/{time_period_gid}:
+  /time_periods/{timePeriodGid}:
     get:
       tags:
       - Time periods
@@ -34004,7 +34054,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /tasks/{task_gid}/time_tracking_entries:
+  /tasks/{taskGid}/time_tracking_entries:
     get:
       tags:
       - Time tracking entries
@@ -34217,7 +34267,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/task_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /time_tracking_entries/{time_tracking_entry_gid}:
+  /time_tracking_entries/{timeTrackingEntryGid}:
     get:
       tags:
       - Time tracking entries
@@ -34507,7 +34557,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/time_tracking_entry_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /workspaces/{workspace_gid}/typeahead:
+  /workspaces/{workspaceGid}/typeahead:
     get:
       tags:
       - Typeahead
@@ -34700,7 +34750,6 @@ paths:
       explode: true
       schema:
         type: string
-        default: user
         enum:
         - custom_field
         - goal
@@ -34711,6 +34760,8 @@ paths:
         - task
         - team
         - user
+        default: user
+      x-ballerina-name: resourceType
     - name: type
       in: query
       description: "*Deprecated: new integrations should prefer the resource_type\
@@ -34720,7 +34771,6 @@ paths:
       explode: true
       schema:
         type: string
-        default: user
         enum:
         - custom_field
         - portfolio
@@ -34728,6 +34778,7 @@ paths:
         - tag
         - task
         - user
+        default: user
     - name: query
       in: query
       description: "The string that will be used to search for relevant objects. If\
@@ -34750,7 +34801,7 @@ paths:
         type: integer
       example: 20
     - $ref: '#/components/parameters/pretty'
-  /user_task_lists/{user_task_list_gid}:
+  /user_task_lists/{userTaskListGid}:
     get:
       tags:
       - User task lists
@@ -34889,7 +34940,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/user_task_list_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /users/{user_gid}/user_task_list:
+  /users/{userGid}/user_task_list:
     get:
       tags:
       - User task lists
@@ -35226,7 +35277,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /users/{user_gid}:
+  /users/{userGid}:
     get:
       tags:
       - Users
@@ -35383,7 +35434,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/user_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /users/{user_gid}/favorites:
+  /users/{userGid}/favorites:
     get:
       tags:
       - Users
@@ -35545,7 +35596,6 @@ paths:
       explode: true
       schema:
         type: string
-        default: project
         enum:
         - portfolio
         - project
@@ -35553,6 +35603,8 @@ paths:
         - task
         - user
         - project_template
+        default: project
+      x-ballerina-name: resourceType
     - name: workspace
       in: query
       description: The workspace in which to get favorites
@@ -35562,7 +35614,7 @@ paths:
       schema:
         type: string
       example: "1234"
-  /teams/{team_gid}/users:
+  /teams/{teamGid}/users:
     get:
       tags:
       - Users
@@ -35724,7 +35776,7 @@ paths:
     - $ref: '#/components/parameters/team_path_gid'
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/offset'
-  /workspaces/{workspace_gid}/users:
+  /workspaces/{workspaceGid}/users:
     get:
       tags:
       - Users
@@ -36293,7 +36345,7 @@ paths:
             result = client.webhooks.create_webhook(field: "value", field: "value", options: {pretty: true})
     parameters:
     - $ref: '#/components/parameters/pretty'
-  /webhooks/{webhook_gid}:
+  /webhooks/{webhookGid}:
     get:
       tags:
       - Webhooks
@@ -36735,7 +36787,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/webhook_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /workspace_memberships/{workspace_membership_gid}:
+  /workspace_memberships/{workspaceMembershipGid}:
     get:
       tags:
       - Workspace memberships
@@ -36890,7 +36942,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/workspace_membership_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /users/{user_gid}/workspace_memberships:
+  /users/{userGid}/workspace_memberships:
     get:
       tags:
       - Workspace memberships
@@ -37066,7 +37118,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /workspaces/{workspace_gid}/workspace_memberships:
+  /workspaces/{workspaceGid}/workspace_memberships:
     get:
       tags:
       - Workspace memberships
@@ -37383,7 +37435,7 @@ paths:
     - $ref: '#/components/parameters/pretty'
     - $ref: '#/components/parameters/limit'
     - $ref: '#/components/parameters/offset'
-  /workspaces/{workspace_gid}:
+  /workspaces/{workspaceGid}:
     get:
       tags:
       - Workspaces
@@ -37672,7 +37724,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/workspace_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /workspaces/{workspace_gid}/addUser:
+  /workspaces/{workspaceGid}/addUser:
     post:
       tags:
       - Workspaces
@@ -37837,7 +37889,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/workspace_path_gid'
     - $ref: '#/components/parameters/pretty'
-  /workspaces/{workspace_gid}/removeUser:
+  /workspaces/{workspaceGid}/removeUser:
     post:
       tags:
       - Workspaces
@@ -44782,7 +44834,7 @@ components:
         type: boolean
       example: false
     attachment_path_gid:
-      name: attachment_gid
+      name: attachmentGid
       in: path
       description: Globally unique identifier for the attachment
       required: true
@@ -44792,9 +44844,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: attachment
-      x-ballerina-name: attachmentGid
     custom_field_path_gid:
-      name: custom_field_gid
+      name: customFieldGid
       in: path
       description: Globally unique identifier for the custom field
       required: true
@@ -44804,9 +44855,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: custom_field
-      x-ballerina-name: customFieldGid
     custom_id:
-      name: custom_id
+      name: customId
       in: path
       description: Generated custom ID for a task
       required: true
@@ -44815,9 +44865,8 @@ components:
       schema:
         type: string
       example: EX-1
-      x-ballerina-name: customId
     goal_path_gid:
-      name: goal_gid
+      name: goalGid
       in: path
       description: Globally unique identifier for the goal
       required: true
@@ -44827,9 +44876,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: goal
-      x-ballerina-name: goalGid
     goal_relationship_path_gid:
-      name: goal_relationship_gid
+      name: goalRelationshipGid
       in: path
       description: Globally unique identifier for the goal relationship
       required: true
@@ -44839,9 +44887,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: goal_relationship
-      x-ballerina-name: goalRelationshipGid
     job_path_gid:
-      name: job_gid
+      name: jobGid
       in: path
       description: Globally unique identifier for the job
       required: true
@@ -44851,9 +44898,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: job
-      x-ballerina-name: jobGid
     membership_path_gid:
-      name: membership_gid
+      name: membershipGid
       in: path
       description: Globally unique identifier for the membership
       required: true
@@ -44863,9 +44909,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: membership
-      x-ballerina-name: membershipGid
     organization_export_path_gid:
-      name: organization_export_gid
+      name: organizationExportGid
       in: path
       description: Globally unique identifier for the organization export
       required: true
@@ -44875,9 +44920,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: organization_export
-      x-ballerina-name: organizationExportGid
     project_brief_path_gid:
-      name: project_brief_gid
+      name: projectBriefGid
       in: path
       description: Globally unique identifier for the project brief
       required: true
@@ -44887,9 +44931,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: project_brief
-      x-ballerina-name: projectBriefGid
     project_path_gid:
-      name: project_gid
+      name: projectGid
       in: path
       description: Globally unique identifier for the project
       required: true
@@ -44899,9 +44942,8 @@ components:
         type: string
       example: "1331"
       x-env-variable: project
-      x-ballerina-name: projectGid
     project_template_path_gid:
-      name: project_template_gid
+      name: projectTemplateGid
       in: path
       description: Globally unique identifier for the project template
       required: true
@@ -44911,9 +44953,8 @@ components:
         type: string
       example: "1331"
       x-env-variable: project_template
-      x-ballerina-name: projectTemplateGid
     project_membership_path_gid:
-      name: project_membership_gid
+      name: projectMembershipGid
       in: path
       required: true
       style: simple
@@ -44922,9 +44963,8 @@ components:
         type: string
       example: "1331"
       x-env-variable: project_membership
-      x-ballerina-name: projectMembershipGid
     project_status_path_gid:
-      name: project_status_gid
+      name: projectStatusGid
       in: path
       description: The project status update to get
       required: true
@@ -44934,9 +44974,8 @@ components:
         type: string
       example: "321654"
       x-env-variable: project_status
-      x-ballerina-name: projectStatusGid
     status_update_path_gid:
-      name: status_update_gid
+      name: statusUpdateGid
       in: path
       description: The status update to get
       required: true
@@ -44946,9 +44985,8 @@ components:
         type: string
       example: "321654"
       x-env-variable: status
-      x-ballerina-name: statusUpdateGid
     portfolio_path_gid:
-      name: portfolio_gid
+      name: portfolioGid
       in: path
       description: Globally unique identifier for the portfolio
       required: true
@@ -44958,9 +44996,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: portfolio
-      x-ballerina-name: portfolioGid
     portfolio_membership_path_gid:
-      name: portfolio_membership_gid
+      name: portfolioMembershipGid
       in: path
       required: true
       style: simple
@@ -44969,7 +45006,6 @@ components:
         type: string
       example: "1331"
       x-env-variable: portfolio_membership
-      x-ballerina-name: portfolioMembershipGid
     portfolio_query_param:
       name: portfolio
       in: query
@@ -44982,7 +45018,7 @@ components:
       example: "12345"
       x-env-variable: portfolio
     rule_trigger_path_gid:
-      name: rule_trigger_gid
+      name: ruleTriggerGid
       in: path
       description: The ID of the incoming web request trigger. This value is a path
         parameter that is automatically generated for the API endpoint
@@ -44993,9 +45029,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: rule
-      x-ballerina-name: ruleTriggerGid
     section_path_gid:
-      name: section_gid
+      name: sectionGid
       in: path
       description: The globally unique identifier for the section
       required: true
@@ -45005,9 +45040,8 @@ components:
         type: string
       example: "321654"
       x-env-variable: section
-      x-ballerina-name: sectionGid
     story_path_gid:
-      name: story_gid
+      name: storyGid
       in: path
       description: Globally unique identifier for the story
       required: true
@@ -45017,9 +45051,8 @@ components:
         type: string
       example: "35678"
       x-env-variable: story
-      x-ballerina-name: storyGid
     tag_path_gid:
-      name: tag_gid
+      name: tagGid
       in: path
       description: Globally unique identifier for the tag
       required: true
@@ -45029,9 +45062,8 @@ components:
         type: string
       example: "11235"
       x-env-variable: tag
-      x-ballerina-name: tagGid
     task_path_gid:
-      name: task_gid
+      name: taskGid
       in: path
       description: The task to operate on
       required: true
@@ -45041,9 +45073,8 @@ components:
         type: string
       example: "321654"
       x-env-variable: task
-      x-ballerina-name: taskGid
     task_template_path_gid:
-      name: task_template_gid
+      name: taskTemplateGid
       in: path
       description: Globally unique identifier for the task template
       required: true
@@ -45053,9 +45084,8 @@ components:
         type: string
       example: "1331"
       x-env-variable: task_template
-      x-ballerina-name: taskTemplateGid
     team_path_gid:
-      name: team_gid
+      name: teamGid
       in: path
       description: Globally unique identifier for the team
       required: true
@@ -45065,7 +45095,6 @@ components:
         type: string
       example: "159874"
       x-env-variable: team
-      x-ballerina-name: teamGid
     team_query_param:
       name: team
       in: query
@@ -45078,7 +45107,7 @@ components:
       example: "14916"
       x-env-variable: team
     team_membership_path_gid:
-      name: team_membership_gid
+      name: teamMembershipGid
       in: path
       required: true
       style: simple
@@ -45087,9 +45116,8 @@ components:
         type: string
       example: "724362"
       x-env-variable: team_membership
-      x-ballerina-name: teamMembershipGid
     time_period_path_gid:
-      name: time_period_gid
+      name: timePeriodGid
       in: path
       description: Globally unique identifier for the time period
       required: true
@@ -45099,9 +45127,8 @@ components:
         type: string
       example: "917392"
       x-env-variable: time_period
-      x-ballerina-name: timePeriodGid
     time_tracking_entry_path_gid:
-      name: time_tracking_entry_gid
+      name: timeTrackingEntryGid
       in: path
       description: Globally unique identifier for the time tracking entry
       required: true
@@ -45111,7 +45138,6 @@ components:
         type: string
       example: "917392"
       x-env-variable: time_tracking_entry
-      x-ballerina-name: timeTrackingEntryGid
     user_query_param:
       name: user
       in: query
@@ -45125,7 +45151,7 @@ components:
       example: me
       x-env-variable: user
     user_path_gid:
-      name: user_gid
+      name: userGid
       in: path
       description: "A string identifying a user. This can either be the string \"\
         me\", an email, or the gid of a user"
@@ -45136,9 +45162,8 @@ components:
         type: string
       example: me
       x-env-variable: user
-      x-ballerina-name: userGid
     user_task_list_path_gid:
-      name: user_task_list_gid
+      name: userTaskListGid
       in: path
       description: Globally unique identifier for the user task list
       required: true
@@ -45148,9 +45173,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: user_task_list
-      x-ballerina-name: userTaskListGid
     webhook_path_gid:
-      name: webhook_gid
+      name: webhookGid
       in: path
       description: Globally unique identifier for the webhook
       required: true
@@ -45160,9 +45184,8 @@ components:
         type: string
       example: "12345"
       x-env-variable: webhook
-      x-ballerina-name: webhookGid
     workspace_path_gid:
-      name: workspace_gid
+      name: workspaceGid
       in: path
       description: Globally unique identifier for the workspace or organization
       required: true
@@ -45172,7 +45195,6 @@ components:
         type: string
       example: "12345"
       x-env-variable: workspace
-      x-ballerina-name: workspaceGid
     workspace_query_param:
       name: workspace
       in: query
@@ -45185,7 +45207,7 @@ components:
       example: "12345"
       x-env-variable: workspace
     workspace_membership_path_gid:
-      name: workspace_membership_gid
+      name: workspaceMembershipGid
       in: path
       required: true
       style: simple
@@ -45194,7 +45216,6 @@ components:
         type: string
       example: "12345"
       x-env-variable: workspace_membership
-      x-ballerina-name: workspaceMembershipGid
     audit_log_start_at:
       name: start_at
       in: query
