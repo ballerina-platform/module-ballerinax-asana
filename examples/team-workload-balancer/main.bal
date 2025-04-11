@@ -33,7 +33,7 @@ public function main() returns error? {
     map<int> userWorkloads = {};
 
     // Get users in the workspace
-    asana:Inline_response_200_49|error userResponse = asana->/users(workspace = workspaceId);
+    asana:UserCompactsResponse|error userResponse = asana->/users(workspace = workspaceId);
     if userResponse is error {
         return error("Error occurred while fetching users");
     }
@@ -46,7 +46,7 @@ public function main() returns error? {
             continue;
         }
 
-        asana:Inline_response_200_48|error tasksResponse = asana->/users/[userId]/user_task_list(workspace = workspaceId);
+        asana:UserTaskListOkResponse|error tasksResponse = asana->/users/[userId]/user_task_list(workspace = workspaceId);
         if tasksResponse is error {
             log:printWarn(string `Error occurred while fetching tasks for user: ${user?.name ?: "unknown"}`);
             continue;

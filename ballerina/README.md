@@ -63,13 +63,13 @@ Now, utilize the available connector operations.
 #### Get all projects for the authenticated user
 
 ```ballerina
-record {asana:ProjectCompact[] data?;} projects = check asana->/projects();
+ProjectCompacts projects = check asana->/projects();
 ```
 
 #### Create a new task in a project
 
 ```ballerina
-asana:Tasks_body taskReq = {
+asana:TasksBody taskReq = {
     data: {
         name: "Email Marketing Campaign",
         notes: "Create a new email marketing campaign for the upcoming product launch.",
@@ -78,7 +78,7 @@ asana:Tasks_body taskReq = {
     }
 };
 
-record {asana:TaskResponse data?;} taskCreated = check asana->/tasks.post(taskReq);
+TaskCreatedResponse taskCreated = check asana->/tasks.post(taskReq);
 ```
 
 ## Examples
