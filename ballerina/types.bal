@@ -1747,6 +1747,7 @@ public type BatchRequestAction record {
     "get"|"post"|"put"|"delete"|"patch"|"head" method;
     # For `GET` requests, this should be a map of query parameters you would have normally passed in the URL. Options and pagination are not accepted here; put them in `options` instead. For `POST`, `PATCH`, and `PUT` methods, this should be the content you would have normally put in the data field of the body
     record {} data?;
+    # Pagination (`limit` and `offset`) and output options (`fields` or `expand`) for the action. “Pretty” JSON output is not an available option on individual actions; if you want pretty output, specify that option on the parent request
     BatchRequestActionOptions options?;
     # The path of the desired endpoint relative to the API’s base URL. Query parameters are not accepted here; put them in `data` instead
     @jsondata:Name {value: "relative_path"}
@@ -2050,6 +2051,7 @@ public type TeamMembershipCompactsResponse record {
 };
 
 public type OrganizationExportsBody record {
+    # An *organization_export* request starts a job to export the complete data of the given Organization
     OrganizationExportRequest data?;
 };
 
@@ -2303,6 +2305,7 @@ public type EventResponse record {
     AsanaNamedResource parent?;
     # The resource which has triggered the event by being modified in some way
     AsanaNamedResource 'resource?;
+    # Information about the type of change that has occurred. This field is only present when the value of the property `action`, describing the action taken on the **resource**, is `changed`
     EventResponseChange change?;
     # The type of action taken on the **resource** that triggered the event.  This can be one of `changed`, `added`, `removed`, `deleted`, or `undeleted` depending on the nature of the event
     string action?;
@@ -2365,6 +2368,7 @@ public type PortfolioBaseAllOf2 record {
 };
 
 public type TaskGidAddDependentsBody record {
+    # A set of dependent tasks
     ModifyDependentsRequest data?;
 };
 
@@ -2879,7 +2883,6 @@ public type CreateStoryForTaskQueries record {
 };
 
 public type AttachmentResponseAllOf2 record {
-    # 
     @jsondata:Name {value: "permanent_url"}
     string? permanentUrl?;
     record {*TaskCompact; "default_task"|"milestone"|"section"|"approval"? resource_subtype?;} parent?;
@@ -3141,6 +3144,7 @@ public type GoalRequestAllOf2 record {
 };
 
 public type TaskCountOkResponse record {
+    # A response object returned from the task count endpoint
     TaskCountResponse data?;
 };
 
@@ -3335,6 +3339,7 @@ public type TagsBody record {
 };
 
 public type TeamGidAddUserBody record {
+    # A user identification object for specification with the addUser/removeUser endpoints
     TeamAddUserRequest data?;
 };
 
@@ -4257,6 +4262,7 @@ public type TimePeriodCompact record {
 };
 
 public type BatchBody record {
+    # A request object for use in a batch request
     BatchRequest data?;
 };
 
@@ -4393,6 +4399,7 @@ public type TaskTemplateRecipeCompactAllOf1 record {
 };
 
 public type WorkspaceGidRemoveUserBody record {
+    # A user identification object for specification with the addUser/removeUser endpoints
     WorkspaceRemoveUserRequest data?;
 };
 
@@ -4413,17 +4420,21 @@ public type UserResponse record {
 # 
 # Every audit log event is comprised of an `event_type`, `actor`, `resource`, and `context`. Some events will include additional metadata about the event under `details`. See our [currently supported list of events](/docs/audit-log-events#supported-audit-log-events) for more details
 public type AuditLogEvent record {
+    # The entity that triggered the event. Will typically be a user
     AuditLogEventActor actor?;
     # Globally unique identifier of the `AuditLogEvent`, as a string
     string gid?;
     # The type of the event
     @jsondata:Name {value: "event_type"}
     string eventType?;
+    # The primary object that was affected by this event
     AuditLogEventResource 'resource?;
+    # The context from which this event originated
     AuditLogEventContext context?;
     # The time the event was created
     @jsondata:Name {value: "created_at"}
     string createdAt?;
+    # Event specific details. The schema will vary depending on the `event_type`
     AuditLogEventDetails details?;
     # The category that this `event_type` belongs to
     @jsondata:Name {value: "event_category"}
@@ -4695,6 +4706,7 @@ public type GetUserTaskListForUserQueries record {
 };
 
 public type EmptyOkResponse record {
+    # An empty object. Some endpoints do not return an object on success. The success is conveyed through a 2-- status code and returning an empty object
     EmptyResponse data?;
 };
 
@@ -5056,6 +5068,7 @@ public type StoryResponseAllOf2 record {
 };
 
 public type UserBaseResponseAllOf2 record {
+    # A map of the user’s profile photo in various sizes, or null if no photo is set. Sizes provided are 21, 27, 36, 60, 128, and 1024. All images are in PNG format, except for 1024 (which is in JPEG format)
     UserBaseResponsePhoto? photo?;
     # The user's email address
     string email?;
@@ -5347,6 +5360,7 @@ public type ProjectStatusCompact record {
 };
 
 public type TaskGidRemoveDependentsBody record {
+    # A set of dependent tasks
     ModifyDependentsRequest data?;
 };
 
@@ -5596,6 +5610,7 @@ public type TagResponseAllOf2 record {
 };
 
 public type TeamGidRemoveUserBody record {
+    # A user identification object for specification with the addUser/removeUser endpoints
     TeamRemoveUserRequest data?;
 };
 
@@ -5816,6 +5831,7 @@ public type TaskGidAddProjectBody record {
 };
 
 public type WorkspaceGidAddUserBody record {
+    # A user identification object for specification with the addUser/removeUser endpoints
     WorkspaceAddUserRequest data?;
 };
 
