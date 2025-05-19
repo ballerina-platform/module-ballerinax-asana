@@ -31374,10 +31374,10 @@ paths:
       explode: true
       schema:
         type: string
+        default: milestone
         enum:
         - default_task
         - milestone
-        default: milestone
       x-ballerina-name: resourceSubtype
     - name: assignee.any
       in: query
@@ -31895,13 +31895,13 @@ paths:
       explode: true
       schema:
         type: string
+        default: modified_at
         enum:
         - due_date
         - created_at
         - completed_at
         - likes
         - modified_at
-        default: modified_at
       example: likes
       x-ballerina-name: sortBy
     - name: sort_ascending
@@ -34750,6 +34750,7 @@ paths:
       explode: true
       schema:
         type: string
+        default: user
         enum:
         - custom_field
         - goal
@@ -34760,7 +34761,6 @@ paths:
         - task
         - team
         - user
-        default: user
       x-ballerina-name: resourceType
     - name: type
       in: query
@@ -34771,6 +34771,7 @@ paths:
       explode: true
       schema:
         type: string
+        default: user
         enum:
         - custom_field
         - portfolio
@@ -34778,7 +34779,6 @@ paths:
         - tag
         - task
         - user
-        default: user
     - name: query
       in: query
       description: "The string that will be used to search for relevant objects. If\
@@ -35596,6 +35596,7 @@ paths:
       explode: true
       schema:
         type: string
+        default: project
         enum:
         - portfolio
         - project
@@ -35603,7 +35604,6 @@ paths:
         - task
         - user
         - project_template
-        default: project
       x-ballerina-name: resourceType
     - name: workspace
       in: query
@@ -38025,12 +38025,28 @@ paths:
     - $ref: '#/components/parameters/pretty'
 components:
   schemas:
+    ProjectCreatedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ProjectResponse'
     GoalRelationshipCompact:
       allOf:
       - $ref: '#/components/schemas/AsanaResource'
       - $ref: '#/components/schemas/GoalRelationshipCompactAllOf2'
     ProjectStatusRequest:
       $ref: '#/components/schemas/ProjectStatusBase'
+    WorkspaceMembershipCompactResponse:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceMembershipCompact'
     TeamRequest:
       allOf:
       - $ref: '#/components/schemas/TeamBase'
@@ -38376,6 +38392,11 @@ components:
             \ parameters cannot both be specified"
           example: "1331"
           x-ballerina-name: insertAfter
+    MembershipCreatedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/MembershipResponse'
     TimePeriodCompactAllOf2:
       type: object
       properties:
@@ -38435,6 +38456,13 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/RemoveMembersRequest'
+    GoalCompacts:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GoalCompact'
     CustomFieldCompact:
       allOf:
       - $ref: '#/components/schemas/AsanaResource'
@@ -38443,22 +38471,6 @@ components:
       allOf:
       - $ref: '#/components/schemas/WorkspaceBase'
       - $ref: '#/components/schemas/WorkspaceResponseAllOf2'
-    GoalRelationshipCompacts:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GoalRelationshipCompact'
-    GoalRelationshipOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/GoalRelationshipResponse'
     GoalGidSetMetricBody:
       type: object
       properties:
@@ -38468,6 +38480,17 @@ components:
       allOf:
       - $ref: '#/components/schemas/SectionBase'
       - $ref: '#/components/schemas/SectionResponseAllOf2'
+    TaskCompactsResponse:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskCompact'
     WorkspaceGidTagsBody:
       type: object
       properties:
@@ -38486,20 +38509,53 @@ components:
       allOf:
       - $ref: '#/components/schemas/AsanaResource'
       - $ref: '#/components/schemas/AttachmentCompactAllOf2'
+    CustomFieldsResponse:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldResponse'
+    GoalRelationshipCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GoalRelationshipCompact'
     ProjectCompact:
       allOf:
       - $ref: '#/components/schemas/AsanaResource'
       - $ref: '#/components/schemas/ProjectCompactAllOf2'
+    WorkspaceOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WorkspaceResponse'
     ProjectGidProjectStatusesBody:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/ProjectStatusRequest'
-    MembershipCreatedResponse:
+    WebhookOkResponse:
       type: object
       properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
         data:
-          $ref: '#/components/schemas/MembershipResponse'
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookResponse'
     GoalResponseAllOf2:
       type: object
       properties:
@@ -38577,16 +38633,6 @@ components:
       allOf:
       - $ref: '#/components/schemas/WebhookFilter'
       - $ref: '#/components/schemas/FiltersAllOf22'
-    EnumOptions:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/EnumOption'
-    PortfolioCreatedResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/PortfolioResponse'
     ProjectGidRemoveFollowersBody:
       type: object
       properties:
@@ -38594,11 +38640,6 @@ components:
           $ref: '#/components/schemas/RemoveFollowersRequest'
     FiltersAllOf22:
       type: object
-    OrganizationExportCreatedResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/OrganizationExportResponse'
     FiltersAllOf21:
       type: object
     ProjectGidAddCustomFieldSettingBody:
@@ -38606,16 +38647,6 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/AddCustomFieldSettingRequest'
-    TagCreatedResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/TagResponse'
-    ProjectCreatedResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/ProjectResponse'
     ProjectTemplateBaseAllOf2:
       type: object
       properties:
@@ -38683,16 +38714,6 @@ components:
           items:
             $ref: '#/components/schemas/TemplateRole'
           x-ballerina-name: requestedRoles
-    TeamCreatedResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/TeamResponse'
-    TaskCreatedResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/TaskResponse'
     GoalCompact:
       allOf:
       - $ref: '#/components/schemas/AsanaResource'
@@ -38723,18 +38744,11 @@ components:
       description: This object represents a user's connection to a team
       x-docs-overrides:
         properties.resource_type.example: team_membership
-    PreconditionFailedResponse:
+    StatusUpdateOkResponse:
       type: object
       properties:
-        sync:
-          type: string
-          description: A sync token to be used with the next call to the /events endpoint
-          readOnly: true
-          example: de4774f6915eae04714ca93bb2f5ee81
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/PreconditionFailedErrors'
+        data:
+          $ref: '#/components/schemas/StatusUpdateResponse'
     TaskRequest:
       allOf:
       - $ref: '#/components/schemas/TaskBase'
@@ -38759,6 +38773,17 @@ components:
         \ custom field. If no date is selected, the value of `date_value` will be\
         \ `null`"
       nullable: true
+    PreconditionFailedErrors:
+      type: object
+      properties:
+        message:
+          type: string
+          description: "Message providing more detail about the error that occurred,\
+            \ if available"
+          readOnly: true
+          example: "Sync token invalid or too old. If you are attempting to keep resources\
+            \ in sync, you must fetch the full dataset for this query now and use\
+            \ the new sync token for the next sync."
     ErrorResponse:
       type: object
       properties:
@@ -38795,33 +38820,6 @@ components:
         a team
       x-docs-overrides:
         properties.resource_type.example: team
-    EmptyOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/EmptyResponse'
-    AuditLogEventResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditLogEvent'
-    AttachmentCompacts:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttachmentCompact'
     MembershipUpdateRequest:
       type: object
       properties:
@@ -38830,17 +38828,6 @@ components:
           description: The role given to the member. Can be `editor` or `commenter`
           example: editor
           x-ballerina-name: accessLevel
-    CustomFieldSettingsResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldSettingResponse'
     GoalRelationshipCompactAllOf2:
       type: object
       properties:
@@ -38873,47 +38860,11 @@ components:
         \ between a goal and another goal, a project, a task, or a portfolio"
       x-docs-overrides:
         properties.resource_type.example: goal_relationship
-    BatchesResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/BatchResponse'
     CustomFieldsBody:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/CustomFieldRequest'
-    EventsResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventResponse'
-        has_more:
-          type: boolean
-          description: Indicates whether there are more events to pull
-          example: true
-          x-ballerina-name: hasMore
-        sync:
-          type: string
-          description: A sync token to be used with the next call to the /events endpoint
-          example: de4774f6915eae04714ca93bb2f5ee81
-      description: The full record for all events that have occurred since the sync
-        token was created
-    CustomFieldsResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldResponse'
     OrganizationExportBase:
       $ref: '#/components/schemas/OrganizationExportCompact'
     AsanaNamedResource:
@@ -38961,6 +38912,36 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/ProjectUpdateRequest'
+    EventsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventResponse'
+        has_more:
+          type: boolean
+          description: Indicates whether there are more events to pull
+          example: true
+          x-ballerina-name: hasMore
+        sync:
+          type: string
+          description: A sync token to be used with the next call to the /events endpoint
+          example: de4774f6915eae04714ca93bb2f5ee81
+      description: The full record for all events that have occurred since the sync
+        token was created
+    PreconditionFailedResponse:
+      type: object
+      properties:
+        sync:
+          type: string
+          description: A sync token to be used with the next call to the /events endpoint
+          readOnly: true
+          example: de4774f6915eae04714ca93bb2f5ee81
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/PreconditionFailedErrors'
     TimeTrackingEntryCompactAllOf2:
       type: object
       properties:
@@ -39439,6 +39420,11 @@ components:
           items:
             type: string
             description: Gid of a tag.
+    PortfolioCreatedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PortfolioResponse'
     GoalUpdateRequestAllOf2:
       type: object
       properties:
@@ -39468,6 +39454,13 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/ProjectSaveAsTemplateRequest'
+    TaskCompacts:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskCompact'
     WorkspaceBase:
       $ref: '#/components/schemas/WorkspaceCompact'
     EnumOptionsenumOptionGidBody:
@@ -39501,6 +39494,17 @@ components:
       allOf:
       - $ref: '#/components/schemas/StatusUpdateBase'
       - $ref: '#/components/schemas/StatusUpdateResponseAllOf2'
+    PortfolioCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortfolioCompact'
     EnumOptionAllOf2:
       type: object
       properties:
@@ -39551,6 +39555,17 @@ components:
       allOf:
       - $ref: '#/components/schemas/StatusUpdateBase'
       - $ref: '#/components/schemas/StatusUpdateRequestAllOf2'
+    StoryCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StoryCompact'
     TagCompactAllOf2:
       type: object
       properties:
@@ -39716,6 +39731,11 @@ components:
           format: date
           example: 2024-02-28
           x-ballerina-name: startDate
+    OrganizationExportCreatedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/OrganizationExportResponse'
     DateVariableCompact:
       type: object
       properties:
@@ -40072,6 +40092,11 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/TaskDuplicateRequest'
+    GoalOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GoalResponse'
     GoalResponse:
       allOf:
       - $ref: '#/components/schemas/GoalBase'
@@ -40098,6 +40123,15 @@ components:
       $ref: '#/components/schemas/TimePeriodBase'
     GoalRelationshipRequestAllOf2:
       type: object
+    AsanaNamedResources:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AsanaNamedResource'
+      description: "A generic list of objects, such as those returned by the typeahead\
+        \ search endpoint"
     ProjectResponseAllOf2:
       type: object
       properties:
@@ -40221,6 +40255,17 @@ components:
           allOf:
           - $ref: '#/components/schemas/UserCompact'
           x-ballerina-name: completedBy
+    TeamMembershipCompactsResponse:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMembershipCompact'
     OrganizationExportsBody:
       type: object
       properties:
@@ -40543,6 +40588,17 @@ components:
             readOnly: true
             items:
               $ref: '#/components/schemas/AsanaResource'
+    TimePeriodCompactsResponse:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimePeriodCompact'
     StoryCompactAllOf2:
       type: object
       properties:
@@ -40633,6 +40689,13 @@ components:
         Asana system
       x-docs-overrides:
         properties.resource_type.example: story
+    TaskTemplateCompacts:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskTemplateCompact'
     EventResponse:
       type: object
       properties:
@@ -40849,6 +40912,27 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/ModifyDependentsRequest'
+    ProjectMembershipNormalOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ProjectMembershipNormalResponse'
+    SectionCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SectionCompact'
+    TaskCreatedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TaskResponse'
     GoalRelationshipResponse:
       allOf:
       - $ref: '#/components/schemas/GoalRelationshipBase'
@@ -40865,6 +40949,13 @@ components:
           $ref: '#/components/schemas/WebhookUpdateRequest'
     JobBase:
       $ref: '#/components/schemas/JobCompact'
+    BatchesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchResponse'
     CustomFieldRequestAllOf2:
       required:
       - workspace
@@ -40903,6 +40994,11 @@ components:
       allOf:
       - $ref: '#/components/schemas/ProjectTemplateCompact'
       - $ref: '#/components/schemas/ProjectTemplateBaseAllOf2'
+    CustomFieldCreatedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CustomFieldResponse'
     ProjectTemplateCompactAllOf2:
       type: object
       properties:
@@ -40916,6 +41012,16 @@ components:
         \ set of work every time"
       x-docs-overrides:
         properties.resource_type.example: project_template
+    UserTaskListOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UserTaskListResponse'
+    StoryOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/StoryResponse'
     UpdateTimeTrackingEntryRequest:
       type: object
       properties:
@@ -41053,17 +41159,6 @@ components:
           readOnly: true
           items:
             $ref: '#/components/schemas/WorkspaceCompact'
-    PreconditionFailedErrors:
-      type: object
-      properties:
-        message:
-          type: string
-          description: "Message providing more detail about the error that occurred,\
-            \ if available"
-          readOnly: true
-          example: "Sync token invalid or too old. If you are attempting to keep resources\
-            \ in sync, you must fetch the full dataset for this query now and use\
-            \ the new sync token for the next sync."
     ProjectMembershipNormalResponse:
       properties:
         resource_type:
@@ -41134,6 +41229,11 @@ components:
       type: object
       description: An empty object. Some endpoints do not return an object on success.
         The success is conveyed through a 2-- status code and returning an empty object
+    ProjectTemplateOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ProjectTemplateResponse'
     TaskDuplicateRequest:
       type: object
       properties:
@@ -41262,16 +41362,22 @@ components:
         with a predefined setup
       x-docs-overrides:
         properties.resource_type.example: task_template
-    CustomFieldCreatedResponse:
+    TagCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagCompact'
+    UserOkResponse:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/CustomFieldResponse'
-    AttachmentOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/AttachmentResponse'
+          $ref: '#/components/schemas/UserResponse'
     AsanaResource:
       type: object
       properties:
@@ -41294,6 +41400,17 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/StoryRequest'
+    AttachmentCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentCompact'
     UserTaskListResponse:
       $ref: '#/components/schemas/UserTaskListBase'
     ProjectRequestAllOf2:
@@ -41333,6 +41450,11 @@ components:
           type: string
           description: The team that this project is shared with
           example: "12345"
+    AttachmentOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AttachmentResponse'
     TeamMembershipResponse:
       $ref: '#/components/schemas/TeamMembershipBase'
     WorkspaceMembershipBase:
@@ -41506,6 +41628,17 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/ModifyDependenciesRequest'
+    TeamCompactsResponse:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamCompact'
     EnumOptionInsertRequest:
       required:
       - enum_option
@@ -41540,6 +41673,11 @@ components:
           items:
             type: string
             description: The `gid` of a user.
+    TaskCountOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TaskCountResponse'
     WorkspaceGidProjectsBody:
       type: object
       properties:
@@ -41553,6 +41691,11 @@ components:
       allOf:
       - $ref: '#/components/schemas/WebhookFilter'
       - $ref: '#/components/schemas/FiltersAllOf2'
+    GoalRelationshipOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GoalRelationshipResponse'
     AuditLogEventActor:
       type: object
       properties:
@@ -41582,6 +41725,11 @@ components:
           description: "The email of the actor, if it is a user"
           example: gregsanchez@example.com
       description: The entity that triggered the event. Will typically be a user
+    TeamCreatedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TeamResponse'
     GoalMembershipCompact:
       allOf:
       - $ref: '#/components/schemas/GoalMembershipBase'
@@ -41668,6 +41816,11 @@ components:
           type: string
           description: Globally unique identifier for the user who is assigned to
             the allocation
+    EnumOptions:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/EnumOption'
     RuleTriggerResponse:
       type: object
       properties:
@@ -41757,6 +41910,11 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/TeamAddUserRequest'
+    SectionOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SectionResponse'
     ProjectBase:
       allOf:
       - $ref: '#/components/schemas/ProjectCompact'
@@ -41952,6 +42110,11 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/ProjectBriefRequest'
+    ProjectMembershipCompactOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ProjectMembershipCompactResponse'
     TaskTemplateBase:
       allOf:
       - $ref: '#/components/schemas/TaskTemplateCompact'
@@ -42022,6 +42185,11 @@ components:
           x-ballerina-name: resourceSubtype
       description: "A WebhookFilter can be passed on creation of a webhook in order\
         \ to filter the types of actions that trigger delivery of an [event](/reference/events)"
+    TaskTemplateOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TaskTemplateResponse'
     TeamMembershipBase:
       $ref: '#/components/schemas/TeamMembershipCompact'
     UserBaseResponse:
@@ -42030,6 +42198,11 @@ components:
       - $ref: '#/components/schemas/UserBaseResponseAllOf2'
     GoalRelationshipResponseAllOf2:
       type: object
+    TimeTrackingEntryBases:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TimeTrackingEntryBase'
     MembershipResponse:
       anyOf:
       - $ref: '#/components/schemas/GoalMembershipResponse'
@@ -42043,6 +42216,11 @@ components:
           type: string
           description: The item to remove from the portfolio
           example: "1331"
+    TagCreatedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TagResponse'
     ProjectTemplateResponse:
       allOf:
       - $ref: '#/components/schemas/ProjectTemplateBase'
@@ -42275,6 +42453,17 @@ components:
       allOf:
       - $ref: '#/components/schemas/ProjectBriefBase'
       - $ref: '#/components/schemas/ProjectBriefRequestAllOf2'
+    ProjectCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectCompact'
     GoalMetricCurrentValueRequestAllOf2:
       type: object
       properties:
@@ -42284,6 +42473,17 @@ components:
             metric of type number'
           example: 8.12
           x-ballerina-name: currentNumberValue
+    ProjectStatusCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectStatusCompact'
     AuditLogEventContext:
       type: object
       properties:
@@ -42338,6 +42538,17 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/TaskAddFollowersRequest'
+    StatusUpdateCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusUpdateCompact'
     OrganizationExportResponse:
       $ref: '#/components/schemas/OrganizationExportBase'
     ProjectSaveAsTemplateRequest:
@@ -42515,6 +42726,17 @@ components:
       allOf:
       - $ref: '#/components/schemas/AsanaResource'
       - $ref: '#/components/schemas/AllocationBaseAllOf2'
+    PortfolioMembershipCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortfolioMembershipCompact'
     StatusUpdateRequestAllOf2:
       required:
       - parent
@@ -42700,6 +42922,17 @@ components:
         description: This object represents a user's connection to a goal
         x-docs-overrides:
           properties.resource_type.example: membership
+    ProjectMembershipCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectMembershipCompact'
     StatusUpdateCompact:
       allOf:
       - $ref: '#/components/schemas/AsanaResource'
@@ -42709,6 +42942,13 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/GoalRequest'
+    UserCompacts:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserCompact'
     AllocationResponseAllOf2:
       type: object
       properties:
@@ -42721,17 +42961,6 @@ components:
           description: The subtype of the allocation
           example: project_allocation
           x-ballerina-name: resourceSubtype
-    ProjectCompacts:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProjectCompact'
     CustomFieldSettingResponse:
       allOf:
       - $ref: '#/components/schemas/CustomFieldSettingBase'
@@ -42745,10 +42974,25 @@ components:
       allOf:
       - $ref: '#/components/schemas/GoalMembershipBase'
       - $ref: '#/components/schemas/GoalMembershipResponseAllOf2'
+    UserBaseOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UserBaseResponse'
+    ProjectBriefOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ProjectBriefResponse'
     ProjectTemplateCompact:
       allOf:
       - $ref: '#/components/schemas/AsanaResource'
       - $ref: '#/components/schemas/ProjectTemplateCompactAllOf2'
+    TimePeriodOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TimePeriodResponse'
     RequestedRoleRequest:
       type: object
       properties:
@@ -42761,16 +43005,11 @@ components:
           type: string
           description: The user id that should be assigned to the template role
           example: "123"
-    ProjectBriefOkResponse:
+    WorkspaceMembershipOkResponse:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/ProjectBriefResponse'
-    CustomFieldSettingOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/CustomFieldSettingResponse'
+          $ref: '#/components/schemas/WorkspaceMembershipResponse'
     OrganizationExportCompactAllOf2:
       type: object
       properties:
@@ -42816,22 +43055,11 @@ components:
         the complete data of an Organization in JSON format
       x-docs-overrides:
         properties.resource_type.example: organization_export
-    ProjectMembershipCompacts:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProjectMembershipCompact'
-    ProjectMembershipNormalOkResponse:
+    EmptyOkResponse:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/ProjectMembershipNormalResponse'
+          $ref: '#/components/schemas/EmptyResponse'
     WorkspaceMembershipResponseVacationDates:
       type: object
       properties:
@@ -42854,17 +43082,11 @@ components:
         \ object will be null"
       nullable: true
       readOnly: true
-    ProjectStatusCompacts:
+    TeamMembershipOkResponse:
       type: object
       properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
         data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProjectStatusCompact'
+          $ref: '#/components/schemas/TeamMembershipResponse'
     AttachmentRequest:
       required:
       - parent
@@ -42906,41 +43128,10 @@ components:
           type: string
           description: |
             The URL of the external resource being attached. Required for attachments of type `external`
-    ProjectStatusOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/ProjectStatusResponse'
-    ProjectTemplateCompacts:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProjectTemplateCompact'
     TaskResponse:
       allOf:
       - $ref: '#/components/schemas/TaskBase'
       - $ref: '#/components/schemas/TaskResponseAllOf2'
-    ProjectTemplateOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/ProjectTemplateResponse'
-    RuleTriggerOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/RuleTriggerResponse'
-    TaskCountOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/TaskCountResponse'
     CreateMembershipRequestAllOf2:
       type: object
       properties:
@@ -43152,69 +43343,26 @@ components:
         \ is only present when the value of the property `action`, describing the\
         \ action taken on the **resource**, is `changed`"
       readOnly: true
-    SectionOkResponse:
+    AsanaNamedResourceResponse:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AsanaNamedResource'
+    ProjectStatusOkResponse:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/SectionResponse'
-    StatusUpdateOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/StatusUpdateResponse'
+          $ref: '#/components/schemas/ProjectStatusResponse'
     ProjectRequest:
       allOf:
       - $ref: '#/components/schemas/ProjectBase'
       - $ref: '#/components/schemas/ProjectRequestAllOf2'
-    SectionCompacts:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SectionCompact'
-    StoryOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/StoryResponse'
-    StatusUpdateCompacts:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/StatusUpdateCompact'
-    TagCompacts:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagCompact'
-    StoryCompacts:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/StoryCompact'
     CustomFieldBase:
       properties:
         enum_options:
@@ -43447,11 +43595,6 @@ components:
             nullable: true
             example: EUR
             x-ballerina-name: currencyCode
-    TaskTemplateOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/TaskTemplateResponse'
     StoryResponseAllOf2:
       type: object
       properties:
@@ -43705,13 +43848,6 @@ components:
           x-ballerina-name: newTextValue
         story:
           $ref: '#/components/schemas/StoryCompact'
-    TaskTemplateCompacts:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaskTemplateCompact'
     UserBaseResponseAllOf2:
       type: object
       properties:
@@ -43723,17 +43859,6 @@ components:
           format: email
           readOnly: true
           example: gsanchez@example.com
-    TaskCompactsResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaskCompact'
     TaskGidSetParentBody:
       type: object
       properties:
@@ -43793,24 +43918,12 @@ components:
         Asana are centered
       x-docs-overrides:
         properties.resource_type.example: task
-    ProjectGidAddMembersBody:
+    CustomFieldSettingOkResponse:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/AddMembersRequest'
-    TeamMembershipOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/TeamMembershipResponse'
-    TaskCompacts:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaskCompact'
-    TeamCompactsResponse:
+          $ref: '#/components/schemas/CustomFieldSettingResponse'
+    ProjectTemplateCompacts:
       type: object
       properties:
         next_page:
@@ -43820,7 +43933,34 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/TeamCompact'
+            $ref: '#/components/schemas/ProjectTemplateCompact'
+    TimeTrackingEntryCompactsResponse:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeTrackingEntryCompact'
+    WorkspaceCompactResponse:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceCompact'
+    ProjectGidAddMembersBody:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AddMembersRequest'
     ModifyDependenciesRequest:
       type: object
       properties:
@@ -43833,28 +43973,6 @@ components:
         dependencies:
         - "133713"
         - "184253"
-    TeamMembershipCompactsResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TeamMembershipCompact'
-    TimePeriodCompactsResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimePeriodCompact'
     ProjectSectionInsertRequest:
       required:
       - section
@@ -43876,20 +43994,6 @@ components:
           type: string
           description: The section to reorder
           example: "321654"
-    TimePeriodOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/TimePeriodResponse'
-    AsanaNamedResources:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AsanaNamedResource'
-      description: "A generic list of objects, such as those returned by the typeahead\
-        \ search endpoint"
     TeamRemoveUserRequest:
       type: object
       properties:
@@ -43900,33 +44004,6 @@ components:
           example: "12345"
       description: A user identification object for specification with the addUser/removeUser
         endpoints
-    TimeTrackingEntryCompactsResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeTrackingEntryCompact'
-    UserCompactsResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserCompact'
-    UserTaskListOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/UserTaskListResponse'
     TeamGidProjectsBody:
       type: object
       properties:
@@ -44035,23 +44112,16 @@ components:
       allOf:
       - $ref: '#/components/schemas/AllocationBase'
       - $ref: '#/components/schemas/AllocationCompactAllOf2'
-    UserOkResponse:
+    EnumOptions0:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/UserResponse'
+          $ref: '#/components/schemas/WebhookResponse'
     CreateMembershipRequest:
       allOf:
       - $ref: '#/components/schemas/MembershipRequest'
       - $ref: '#/components/schemas/CreateMembershipRequestAllOf2'
-    UserCompacts:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserCompact'
-    AsanaNamedResourceResponse:
+    GoalCompactsResponse:
       type: object
       properties:
         next_page:
@@ -44061,59 +44131,11 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/AsanaNamedResource'
-    WorkspaceMembershipOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/WorkspaceMembershipResponse'
-    WebhookOkResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WebhookResponse'
-    WorkspaceCompactResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkspaceCompact'
+            $ref: '#/components/schemas/GoalCompact'
     AllocationRequest:
       allOf:
       - $ref: '#/components/schemas/AllocationBase'
       - $ref: '#/components/schemas/AllocationRequestAllOf2'
-    WorkspaceMembershipCompactResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkspaceMembershipCompact'
-    UserBaseOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/UserBaseResponse'
-    WorkspaceOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/WorkspaceResponse'
     ProjectStatusCompact:
       allOf:
       - $ref: '#/components/schemas/AsanaResource'
@@ -44123,6 +44145,17 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/ModifyDependentsRequest'
+    MembershipCompacts:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MembershipCompact'
     GoalAddSupportingWorkRequest:
       required:
       - supporting_work
@@ -44194,22 +44227,33 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/ProjectRequest'
+    AuditLogEventResponse:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLogEvent'
     PortfolioGidAddMembersBody:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/AddMembersRequest'
+    RuleTriggerOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RuleTriggerResponse'
     AttachmentResponse:
       allOf:
       - $ref: '#/components/schemas/AttachmentBase'
       - $ref: '#/components/schemas/AttachmentResponseAllOf2'
     WorkspaceRequest:
       $ref: '#/components/schemas/WorkspaceBase'
-    TimeTrackingEntryBases:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/TimeTrackingEntryBase'
     WorkspacesworkspaceGidBody:
       type: object
       properties:
@@ -44307,11 +44351,6 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/TeamRemoveUserRequest'
-    EnumOptions0:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/WebhookResponse'
     TagResponseAllOf2:
       type: object
       properties:
@@ -44496,6 +44535,22 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/WorkspaceAddUserRequest'
+    CustomFieldSettingsResponse:
+      type: object
+      properties:
+        next_page:
+          allOf:
+          - $ref: '#/components/schemas/NextPage'
+          x-ballerina-name: nextPage
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldSettingResponse'
+    PortfolioMembershipOkResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PortfolioMembershipResponse'
     AuditLogEventResource:
       type: object
       properties:
@@ -44579,33 +44634,15 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/RemoveCustomFieldSettingRequest'
-    GoalOkResponse:
+    JobOkResponse:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/GoalResponse'
+          $ref: '#/components/schemas/JobResponse'
     WorkspaceCompact:
       allOf:
       - $ref: '#/components/schemas/AsanaResource'
       - $ref: '#/components/schemas/WorkspaceCompactAllOf2'
-    GoalCompacts:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GoalCompact'
-    GoalCompactsResponse:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GoalCompact'
     TaskRemoveFollowersRequest:
       required:
       - followers
@@ -44620,7 +44657,7 @@ components:
           - "321654"
           items:
             type: string
-    MembershipCompacts:
+    UserCompactsResponse:
       type: object
       properties:
         next_page:
@@ -44630,39 +44667,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/MembershipCompact'
-    JobOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/JobResponse'
-    PortfolioMembershipCompacts:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PortfolioMembershipCompact'
-    ProjectMembershipCompactOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/ProjectMembershipCompactResponse'
-    PortfolioCompacts:
-      type: object
-      properties:
-        next_page:
-          allOf:
-          - $ref: '#/components/schemas/NextPage'
-          x-ballerina-name: nextPage
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PortfolioCompact'
+            $ref: '#/components/schemas/UserCompact'
     CustomFieldSettingCompactAllOf2:
       type: object
       description: Custom Fields Settings objects represent the many-to-many join
@@ -44670,11 +44675,6 @@ components:
         to that particular pairing
       x-docs-overrides:
         properties.resource_type.example: custom_field_setting
-    PortfolioMembershipOkResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/PortfolioMembershipResponse'
   responses:
     GenericErrorResponse:
       description: "Sadly, sometimes requests to the API are not successful. Failures\
