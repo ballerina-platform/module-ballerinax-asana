@@ -5,7 +5,7 @@ name = "asana"
 version = "@toml.version@"
 license = ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = ["Asana", "Productivity/Project Management", "Cost/Freemium", "Task Management"]
+keywords = ["Productivity/Project Management", "Cost/Freemium", "Task Management", "Vendor/Asana", "Area/Project Management", "Type/Connector"]
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/module-ballerinax-asana"
 
