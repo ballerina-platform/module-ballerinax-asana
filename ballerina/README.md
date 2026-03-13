@@ -2,7 +2,14 @@
 
 [Asana](https://asana.com/) is a popular project management and team collaboration tool that enables teams to organize, track, and manage their work and projects. It offers features such as task assignments, project milestones, team dashboards, and more, facilitating efficient workflow management.
 
-This Ballerina connector is designed to interface with [Asana's REST API](https://developers.asana.com/reference/rest-api-reference), enabling programmatic access to Asana's services. It allows developers to automate tasks, manage projects, tasks, teams, and more, directly from Ballerina applications.
+The Asana connector is designed to interface with [Asana's REST API](https://developers.asana.com/reference/rest-api-reference), enabling programmatic access to Asana's services. It allows applications to automate tasks, manage projects, tasks, teams, and more.
+
+### Key Features
+
+- Automate task management
+- Manage projects, tasks, and teams
+- Evaluate and balance team workload
+- Support for project milestones and team dashboards
 
 ## Setup guide
 
