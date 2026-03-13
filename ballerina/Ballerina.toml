@@ -2,10 +2,10 @@
 distribution = "2201.12.0"
 org = "ballerinax"
 name = "asana"
-version = "3.0.0"
+version = "3.0.1"
 license = ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = ["Productivity/Project Management", "Cost/Freemium", "Task Management", "Vendor/Asana", "Area/Project Management", "Type/Connector"]
+keywords = ["Project Management/Task Management", "Cost/Freemium", "Vendor/Asana", "Area/Productivity & Collaboration", "Type/Connector"]
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/module-ballerinax-asana"
 
